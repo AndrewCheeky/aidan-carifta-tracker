@@ -5,7 +5,8 @@ const value=x=>x===null||x===undefined||x===''?'<span class="pending">Pending ve
 const card=(label,val)=>`<div class="card"><div class="label">${esc(label)}</div><div class="value">${val}</div></div>`;
 const table=(headers,rows)=>`<table><thead><tr>${headers.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table>`;
 function render(){if(!DATA)return;let html='';const ev=DATA.events;
-if(TAB==='visual'){
+if(TAB==='trends'){html=renderTrends(DATA);
+}else if(TAB==='visual'){
 const sec=t=>{if(!t)return null;const a=String(t).replace(/^\+/,'').split(':').map(Number);return a.every(Number.isFinite)?a.reduce((v,x)=>v*60+x,0):null};
 const gap=e=>e.third_place&&e.personal_best?sec(e.personal_best)-sec(e.third_place.time):null;
 const fmtGap=n=>n===null?'Not verified':(n<0?Math.abs(n).toFixed(2)+'s ahead':n.toFixed(2)+'s behind');
@@ -42,3 +43,28 @@ document.querySelector('#content').innerHTML=html;document.querySelector('#statu
 }
 document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');TAB=b.dataset.tab;render()}));
 fetch('data.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Data not found');return r.json()}).then(d=>{DATA=d;render()}).catch(e=>document.querySelector('#status').textContent='Unable to load verified data: '+e.message);
+
+// Race-by-race trends. Meet start dates are placement proxies where exact race days are unknown.
+const trendSeconds=t=>{const parts=String(t||'').split(':').map(Number);return parts.length&&parts.every(Number.isFinite)?parts.reduce((v,n)=>v*60+n,0):null};
+const trendTime=n=>{if(n===null||!Number.isFinite(n))return 'Pending';const m=Math.floor(n/60),ss=(n%60).toFixed(2).padStart(5,'0');return m?`${m}:${ss}`:ss};
+const trendEventNames=d=>[...new Set([...(d.athlete?.events||[]),...(d.events||[]).map(e=>e.event),...(d.race_history_2026||[]).map(r=>r.event)])];
+function renderTrends(d){
+const names=trendEventNames(d), races=d.race_history_2026||[];
+const groups=names.map(name=>({name,swims:races.filter(r=>r.event===name&&trendSeconds(r.time)!==null&&['LCM','SCM'].includes(r.course)).sort((a,b)=>String(a.race_date).localeCompare(String(b.race_date)))}));
+const options=groups.map(g=>`<option value="${esc(g.name)}">${esc(g.name)} (${g.swims.length})</option>`).join('');
+return `<div class="panel"><h2>Performance Trends · all ${names.length} documented events</h2><p>Every completed, verified swim is shown separately from personal-best progression. Lower times are faster. LCM and SCM are never combined. Results with only a meet date range use the meet start as an approximate horizontal position, not a verified race day.</p><div class="trend-controls"><label>Event <select id="trend-event">${options}</select></label><label>Course <select id="trend-course"><option value="LCM">Long course (LCM)</option><option value="SCM">Short course (SCM)</option></select></label></div><div id="trend-detail"></div></div><div class="panel"><h2>All-event progress summary</h2><p>Change compares the first and latest recorded completed swims, not a prediction of future performance. Preliminaries and finals are separate results.</p><div class="visual-scroll">${table(['Event','LCM swims','First','Latest','Change','Assessment'],groups.map(g=>{const l=g.swims.filter(r=>r.course==='LCM');const first=l[0],last=l.at(-1),change=l.length>1?trendSeconds(last.time)-trendSeconds(first.time):null;return `<tr><td>${esc(g.name)}</td><td>${l.length}</td><td>${first?esc(first.time):'—'}</td><td>${last?esc(last.time):'—'}</td><td>${change===null?'—':`${change>0?'+':''}${change.toFixed(2)}s`}</td><td>${change===null?'Insufficient history':change<0?'Improved':change>0?'Slower latest swim':'Unchanged'}</td></tr>`}))}</div></div><div class="notice">Training reference only. No verified swims are interpolated. National rankings and qualifying standards are independent of this graph.</div>`;
+}
+function drawTrendDetail(){const target=document.getElementById('trend-detail');if(!target||!DATA)return;const name=document.getElementById('trend-event')?.value,course=document.getElementById('trend-course')?.value;
+const swims=(DATA.race_history_2026||[]).filter(r=>r.event===name&&r.course===course&&trendSeconds(r.time)!==null).sort((a,b)=>String(a.race_date).localeCompare(String(b.race_date)));
+if(!swims.length){target.innerHTML='<p class="pending">No verified completed swims for this event and course.</p>';return;}
+const vals=swims.map(r=>trendSeconds(r.time));let pb=Infinity;const bests=vals.map(v=>(pb=Math.min(pb,v)));const low=Math.min(...vals)-2,high=Math.max(...vals)+2,w=740,h=250,left=65,right=18,top=22,bottom=46;
+const xx=i=>left+(swims.length===1?(w-left-right)/2:i*(w-left-right)/(swims.length-1)),yy=v=>top+(high-v)*(h-top-bottom)/(high-low);
+const line=arr=>arr.map((v,i)=>`${i?'L':'M'}${xx(i).toFixed(1)},${yy(v).toFixed(1)}`).join(' ');
+const grid=Array.from({length:5},(_,i)=>{const v=low+(high-low)*i/4,y=yy(v);return `<line x1="${left}" y1="${y}" x2="${w-right}" y2="${y}" stroke="currentColor" opacity=".12"/><text x="${left-8}" y="${y+4}" text-anchor="end" fill="currentColor" font-size="12">${trendTime(v)}</text>`}).join('');
+const dots=swims.map((r,i)=>`<circle cx="${xx(i)}" cy="${yy(vals[i])}" r="5" fill="#e3a300"><title>${esc(r.meet_name)} · ${esc(r.round)} · ${esc(r.time)} · ${esc(r.meet_dates||r.race_date)}</title></circle>`).join('');
+const first=vals[0],latest=vals.at(-1),change=swims.length>1?latest-first:null;
+const cards=`<div class="cards">${card('Recorded swims',swims.length)}${card('Fastest verified',trendTime(Math.min(...vals)))}${card('First to latest',change===null?'Insufficient history':`${change>0?'+':''}${change.toFixed(2)}s ${change<0?'faster':change>0?'slower':'unchanged'}`)}</div>`;
+target.innerHTML=cards+`<div class="trend-chart"><svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(name)} ${esc(course)} race times and personal-best progression" preserveAspectRatio="xMidYMid meet">${grid}<path d="${line(bests)}" fill="none" stroke="#24a47c" stroke-width="3" stroke-dasharray="7 5"/><path d="${line(vals)}" fill="none" stroke="#e3a300" stroke-width="3"/>${dots}<text x="${left}" y="${h-13}" fill="currentColor" font-size="12">First recorded swim</text><text x="${w-right}" y="${h-13}" text-anchor="end" fill="currentColor" font-size="12">Latest recorded swim</text></svg></div><p><strong style="color:#e3a300">● Race time</strong> · <strong style="color:#24a47c">- - Personal-best progression</strong></p><div class="visual-scroll">${table(['Meet / date range','Round','Time','Source'],swims.map(r=>`<tr><td>${esc(r.meet_name)}<small> · ${esc(r.meet_dates||r.race_date)}</small></td><td>${esc(r.round)}</td><td>${esc(r.time)}</td><td>${r.source_pdf?`<a href="${encodeURI(esc(r.source_pdf))}#page=${esc(r.source_page)}" target="_blank" rel="noopener">Official PDF p.${esc(r.source_page)}</a>`:'Not linked'}</td></tr>`))}</div>`;
+}
+// The main render replaces the tab content, so install controls after every render.
+const originalRender=render;render=function(){originalRender();if(TAB==='trends'){document.querySelectorAll('#trend-event,#trend-course').forEach(el=>el.addEventListener('change',drawTrendDetail));drawTrendDetail();}};
