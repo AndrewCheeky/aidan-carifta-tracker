@@ -92,3 +92,16 @@ Run **Actions → Monitor official ASAJ publications → Run workflow** (choose 
 ### November 2026 extraction rebuild
 
 The ingestion workflow includes two user-supplied ASAJ PDF reference fixtures under `reference/asaj/` to regression-test the HY-TEK rankings and CARIFTA 2027 standards. It stages review-only records from both references on every run, even if the live ASAJ listing has no matching PDFs. `review/asaj/proposals.json` is **not** published to the website. The reference records use `uploaded-reference:` identifiers and are **not official live URLs**. Do not set `verified=true` until the document and its canonical ASAJ URL have been checked. The Boys 12 `unresolved_name_field` intentionally includes uncertain club/meet text and must not be displayed as a swimmer name without human verification.
+
+## Publishing the extracted ASAJ data (manual approval)
+
+The website reads `data/*.csv`, not `review/asaj/proposals.json`. The ingestion workflow only stages unverified evidence. To prepare the publishable CSVs, first create `review/asaj/qualification_source_url.txt` containing the **exact ASAJ PDF URL** for the uploaded `Carifta 2027 QT.pdf` (not a guessed URL). Run **Actions → Prepare official ASAJ publication review** on `main`, then download the `official-asaj-publication-candidates` artifact. Check every row against the two PDFs. Copy approved CSVs from that artifact to `data/` in a separate pull request, review and merge. The existing deployment workflow then rebuilds `docs/data.json` and deploys. No workflow automatically approves or publishes proposals.
+
+The first-stage CSVs contain Aidan's **ASAJ top times** from the September 29 rankings, not independently confirmed lifetime PBs. Boys age-12 names and podium gaps remain pending until their original table rows can be reliably validated. The qualifying PDF source URL is deliberately required because its precise official download URL has not yet been established from the uploaded PDF alone.
+
+
+## Publish verified ASAJ figures
+The official CARIFTA 2027 download link is configured in `review/asaj/qualification_source_url.txt`.
+Run **Actions → Prepare official ASAJ publication review → Run workflow (main)**.
+The action validates the extracted CSVs and opens a PR targeting `main`. Review the official PDF evidence and merge the PR to publish. GitHub repository Actions settings may require **Allow GitHub Actions to create and approve pull requests**.
+The review PR contains Aidan's extracted top times and qualification standards. Podium and Boys 12 comparison data remain pending rather than fabricated.
