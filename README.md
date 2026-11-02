@@ -149,3 +149,8 @@ To process the four included PDFs now, run **Import uploaded ASAJ meet PDFs** fr
 
 ### Third-place comparisons (ASAJ 29 September 2026)
 The Jamaica Rankings tab shows the named third-place Boys 13–14 swimmer, his official long-course ranking time, and the gap against Aidan's fastest verified time. Source: `reference/asaj/General Rankings 29-09-2026.pdf`. The benchmark is a dated snapshot and does not automatically change when new meet results are uploaded. The dataset is `data/third_place_boys13_14.csv`. To update rankings, verify a newer official ASAJ ranking PDF and update the CSV together.
+
+
+## Automated all-swimmer ASAJ comparisons
+
+`scripts/extract_competitors.py` reads `sources/asaj/2026/*.pdf` and generates `data/asaj_competitor_results.csv` containing all parsable, explicitly Boys/Girls individual result rows, with meet-date range and PDF/page evidence. Mixed-sex results are excluded because gender cannot safely be inferred. `scripts/build.py` compares each swimmer's fastest recorded time to Aidan's verified LCM best: Boys 12 within ±10%, Boys 13 within ±5%. These are comparisons within the supplied meets, **not official national rankings**. GitHub's PDF import workflow updates the CSV through a review PR; the deployment workflow regenerates it. Age is the age printed at each meet, not an inferred current age.
