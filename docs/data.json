@@ -17,6 +17,20 @@
   },
   "events": [
     {
+      "carifta": {
+        "eligible_best": null,
+        "eligible_source_pdf": null,
+        "eligible_source_page": null,
+        "eligible_meet": null,
+        "standard_status": "No date-verified eligible swim",
+        "A_met": false,
+        "B_met": false,
+        "A_gap": null,
+        "B_gap": null,
+        "selection_priority": "Pending current qualifying-period ranking and eligibility verification",
+        "selection_projection": "Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable",
+        "ranking_verified_for_selection": false
+      },
       "event": "50 Free",
       "personal_best": "27.60",
       "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
@@ -118,6 +132,20 @@
       ]
     },
     {
+      "carifta": {
+        "eligible_best": null,
+        "eligible_source_pdf": null,
+        "eligible_source_page": null,
+        "eligible_meet": null,
+        "standard_status": "No date-verified eligible swim",
+        "A_met": false,
+        "B_met": false,
+        "A_gap": null,
+        "B_gap": null,
+        "selection_priority": "Pending current qualifying-period ranking and eligibility verification",
+        "selection_projection": "Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable",
+        "ranking_verified_for_selection": false
+      },
       "event": "100 Free",
       "personal_best": "1:01.20",
       "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
@@ -205,6 +233,20 @@
       ]
     },
     {
+      "carifta": {
+        "eligible_best": null,
+        "eligible_source_pdf": null,
+        "eligible_source_page": null,
+        "eligible_meet": null,
+        "standard_status": "No date-verified eligible swim",
+        "A_met": false,
+        "B_met": false,
+        "A_gap": null,
+        "B_gap": null,
+        "selection_priority": "Pending current qualifying-period ranking and eligibility verification",
+        "selection_projection": "Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable",
+        "ranking_verified_for_selection": false
+      },
       "event": "100 Back",
       "personal_best": null,
       "pb_source": null,
@@ -235,6 +277,20 @@
       "boys12": []
     },
     {
+      "carifta": {
+        "eligible_best": "2:53.37",
+        "eligible_source_pdf": "asaj-pdfs/2026 ASAJ Development Meet 2 - results.pdf",
+        "eligible_source_page": "1",
+        "eligible_meet": "2026 ASAJ Development Meet# 2",
+        "standard_status": "Not yet achieved",
+        "A_met": false,
+        "B_met": false,
+        "A_gap": "+9.28s",
+        "B_gap": "+6.29s",
+        "selection_priority": "Pending current qualifying-period ranking and eligibility verification",
+        "selection_projection": "Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable",
+        "ranking_verified_for_selection": false
+      },
       "event": "200 Breast",
       "personal_best": "2:53.01",
       "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
@@ -301,6 +357,20 @@
       ]
     },
     {
+      "carifta": {
+        "eligible_best": null,
+        "eligible_source_pdf": null,
+        "eligible_source_page": null,
+        "eligible_meet": null,
+        "standard_status": "No date-verified eligible swim",
+        "A_met": false,
+        "B_met": false,
+        "A_gap": null,
+        "B_gap": null,
+        "selection_priority": "Pending current qualifying-period ranking and eligibility verification",
+        "selection_projection": "Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable",
+        "ranking_verified_for_selection": false
+      },
       "event": "100 Fly",
       "personal_best": "1:09.22",
       "pb_source": "https://www.asaj.com.jm/",
@@ -360,6 +430,20 @@
       ]
     },
     {
+      "carifta": {
+        "eligible_best": null,
+        "eligible_source_pdf": null,
+        "eligible_source_page": null,
+        "eligible_meet": null,
+        "standard_status": "No date-verified eligible swim",
+        "A_met": false,
+        "B_met": false,
+        "A_gap": null,
+        "B_gap": null,
+        "selection_priority": "Pending current qualifying-period ranking and eligibility verification",
+        "selection_projection": "Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable",
+        "ranking_verified_for_selection": false
+      },
       "event": "200 Fly",
       "personal_best": "2:53.03",
       "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
@@ -398,6 +482,20 @@
       ]
     },
     {
+      "carifta": {
+        "eligible_best": null,
+        "eligible_source_pdf": null,
+        "eligible_source_page": null,
+        "eligible_meet": null,
+        "standard_status": "No date-verified eligible swim",
+        "A_met": false,
+        "B_met": false,
+        "A_gap": null,
+        "B_gap": null,
+        "selection_priority": "Pending current qualifying-period ranking and eligibility verification",
+        "selection_projection": "Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable",
+        "ranking_verified_for_selection": false
+      },
       "event": "200 IM",
       "personal_best": "2:36.66",
       "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
@@ -464,6 +562,20 @@
       ]
     },
     {
+      "carifta": {
+        "eligible_best": "5:28.27",
+        "eligible_source_pdf": "asaj-pdfs/2026 ASAJ Distance Meet results.pdf",
+        "eligible_source_page": "2",
+        "eligible_meet": "2026 ASAJ BB Distance Dvelopment Meet",
+        "standard_status": "B achieved",
+        "A_met": false,
+        "B_met": true,
+        "A_gap": "+9.53s",
+        "B_gap": "−4.50s",
+        "selection_priority": "Pending current qualifying-period ranking and eligibility verification",
+        "selection_projection": "Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable",
+        "ranking_verified_for_selection": false
+      },
       "event": "400 IM",
       "personal_best": "5:28.27",
       "pb_source": "https://www.asaj.com.jm/",
@@ -895,6 +1007,183 @@
       "date_precision": "exact"
     }
   ],
+  "goodwill": {
+    "competition_year": 2026,
+    "age_group": "Boys 13–14",
+    "standards": {
+      "50 Free": {
+        "A": "26.44",
+        "B": "26.80"
+      },
+      "100 Free": {
+        "A": "58.85",
+        "B": "59.87"
+      },
+      "200 Free": {
+        "A": "2:12.18",
+        "B": "2:18.24"
+      },
+      "50 Back": {
+        "A": "31.18",
+        "B": "32.64"
+      },
+      "100 Back": {
+        "A": "1:10.19",
+        "B": "1:15.05"
+      },
+      "50 Breast": {
+        "A": "34.73",
+        "B": "35.80"
+      },
+      "100 Breast": {
+        "A": "1:17.09",
+        "B": "1:20.46"
+      },
+      "50 Fly": {
+        "A": "28.21",
+        "B": "29.42"
+      },
+      "100 Fly": {
+        "A": "1:05.15",
+        "B": "1:07.92"
+      },
+      "200 IM": {
+        "A": "2:33.84",
+        "B": "2:39.14"
+      }
+    },
+    "criteria_summary": {
+      "qualifying_period_start": "2025-12-01",
+      "qualifying_period_end": "Final local qualifying meet (date not supplied)",
+      "accepted_courses": [
+        "SCM",
+        "LCM"
+      ],
+      "priority_one": "A then B standard, with 1st or 2nd ranking in at least one individual event",
+      "maximum_swimmers_per_age_group": 4,
+      "priority_two": "Relay selection if only two or three individual qualifiers; at least one B standard required",
+      "final_selection": "Subject to ASAJ Council ratification"
+    },
+    "source_standards": "reference/asaj/2026 Goodwill Qualifying Times.pdf",
+    "source_criteria": "reference/asaj/Goodwill 2026 Criteria 11 & Over.pdf",
+    "events": [
+      {
+        "event": "50 Free",
+        "personal_best": "27.60",
+        "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
+        "pb_evidence_pdf": null,
+        "pb_evidence_page": null,
+        "standards": {
+          "A": {
+            "time": "26.44",
+            "gap": "+1.16s",
+            "met": false
+          },
+          "B": {
+            "time": "26.80",
+            "gap": "+0.80s",
+            "met": false
+          }
+        }
+      },
+      {
+        "event": "100 Free",
+        "personal_best": "1:01.20",
+        "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
+        "pb_evidence_pdf": null,
+        "pb_evidence_page": null,
+        "standards": {
+          "A": {
+            "time": "58.85",
+            "gap": "+2.35s",
+            "met": false
+          },
+          "B": {
+            "time": "59.87",
+            "gap": "+1.33s",
+            "met": false
+          }
+        }
+      },
+      {
+        "event": "100 Back",
+        "personal_best": null,
+        "pb_source": null,
+        "pb_evidence_pdf": null,
+        "pb_evidence_page": null,
+        "standards": {
+          "A": {
+            "time": "1:10.19",
+            "gap": null,
+            "met": null
+          },
+          "B": {
+            "time": "1:15.05",
+            "gap": null,
+            "met": null
+          }
+        }
+      },
+      {
+        "event": "100 Fly",
+        "personal_best": "1:09.22",
+        "pb_source": "https://www.asaj.com.jm/",
+        "pb_evidence_pdf": "asaj-pdfs/2026 Neville Alexander results.pdf",
+        "pb_evidence_page": "8",
+        "standards": {
+          "A": {
+            "time": "1:05.15",
+            "gap": "+4.07s",
+            "met": false
+          },
+          "B": {
+            "time": "1:07.92",
+            "gap": "+1.30s",
+            "met": false
+          }
+        }
+      },
+      {
+        "event": "200 IM",
+        "personal_best": "2:36.66",
+        "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
+        "pb_evidence_pdf": null,
+        "pb_evidence_page": null,
+        "standards": {
+          "A": {
+            "time": "2:33.84",
+            "gap": "+2.82s",
+            "met": false
+          },
+          "B": {
+            "time": "2:39.14",
+            "gap": "−2.48s",
+            "met": true
+          }
+        }
+      }
+    ]
+  },
+  "carifta_criteria": {
+    "document": "2026 Carifta Criteria.pdf",
+    "ratified": "2025-12-03",
+    "competition": "CARIFTA 2027",
+    "qualifying_period_start": "2026-07-01",
+    "qualifying_period_end": null,
+    "course": "LCM",
+    "automatic_selection": "A standard and ranking 1st or 2nd; then B standard and ranking 1st or 2nd, subject to team limits",
+    "age_group_gender_cap": 8,
+    "team_cap": 36,
+    "tie_breakers": [
+      "Number of standard-qualified events ranked 1st or 2nd",
+      "AQUA points from fastest qualifying event"
+    ],
+    "relay": "Conditional: age group with 3 or 4 automatic qualifiers; qualifying relay projection and B-standard minimum required",
+    "eligibility": "ASAJ registration, nationality/passport or residency, availability, and ASAJ Council ratification must be checked",
+    "ranking_note": "September 2026 snapshot ranks are not selection-period final rankings",
+    "source_pdf": "carifta-documents/2026 Carifta Criteria.pdf",
+    "selection_confirmed": false
+  },
   "meets": [
     {
       "name": "2026 ASAJ Walter Lowi Memorial Sprint Classic",
@@ -964,6 +1253,6 @@
       "status": "verified_listing"
     }
   },
-  "built_at": "2026-11-02T04:10:31+00:00",
+  "built_at": "2026-11-02T04:24:37+00:00",
   "warning": "Only rows explicitly verified against ASAJ are published; empty fields mean not yet verified."
 }

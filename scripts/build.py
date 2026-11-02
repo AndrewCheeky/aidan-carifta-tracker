@@ -78,6 +78,34 @@ by_event={e:[] for e in EVENTS}
 for r in perf: by_event[r['event']].append(r)
 for r in history:
     if r['event'] in by_event: by_event[r['event']].append(r)
+# ASAJ CARIFTA criteria ratified 2025-12-03, supplied as 2026 Carifta Criteria.pdf.
+# For CARIFTA 2027, only dated LCM performances from 2026-07-01 qualify.
+# The final local qualifying meet date and up-to-date qualifying-period rankings
+# have not been supplied: fail closed on selection priority and team selection.
+CARIFTA_START=date(2026,7,1)
+CARIFTA_CRITERIA={
+ 'document':'2026 Carifta Criteria.pdf',
+ 'ratified':'2025-12-03',
+ 'competition':'CARIFTA 2027',
+ 'qualifying_period_start':CARIFTA_START.isoformat(),
+ 'qualifying_period_end':None,
+ 'course':'LCM',
+ 'automatic_selection':'A standard and ranking 1st or 2nd; then B standard and ranking 1st or 2nd, subject to team limits',
+ 'age_group_gender_cap':8,
+ 'team_cap':36,
+ 'tie_breakers':['Number of standard-qualified events ranked 1st or 2nd','AQUA points from fastest qualifying event'],
+ 'relay':'Conditional: age group with 3 or 4 automatic qualifiers; qualifying relay projection and B-standard minimum required',
+ 'eligibility':'ASAJ registration, nationality/passport or residency, availability, and ASAJ Council ratification must be checked',
+ 'ranking_note':'September 2026 snapshot ranks are not selection-period final rankings',
+ 'source_pdf':'carifta-documents/2026 Carifta Criteria.pdf',
+ 'selection_confirmed':False
+}
+def qualifying_date(r):
+    # Meet-range starts before July 1 are excluded unless independently
+    # verified as including July 1; never infer the actual race day.
+    try: return date.fromisoformat(r['race_date'])>=CARIFTA_START
+    except (ValueError,KeyError): return False
+
 results=[]
 for e in EVENTS:
     a=min(by_event[e],key=lambda r:seconds(r['time'])) if by_event[e] else None
@@ -91,12 +119,37 @@ for e in EVENTS:
         for r in (ranks+emerging):
             if r['event']==e and r['age']=='12' and abs(seconds(r['time'])-asec)/asec<=0.10:
                 boys12.append({'name':r['swimmer'],'club':r['club'],'time':r['time'],'difference':fmt(seconds(r['time'])-asec),'source_url':r['source_url']})
-    results.append({'event':e,'personal_best':a['time'] if a else None,'pb_source':a['source_url'] if a else None,'pb_evidence_pdf':a.get('source_pdf') if a else None,'pb_evidence_page':a.get('source_page') if a else None,'standards':{k:{'time':v['time'],'difference':fmt(asec-seconds(v['time'])) if asec is not None else None,'met':asec<=seconds(v['time']) if asec is not None else None,'source_url':v['source_url']} for k,v in std.items()},'rank':int(own['rank']) if own else None,'podium_gap':fmt(asec-seconds(third['time'])) if asec is not None and third else None,'third_place':{'swimmer':third['swimmer'],'time':third['time'],'ranking_date':third['ranking_date'],'source_url':third['source_url']} if third else None,'boys12':boys12})
+    eligible=[r for r in history if r['event']==e and qualifying_date(r)]
+    # Ranking PDF is dated in the window, but does not establish the date
+    # of the underlying swim. It cannot establish qualification eligibility.
+    eligible_best=min(eligible,key=lambda r:seconds(r['time'])) if eligible else None
+    eligible_sec=seconds(eligible_best['time']) if eligible_best else None
+    qualified_A=('A' in std and eligible_sec is not None and eligible_sec<=seconds(std['A']['time']))
+    qualified_B=('B' in std and eligible_sec is not None and eligible_sec<=seconds(std['B']['time']))
+    carifta={
+      'eligible_best':eligible_best['time'] if eligible_best else None,
+      'eligible_source_pdf':eligible_best['source_pdf'] if eligible_best else None,
+      'eligible_source_page':eligible_best['source_page'] if eligible_best else None,
+      'eligible_meet':eligible_best['meet_name'] if eligible_best else None,
+      'standard_status':'A achieved' if qualified_A else 'B achieved' if qualified_B else 'Not yet achieved' if eligible_best else 'No date-verified eligible swim',
+      'A_met':qualified_A,'B_met':qualified_B,
+      'A_gap':fmt(eligible_sec-seconds(std['A']['time'])) if eligible_sec is not None and 'A' in std else None,
+      'B_gap':fmt(eligible_sec-seconds(std['B']['time'])) if eligible_sec is not None and 'B' in std else None,
+      'selection_priority':'Pending current qualifying-period ranking and eligibility verification',
+      'selection_projection':'Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable',
+      'ranking_verified_for_selection':False
+    }
+    results.append({'carifta':carifta,'event':e,'personal_best':a['time'] if a else None,'pb_source':a['source_url'] if a else None,'pb_evidence_pdf':a.get('source_pdf') if a else None,'pb_evidence_page':a.get('source_page') if a else None,'standards':{k:{'time':v['time'],'difference':fmt(asec-seconds(v['time'])) if asec is not None else None,'met':asec<=seconds(v['time']) if asec is not None else None,'source_url':v['source_url']} for k,v in std.items()},'rank':int(own['rank']) if own else None,'podium_gap':fmt(asec-seconds(third['time'])) if asec is not None and third else None,'third_place':{'swimmer':third['swimmer'],'time':third['time'],'ranking_date':third['ranking_date'],'source_url':third['source_url']} if third else None,'boys12':boys12})
 history.sort(key=lambda r:(r['race_date'],r['event'],seconds(r['time'])))
 meets=json.loads((DATA/'meets.json').read_text()); sources=json.loads((DATA/'official_sources.json').read_text())
 for meet in meets:
     if urlparse(meet['url']).hostname not in OFFICIAL_HOSTS: raise ValueError('Unofficial meet URL')
     if date.fromisoformat(meet['start'])>date.fromisoformat(meet['end']): raise ValueError('Bad meet date')
-output={'athlete':json.loads((DATA/'athlete.json').read_text()),'events':results,'race_history_2026':history,'meets':meets,'sources':sources,'built_at':datetime.now().astimezone().isoformat(timespec='seconds'),'warning':'Only rows explicitly verified against ASAJ are published; empty fields mean not yet verified.'}
+goodwill=json.loads((DATA/'goodwill_2026_boys13_14.json').read_text())
+for event,limits in goodwill['standards'].items():
+    if event not in ('50 Free','100 Free','200 Free','50 Back','100 Back','50 Breast','100 Breast','50 Fly','100 Fly','200 IM'): raise ValueError('Unknown Goodwill event')
+    for t in limits.values(): seconds(t)
+goodwill['events']=[{'event':r['event'],'personal_best':r['personal_best'],'pb_source':r['pb_source'],'pb_evidence_pdf':r['pb_evidence_pdf'],'pb_evidence_page':r['pb_evidence_page'],'standards':{k:{'time':t,'gap':fmt(seconds(r['personal_best'])-seconds(t)) if r['personal_best'] else None,'met':seconds(r['personal_best'])<=seconds(t) if r['personal_best'] else None} for k,t in goodwill['standards'][r['event']].items()}} for r in results if r['event'] in goodwill['standards']]
+output={'athlete':json.loads((DATA/'athlete.json').read_text()),'events':results,'race_history_2026':history,'goodwill':goodwill,'carifta_criteria':CARIFTA_CRITERIA,'meets':meets,'sources':sources,'built_at':datetime.now().astimezone().isoformat(timespec='seconds'),'warning':'Only rows explicitly verified against ASAJ are published; empty fields mean not yet verified.'}
 (DOCS/'data.json').write_text(json.dumps(output,indent=2,ensure_ascii=False))
 print('Built',len(results),'events;',len(perf),'verified personal bests;',len(standards),'standards;',len(ranks),'rankings')

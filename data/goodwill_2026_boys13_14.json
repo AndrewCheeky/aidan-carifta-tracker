@@ -1,0 +1,60 @@
+{
+  "competition_year": 2026,
+  "age_group": "Boys 13\u201314",
+  "standards": {
+    "50 Free": {
+      "A": "26.44",
+      "B": "26.80"
+    },
+    "100 Free": {
+      "A": "58.85",
+      "B": "59.87"
+    },
+    "200 Free": {
+      "A": "2:12.18",
+      "B": "2:18.24"
+    },
+    "50 Back": {
+      "A": "31.18",
+      "B": "32.64"
+    },
+    "100 Back": {
+      "A": "1:10.19",
+      "B": "1:15.05"
+    },
+    "50 Breast": {
+      "A": "34.73",
+      "B": "35.80"
+    },
+    "100 Breast": {
+      "A": "1:17.09",
+      "B": "1:20.46"
+    },
+    "50 Fly": {
+      "A": "28.21",
+      "B": "29.42"
+    },
+    "100 Fly": {
+      "A": "1:05.15",
+      "B": "1:07.92"
+    },
+    "200 IM": {
+      "A": "2:33.84",
+      "B": "2:39.14"
+    }
+  },
+  "criteria_summary": {
+    "qualifying_period_start": "2025-12-01",
+    "qualifying_period_end": "Final local qualifying meet (date not supplied)",
+    "accepted_courses": [
+      "SCM",
+      "LCM"
+    ],
+    "priority_one": "A then B standard, with 1st or 2nd ranking in at least one individual event",
+    "maximum_swimmers_per_age_group": 4,
+    "priority_two": "Relay selection if only two or three individual qualifiers; at least one B standard required",
+    "final_selection": "Subject to ASAJ Council ratification"
+  },
+  "source_standards": "reference/asaj/2026 Goodwill Qualifying Times.pdf",
+  "source_criteria": "reference/asaj/Goodwill 2026 Criteria 11 & Over.pdf"
+}

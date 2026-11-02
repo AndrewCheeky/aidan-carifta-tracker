@@ -1,0 +1,1 @@
+Goodwill 2026: Official ASAJ Boys 13–14 A/B standards and selection criteria loaded from supplied PDFs. Historical comparison only; not Goodwill 2027. SCM accepted by official criteria but current dashboard only includes verified LCM results. Qualifying-period end and official selection rankings not verified.
