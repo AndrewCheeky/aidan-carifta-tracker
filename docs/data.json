@@ -2037,6 +2037,138 @@
       "verification_status": "Supplementary, not ASAJ-verified",
       "round": "Unspecified",
       "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "50 Free",
+      "course": "LCM",
+      "time": "32.54",
+      "meet_name": "2023 ASAJ Christmas Open",
+      "race_date": "2023-12-18",
+      "source_url": "https://www.swimcloud.com/results/289841/event/96/?id=114062633#time114062633",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "100 Free",
+      "course": "LCM",
+      "time": "1:14.94",
+      "meet_name": "XXVII Goodwill Championships",
+      "race_date": "2023-08-18",
+      "source_url": "https://www.swimcloud.com/results/275320/event/4/?id=105610710#time105610710",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "200 Free",
+      "course": "LCM",
+      "time": "2:57.51",
+      "meet_name": "XXVII Goodwill Championships",
+      "race_date": "2023-08-20",
+      "source_url": "https://www.swimcloud.com/results/275320/event/87/?id=105610779#time105610779",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "50 Back",
+      "course": "LCM",
+      "time": "40.61",
+      "meet_name": "2023 ASAJ Christmas Open",
+      "race_date": "2023-12-16",
+      "source_url": "https://www.swimcloud.com/results/289841/event/26/?id=114062526#time114062526",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "100 Back",
+      "course": "LCM",
+      "time": "1:50.78",
+      "meet_name": "2023 Walter Rogers Age Group C",
+      "race_date": "2023-02-24",
+      "source_url": "https://www.swimcloud.com/results/264406/event/100/?id=98195617#time98195617",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "50 Breast",
+      "course": "LCM",
+      "time": "42.49",
+      "meet_name": "2023 ASAJ Christmas Open",
+      "race_date": "2023-12-17",
+      "source_url": "https://www.swimcloud.com/results/289841/event/60/?id=114062576#time114062576",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "100 Breast",
+      "course": "LCM",
+      "time": "1:37.63",
+      "meet_name": "XXVII Goodwill Championships",
+      "race_date": "2023-08-19",
+      "source_url": "https://www.swimcloud.com/results/275320/event/59/?id=105610763#time105610763",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "200 Breast",
+      "course": "LCM",
+      "time": "3:42.29",
+      "meet_name": "2023 Walter Rogers Age Group C",
+      "race_date": "2023-02-22",
+      "source_url": "https://www.swimcloud.com/results/264406/event/28/?id=98195573#time98195573",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "50 Fly",
+      "course": "LCM",
+      "time": "36.56",
+      "meet_name": "2023 ASAJ Christmas Open",
+      "race_date": "2023-12-19",
+      "source_url": "https://www.swimcloud.com/results/289841/event/130/?id=114062686#time114062686",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "100 Fly",
+      "course": "LCM",
+      "time": "1:28.07",
+      "meet_name": "2023 ASAJ Christmas Open",
+      "race_date": "2023-12-17",
+      "source_url": "https://www.swimcloud.com/results/289841/event/46/?id=114062550#time114062550",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "200 IM",
+      "course": "LCM",
+      "time": "3:13.53",
+      "meet_name": "2023 ASAJ Christmas Open",
+      "race_date": "2023-12-18",
+      "source_url": "https://www.swimcloud.com/results/289841/event/100/?id=114060460#time114060460",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
     }
   ],
   "goodwill": {
@@ -2406,6 +2538,6 @@
       "status": "verified_listing"
     }
   },
-  "built_at": "2026-11-02T15:32:26+00:00",
+  "built_at": "2026-11-02T16:10:04+00:00",
   "warning": "Only rows explicitly verified against ASAJ are published; empty fields mean not yet verified."
 }
