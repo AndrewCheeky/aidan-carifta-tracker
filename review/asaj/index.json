@@ -5,7 +5,7 @@
     "https://asaj.com.jm/rankings": {
       "category": "rankings",
       "title": "ASAJ listing: rankings",
-      "sha256": "064451c51f23e6c4238794987624f6c3ee2082b54fbf5992577e0e7946943a15",
+      "sha256": "63546766cdde336a2234765e58cbb3622003a16f5326cc132ab1f5b4ec3a9c8a",
       "content_type": "html",
       "links": [
         {
@@ -446,7 +446,7 @@
     "https://www.asaj.com.jm/calendar/2027": {
       "category": "calendar",
       "title": "ASAJ listing: calendar",
-      "sha256": "2e8d6e3342c65cf5363892f4825fec5216bce4aa3e614fa7bb93e84e45b3d163",
+      "sha256": "3d1836e7486302d481233ca209085be51cdd3d35ceebc1aa59e2210ff9a19935",
       "content_type": "html",
       "links": [
         {
@@ -471,7 +471,7 @@
     "https://www.asaj.com.jm/events/aggregator": {
       "category": "events",
       "title": "ASAJ listing: events",
-      "sha256": "83c1993185069a1ed9f7a3c137c757ee6b356a04a434970b858e24b400d25921",
+      "sha256": "941e66cf29ee0ae98a706091d1e8af5741feefdda83b49ff67dd44bfc48ba2c1",
       "content_type": "html",
       "links": [
         {
@@ -548,7 +548,7 @@
     "https://www.asaj.com.jm/resources": {
       "category": "resources",
       "title": "ASAJ listing: resources",
-      "sha256": "1db8c0b7f7f760059f3dd13c0bfd3830a4a3ed01fcae2bb9a076f0e89c977a82",
+      "sha256": "13bc8969195a4f1c5a22e1125def9835c2908681d8257f2f4d73cdbb2f5c34df",
       "content_type": "html",
       "links": [
         {
@@ -821,26 +821,6 @@
   },
   "new_or_changed_documents": [
     "https://asaj.com.jm/rankings",
-    "https://asaj.com.jm/swimming/carifta-2027-06-09-2026.pdf",
-    "https://asaj.com.jm/swimming/carifta-2027-29-09-2026.pdf",
-    "https://asaj.com.jm/swimming/carifta-2027-rankings.pdf",
-    "https://asaj.com.jm/swimming/commonwealth-games-qualifiers-and-rankings-10-03-2026.pdf",
-    "https://asaj.com.jm/swimming/commonwealth-games-qualifiers-rankings-11-04-2026.pdf",
-    "https://asaj.com.jm/swimming/commonwealth-games-qualifiers-rankings-19-04-2026.pdf",
-    "https://asaj.com.jm/swimming/general-ranking-21-07-2026.pdf",
-    "https://asaj.com.jm/swimming/general-ranking-29-06-2026.pdf",
-    "https://asaj.com.jm/swimming/general-rankings-01-06-2026.pdf",
-    "https://asaj.com.jm/swimming/general-rankings-06-09-2026.pdf",
-    "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf",
-    "https://asaj.com.jm/swimming/goodwill-2026-rankings-09-06-2026.pdf",
-    "https://asaj.com.jm/swimming/goodwill-2026-rankings-22-06-2026-v-2.pdf",
-    "https://asaj.com.jm/swimming/goodwill-2026-rankings-22-06-2026-v-4.pdf",
-    "https://asaj.com.jm/swimming/goodwill-2026-rankings-22-06-2026-v.pdf",
-    "https://asaj.com.jm/swimming/goodwill-2026-rankings-22-06-2026.pdf",
-    "https://asaj.com.jm/swimming/goodwill-2026-rankings-27-05-2026.pdf",
-    "https://asaj.com.jm/swimming/goodwill-2026-rankings-31-05-2026.pdf",
-    "https://asaj.com.jm/swimming/top-10-rankings-29-09-2026.pdf",
-    "https://asaj.com.jm/swimming/world-sc-championships-2026-rankings-27-08-2026.pdf",
     "https://www.asaj.com.jm/calendar/2027",
     "https://www.asaj.com.jm/events/aggregator",
     "https://www.asaj.com.jm/resources"
