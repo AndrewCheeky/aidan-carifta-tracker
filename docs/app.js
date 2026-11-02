@@ -173,14 +173,19 @@ function renderMotivational(d){
  const rows=metrics.map(m=>{
   const std=data.find(r=>r.event===m.name&&r.course===m.course&&r.age_group==='13-14'&&r.gender==='Boys');
   const best=m.best;const bestSeconds=typeof best==='number'?best:usaSeconds(best);
-  if(!std||bestSeconds===null)return `<tr><td>${esc(m.name)}</td><td>${m.course}</td><td>${trendTime(best)}</td><td>Unavailable</td><td>Official course standard not loaded</td></tr>`;
+  const matching=m.swims.filter(r=>Math.abs(trendSeconds(r.time)-bestSeconds)<.005);
+  const achieved=matching[0];
+  const achievedDate=achieved?.date?esc(achieved.date)+(achieved.precision!=='exact'?' (meet start; approximate)':''): 'Date unavailable';
+  const achievedSource=achieved?.origin==='ASAJ verified'?'ASAJ verified':achieved?'SwimCloud supplied (unverified)':'Source unavailable';
+  const dateCell=`<td>${achievedDate}<br><small>${achievedSource}</small></td>`;
+  if(!std||bestSeconds===null)return `<tr><td>${esc(m.name)}</td><td>${m.course}</td><td>${trendTime(best)}</td>${dateCell}<td>Unavailable</td><td>Official course standard not loaded</td></tr>`;
   let level='Below B';for(const l of USA_LEVELS){if(bestSeconds<=usaSeconds(std[l]))level=l;}
   const next=level==='AAAA'?null:USA_LEVELS[level==='Below B'?0:USA_LEVELS.indexOf(level)+1];
   const gap=next?Math.max(0,bestSeconds-usaSeconds(std[next])):null;
-  return `<tr><td>${esc(m.name)}</td><td>${m.course}</td><td>${trendTime(best)}</td><td><strong>${level}</strong></td><td>${next?`${gap.toFixed(2)}s to ${next}`:'AAAA achieved'}</td></tr>`;
+  return `<tr><td>${esc(m.name)}</td><td>${m.course}</td><td>${trendTime(best)}</td>${dateCell}<td><strong>${level}</strong></td><td>${next?`${gap.toFixed(2)}s to ${next}`:'AAAA achieved'}</td></tr>`;
  });
  const source='https://www.usaswimming.org/times/popular-resources/time-standards';
- return `<section class="panel"><h2>USA Swimming motivational standards</h2><p>2024–2028, Boys 13–14. These are developmental comparisons, <strong>not</strong> CARIFTA selection or medal benchmarks. The best shown can include supplementary SwimCloud times. SCM standards remain unavailable until verified data is loaded.</p><div class="visual-scroll">${table(['Event','Course','Best shown','Level','Next level gap'],rows)}</div><p class="muted"><a href="${source}" target="_blank" rel="noopener noreferrer">USA Swimming official standards</a> · Age-group 13–14, LCM only. Classification uses the fastest recorded time, not eligibility or age at the time of the swim.</p></section>`;
+ return `<section class="panel"><h2>USA Swimming motivational standards</h2><p>2024–2028, Boys 13–14. These are developmental comparisons, <strong>not</strong> CARIFTA selection or medal benchmarks. The best shown can include supplementary SwimCloud times. SCM standards remain unavailable until verified data is loaded.</p><div class="visual-scroll">${table(['Event','Course','Best shown','Achieved on / source','Level','Next level gap'],rows)}</div><p class="muted"><a href="${source}" target="_blank" rel="noopener noreferrer">USA Swimming official standards</a> · Age-group 13–14, LCM only. Achievement date is the recorded date of the fastest shown swim; ASAJ meet-start dates are marked approximate. Classification uses the fastest recorded time, not eligibility or age at the time of the swim.</p></section>`;
 }
 function renderCompetitiveSnapshot(d){
  const rows=d.events.filter(e=>e.third_place&&e.third_place.time).map(e=>{
