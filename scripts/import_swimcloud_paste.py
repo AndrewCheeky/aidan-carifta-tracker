@@ -39,6 +39,7 @@ def parse(body):
         if date.year<2000 or date.year>datetime.now().year+1:raise ValueError('Unexpected race date')
         if url and (urlparse(url).scheme!='https' or urlparse(url).hostname not in ('www.swimcloud.com','swimcloud.com')):raise ValueError('Invalid SwimCloud source link')
         if not url and meet_url:url=meet_url
+        if url and (urlparse(url).scheme!='https' or urlparse(url).hostname not in ('www.swimcloud.com','swimcloud.com')):raise ValueError('Invalid SwimCloud source link')
         if not meet:raise ValueError('Missing meet')
         rows.append(dict(event=ev.title().replace('Im','IM'),course=course.group(1).upper(),time=tm,meet_name=meet,race_date=date.isoformat(),source_url=url,source_type='SwimCloud user-supplied',verification_status='Supplementary, not ASAJ-verified',round='Unspecified',swimmer='Aidan Seaton'))
     if not rows:raise ValueError('No valid race rows found')

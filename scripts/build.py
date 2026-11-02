@@ -170,8 +170,11 @@ goodwill['events']=[{'event':r['event'],'personal_best':r['personal_best'],'pb_s
 with (DATA/'swimcloud_supplemental.csv').open(newline='') as f:
     swimcloud_supplemental=list(csv.DictReader(f))
 for sr in swimcloud_supplemental:
-    if urlparse(sr['source_url']).hostname!='www.swimcloud.com' or sr['swimmer']!='Aidan Seaton' or sr['course'] not in ('SCM','LCM'):
-        raise ValueError('Invalid supplemental result')
+    url=(sr.get('source_url') or '').strip()
+    host=urlparse(url).hostname
+    # Pasted tables may omit result links. Keep these explicitly unverified.
+    if (url and (urlparse(url).scheme!='https' or host not in ('www.swimcloud.com','swimcloud.com'))) or sr.get('swimmer')!='Aidan Seaton' or sr.get('course') not in ('SCM','LCM'):
+        raise ValueError(f"Invalid supplemental result at {sr.get('race_date','?')} {sr.get('event','?')} {sr.get('course','?')}: check swimmer, course and source_url")
     seconds(sr['time']);date.fromisoformat(sr['race_date'])
 output={'athlete':json.loads((DATA/'athlete.json').read_text()),'events':results,'race_history_2026':history,'swimcloud_supplemental':swimcloud_supplemental,'goodwill':goodwill,'carifta_criteria':CARIFTA_CRITERIA,'meets':meets,'sources':sources,'built_at':datetime.now().astimezone().isoformat(timespec='seconds'),'warning':'Only rows explicitly verified against ASAJ are published; empty fields mean not yet verified.'}
 (DOCS/'data.json').write_text(json.dumps(output,indent=2,ensure_ascii=False))
