@@ -5,7 +5,8 @@ const value=x=>x===null||x===undefined||x===''?'<span class="pending">Pending ve
 const card=(label,val)=>`<div class="card"><div class="label">${esc(label)}</div><div class="value">${val}</div></div>`;
 const table=(headers,rows)=>`<table><thead><tr>${headers.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table>`;
 function render(){if(!DATA)return;let html='';const ev=DATA.events;
-if(TAB==='intelligence'){html=renderIntelligence(DATA);
+if(TAB==='championship'){html=renderChampionshipShortlist(DATA);
+}else if(TAB==='intelligence'){html=renderIntelligence(DATA);
 }else if(TAB==='progress'){html=renderAllEventProgress(DATA);
 }else if(TAB==='trends'){html=renderTrends(DATA);
 }else if(TAB==='visual'){
@@ -180,7 +181,7 @@ function renderIntelligence(d){
  const opp=snapshot.map(m=>`<tr><td>${fmt(m)}</td><td>${trendTime(m.best)}</td><td>${trendTime(m.third)}</td><td class="${m.gap<=0?'good':''}">${m.gap>0?'+':''}${m.gap.toFixed(2)}s</td><td>${m.bgap===null?'Unavailable':`${m.bgap>0?'+':''}${m.bgap.toFixed(2)}s`}</td></tr>`);
  const rows=metrics.map(m=>`<tr><td>${fmt(m)}</td><td>${m.swims.length}</td><td>${trendTime(m.best)}</td><td>${m.pct===null?'Not enough history':`${m.pct>0?'+':''}${m.pct.toFixed(1)}%`}</td><td>${m.recentChange===null?'Not enough history':`${m.recentChange>0?'Faster':m.recentChange<0?'Slower':'Unchanged'} (${Math.abs(m.recentChange).toFixed(2)}s)`}</td></tr>`);
  return `<div class="intel-head"><div><div class="visual-eyebrow">AIDAN SEATON · TRAINING DECISION SUPPORT</div><h2>Performance Intelligence</h2><p>Documented strengths, recent trends and evidence-based priorities. Not a medal prediction.</p></div><div class="intel-toggle"><label>Inspect course <select id="intel-course"><option value="LCM">LCM (50m)</option><option value="SCM">SCM (25m)</option></select></label></div></div>
- ${renderChampionshipShortlist(d)}<div class="intel-cards"><section class="intel-card"><h3>🏆 Closest national podium comparisons</h3><p>September 2026 Jamaica ranking snapshot, LCM only.</p><ol>${snapshot.slice(0,3).map(m=>`<li>${fmt(m)} · ${m.gap>0?m.gap.toFixed(2)+'s behind':Math.abs(m.gap).toFixed(2)+'s ahead'}</li>`).join('')||'<li>No verified snapshot benchmarks</li>'}</ol></section>
+ <div class="intel-cards"><section class="intel-card"><h3>🏆 Closest national podium comparisons</h3><p>September 2026 Jamaica ranking snapshot, LCM only.</p><ol>${snapshot.slice(0,3).map(m=>`<li>${fmt(m)} · ${m.gap>0?m.gap.toFixed(2)+'s behind':Math.abs(m.gap).toFixed(2)+'s ahead'}</li>`).join('')||'<li>No verified snapshot benchmarks</li>'}</ol></section>
  <section class="intel-card"><h3>💪 Historical strengths</h3><p>Largest first-to-latest percentage gains.</p><ol>${strong||'<li>Insufficient data</li>'}</ol></section>
  <section class="intel-card"><h3>🎯 Review opportunities</h3><p>Recent race times moving slower, not a diagnosis.</p><ul>${focus}</ul></section>
  <section class="intel-card"><h3>💡 Coach discussion</h3><ul><li>Review splits, turns, starts and race pacing where available.</li><li>Check training load and taper before interpreting slower races.</li><li>Prioritize events with verified qualification gaps and repeatable improvement.</li></ul></section></div>
