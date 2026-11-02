@@ -2171,6 +2171,212 @@
       "swimmer": "Aidan Seaton"
     }
   ],
+  "usa_motivational": [
+    {
+      "event": "50 Free",
+      "course": "LCM",
+      "age_group": "13-14",
+      "gender": "Boys",
+      "B": "34.29",
+      "BB": "31.79",
+      "A": "29.39",
+      "AA": "28.19",
+      "AAA": "26.89",
+      "AAAA": "25.69"
+    },
+    {
+      "event": "100 Free",
+      "course": "LCM",
+      "age_group": "13-14",
+      "gender": "Boys",
+      "B": "1:15.09",
+      "BB": "1:09.79",
+      "A": "1:04.39",
+      "AA": "1:01.69",
+      "AAA": "58.99",
+      "AAAA": "56.39"
+    },
+    {
+      "event": "200 Free",
+      "course": "LCM",
+      "age_group": "13-14",
+      "gender": "Boys",
+      "B": "2:43.99",
+      "BB": "2:32.29",
+      "A": "2:20.59",
+      "AA": "2:14.69",
+      "AAA": "2:08.89",
+      "AAAA": "2:02.99"
+    },
+    {
+      "event": "400 Free",
+      "course": "LCM",
+      "age_group": "13-14",
+      "gender": "Boys",
+      "B": "5:48.39",
+      "BB": "5:23.49",
+      "A": "4:58.69",
+      "AA": "4:46.19",
+      "AAA": "4:33.79",
+      "AAAA": "4:21.29"
+    },
+    {
+      "event": "800 Free",
+      "course": "LCM",
+      "age_group": "13-14",
+      "gender": "Boys",
+      "B": "12:00.59",
+      "BB": "11:09.19",
+      "A": "10:17.69",
+      "AA": "9:51.99",
+      "AAA": "9:26.19",
+      "AAAA": "9:00.49"
+    },
+    {
+      "event": "1500 Free",
+      "course": "LCM",
+      "age_group": "13-14",
+      "gender": "Boys",
+      "B": "23:04.59",
+      "BB": "21:25.69",
+      "A": "19:46.79",
+      "AA": "18:57.39",
+      "AAA": "18:07.89",
+      "AAAA": "17:18.49"
+    },
+    {
+      "event": "50 Back",
+      "course": "LCM",
+      "age_group": "13-14",
+      "gender": "Boys",
+      "B": "39.49",
+      "BB": "36.69",
+      "A": "33.89",
+      "AA": "32.49",
+      "AAA": "31.09",
+      "AAAA": "29.69"
+    },
+    {
+      "event": "100 Back",
+      "course": "LCM",
+      "age_group": "13-14",
+      "gender": "Boys",
+      "B": "1:23.69",
+      "BB": "1:17.69",
+      "A": "1:11.69",
+      "AA": "1:08.69",
+      "AAA": "1:05.79",
+      "AAAA": "1:02.79"
+    },
+    {
+      "event": "200 Back",
+      "course": "LCM",
+      "age_group": "13-14",
+      "gender": "Boys",
+      "B": "3:01.79",
+      "BB": "2:48.79",
+      "A": "2:35.79",
+      "AA": "2:29.29",
+      "AAA": "2:22.79",
+      "AAAA": "2:16.29"
+    },
+    {
+      "event": "50 Breast",
+      "course": "LCM",
+      "age_group": "13-14",
+      "gender": "Boys",
+      "B": "43.99",
+      "BB": "40.89",
+      "A": "37.69",
+      "AA": "36.19",
+      "AAA": "34.59",
+      "AAAA": "32.99"
+    },
+    {
+      "event": "100 Breast",
+      "course": "LCM",
+      "age_group": "13-14",
+      "gender": "Boys",
+      "B": "1:33.79",
+      "BB": "1:27.09",
+      "A": "1:20.39",
+      "AA": "1:16.99",
+      "AAA": "1:13.69",
+      "AAAA": "1:10.29"
+    },
+    {
+      "event": "200 Breast",
+      "course": "LCM",
+      "age_group": "13-14",
+      "gender": "Boys",
+      "B": "3:22.79",
+      "BB": "3:08.29",
+      "A": "2:53.79",
+      "AA": "2:46.59",
+      "AAA": "2:39.39",
+      "AAAA": "2:32.09"
+    },
+    {
+      "event": "50 Fly",
+      "course": "LCM",
+      "age_group": "13-14",
+      "gender": "Boys",
+      "B": "37.29",
+      "BB": "34.59",
+      "A": "31.89",
+      "AA": "30.59",
+      "AAA": "29.29",
+      "AAAA": "27.99"
+    },
+    {
+      "event": "100 Fly",
+      "course": "LCM",
+      "age_group": "13-14",
+      "gender": "Boys",
+      "B": "1:20.29",
+      "BB": "1:14.59",
+      "A": "1:08.89",
+      "AA": "1:05.99",
+      "AAA": "1:03.09",
+      "AAAA": "1:00.29"
+    },
+    {
+      "event": "200 Fly",
+      "course": "LCM",
+      "age_group": "13-14",
+      "gender": "Boys",
+      "B": "2:59.69",
+      "BB": "2:46.79",
+      "A": "2:33.99",
+      "AA": "2:27.59",
+      "AAA": "2:21.19",
+      "AAAA": "2:14.79"
+    },
+    {
+      "event": "200 IM",
+      "course": "LCM",
+      "age_group": "13-14",
+      "gender": "Boys",
+      "B": "3:02.89",
+      "BB": "2:49.79",
+      "A": "2:36.69",
+      "AA": "2:30.19",
+      "AAA": "2:23.69",
+      "AAAA": "2:17.19"
+    },
+    {
+      "event": "400 IM",
+      "course": "LCM",
+      "age_group": "13-14",
+      "gender": "Boys",
+      "B": "6:30.69",
+      "BB": "6:02.79",
+      "A": "5:34.89",
+      "AA": "5:20.89",
+      "AAA": "5:06.99",
+      "AAAA": "4:52.99"
+    }
+  ],
   "goodwill": {
     "competition_year": 2026,
     "age_group": "Boys 13–14",
@@ -2538,6 +2744,6 @@
       "status": "verified_listing"
     }
   },
-  "built_at": "2026-11-02T16:23:44+00:00",
+  "built_at": "2026-11-02T18:16:14+00:00",
   "warning": "Only rows explicitly verified against ASAJ are published; empty fields mean not yet verified."
 }

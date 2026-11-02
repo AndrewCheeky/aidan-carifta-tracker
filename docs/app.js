@@ -163,3 +163,34 @@ function drawIntelligence(){
  const draw=()=>{const m=all.find(x=>x.name===sel.value);if(!m){target.innerHTML='<p>No recorded swims.</p>';return;}target.innerHTML=`<div class="intel-stats"><div><small>Earliest</small><strong>${trendTime(m.first)}</strong></div><div><small>Latest</small><strong>${trendTime(m.latest)}</strong></div><div><small>Best shown</small><strong>${trendTime(m.best)}</strong></div></div><div class="intel-chart">${intelligenceLine(m)}</div><p>${m.swims.length} documented result(s) · ${m.pct===null?'Insufficient history for a trend':`${m.pct.toFixed(1)}% first-to-latest improvement`}</p>`};sel.onchange=draw;draw();
 }
 const renderWithIntelligence=render;render=function(){renderWithIntelligence();if(TAB==='intelligence'){const c=document.getElementById('intel-course');if(c)c.onchange=drawIntelligence;drawIntelligence();}};
+
+
+// USA Swimming 2024-2028 age-group motivational benchmarks. Never treat as CARIFTA qualification.
+const usaSeconds=x=>{if(!x)return null;const p=String(x).split(':').map(Number);return p.every(Number.isFinite)?p.reduce((a,b)=>a*60+b,0):null};
+const USA_LEVELS=['B','BB','A','AA','AAA','AAAA'];
+function renderMotivational(d){
+ const data=d.usa_motivational||[], metrics=['LCM','SCM'].flatMap(c=>intelligenceMetrics(d,c));
+ const rows=metrics.map(m=>{
+  const std=data.find(r=>r.event===m.name&&r.course===m.course&&r.age_group==='13-14'&&r.gender==='Boys');
+  const best=m.best;const bestSeconds=typeof best==='number'?best:usaSeconds(best);
+  if(!std||bestSeconds===null)return `<tr><td>${esc(m.name)}</td><td>${m.course}</td><td>${trendTime(best)}</td><td>Unavailable</td><td>Official course standard not loaded</td></tr>`;
+  let level='Below B';for(const l of USA_LEVELS){if(bestSeconds<=usaSeconds(std[l]))level=l;}
+  const next=level==='AAAA'?null:USA_LEVELS[level==='Below B'?0:USA_LEVELS.indexOf(level)+1];
+  const gap=next?Math.max(0,bestSeconds-usaSeconds(std[next])):null;
+  return `<tr><td>${esc(m.name)}</td><td>${m.course}</td><td>${trendTime(best)}</td><td><strong>${level}</strong></td><td>${next?`${gap.toFixed(2)}s to ${next}`:'AAAA achieved'}</td></tr>`;
+ });
+ const source='https://www.usaswimming.org/times/popular-resources/time-standards';
+ return `<section class="panel"><h2>USA Swimming motivational standards</h2><p>2024–2028, Boys 13–14. These are developmental comparisons, <strong>not</strong> CARIFTA selection or medal benchmarks. The best shown can include supplementary SwimCloud times. SCM standards remain unavailable until verified data is loaded.</p><div class="visual-scroll">${table(['Event','Course','Best shown','Level','Next level gap'],rows)}</div><p class="muted"><a href="${source}" target="_blank" rel="noopener noreferrer">USA Swimming official standards</a> · Age-group 13–14, LCM only. Classification uses the fastest recorded time, not eligibility or age at the time of the swim.</p></section>`;
+}
+function renderCompetitiveSnapshot(d){
+ const rows=d.events.filter(e=>e.third_place&&e.third_place.time).map(e=>{
+  const t=usaSeconds(e.personal_best),p=usaSeconds(e.third_place.time),gap=t===null||p===null?null:t-p;
+  return `<tr><td>${esc(e.event)} LCM</td><td>${esc(e.personal_best||'Unavailable')}</td><td>${esc(e.third_place.swimmer||'Unavailable')}</td><td>${esc(e.third_place.time)}</td><td>${gap===null?'Unavailable':`${gap>0?'+':''}${gap.toFixed(2)}s`}</td></tr>`;
+ });
+ return `<section class="panel"><h2>Competitor benchmark snapshot</h2><p>Comparison against the documented third-place swimmer in the Jamaica rankings of 29 September 2026. These are not live head-to-head results or CARIFTA bronze benchmarks.</p><div class="visual-scroll">${table(['Event','Aidan shown','National 3rd swimmer','National 3rd time','Gap'],rows)}</div><p class="muted">Gaining or losing ground requires at least two dated, comparable competitor snapshots. Until those are available, relative trend is <strong>insufficient data</strong>, not assumed to be improving.</p></section>`;
+}
+const renderWithStandards=render;
+render=function(){renderWithStandards();if(TAB==='intelligence'){
+ const main=document.getElementById('content')||document.querySelector('main');
+ if(main){const wrap=document.createElement('div');wrap.innerHTML=renderMotivational(DATA)+renderCompetitiveSnapshot(DATA);main.appendChild(wrap);}
+}};
