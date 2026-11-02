@@ -106,6 +106,7 @@ def extract_candidates(pdf_bytes):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--max-pdfs', type=int, default=MAX_PDFS)
+    ap.add_argument('--reference-pdf', action='append', default=[], help='Local official PDF for regression tests/review staging; does not publish CSVs')
     args = ap.parse_args()
     STAGING.mkdir(parents=True, exist_ok=True)
     previous = json.loads(INDEX.read_text()) if INDEX.exists() else {'documents':{}}
@@ -142,11 +143,22 @@ def main():
             digest = hashlib.sha256(raw).hexdigest()
             # Always extract to keep proposal output deterministic on repeated runs.
             details = extract_candidates(raw)
-            structured.extend(extract_structured(raw, download_url, digest, category))
+            found = extract_structured(raw, download_url, digest, category)
+            structured.extend(found)
+            print(f'PDF {link["title"][:70]}: {len(found)} candidates, {details["pages"]} pages, {len(details["aidan_mentions"])} Aidan mentions')
             documents[url] = {'category':category,'title':link['title'],'sha256':digest,
                               'content_type':'pdf','download_url':download_url,'review_status':'needs_human_review',**details}
         except Exception as exc:
             failures.append({'url':url,'error':str(exc)[:300]})
+    for local_name in args.reference_pdf:
+        local = Path(local_name)
+        raw = local.read_bytes()
+        if not raw.startswith(b'%PDF'): raise ValueError(f'Not a PDF: {local}')
+        digest = hashlib.sha256(raw).hexdigest()
+        kind = 'resources' if 'carifta' in local.name.lower() else 'rankings'
+        found = extract_structured(raw, 'uploaded-reference:' + local.name, digest, kind)
+        structured.extend(found)
+        print(f'Reference {local.name}: {len(found)} candidates')
     changed = sorted(k for k,v in documents.items() if previous_docs.get(k) != v)
     # Deterministic output: no volatile timestamp in tracked data.
     output = {'athlete_identity':'Aidan Seaton','identity_policy':'Club, school and national affiliation do not restrict matching.',

@@ -88,3 +88,7 @@ The ingestion workflow **always checks out `main`**, even if someone manually se
 After every run, look under the workflow run's **Artifacts** for `asaj-review-outputs-<run number>`; it contains `index.json` and `proposals.json` even when no changes warrant a pull request. The job also validates that both files exist and that the proposals are marked unverified. A proposal file with `candidates: []` is valid but means no candidate times were extracted, **not** that the tracker has verified athlete performances.
 
 Run **Actions → Monitor official ASAJ publications → Run workflow** (choose `main` for clarity). A deployment triggered by merging a PR is a separate workflow and will not extract PDFs. Never merge proposed numerical figures into `data/*.csv` without checking the official ASAJ source document.
+
+### November 2026 extraction rebuild
+
+The ingestion workflow includes two user-supplied ASAJ PDF reference fixtures under `reference/asaj/` to regression-test the HY-TEK rankings and CARIFTA 2027 standards. It stages review-only records from both references on every run, even if the live ASAJ listing has no matching PDFs. `review/asaj/proposals.json` is **not** published to the website. The reference records use `uploaded-reference:` identifiers and are **not official live URLs**. Do not set `verified=true` until the document and its canonical ASAJ URL have been checked. The Boys 12 `unresolved_name_field` intentionally includes uncertain club/meet text and must not be displayed as a swimmer name without human verification.
