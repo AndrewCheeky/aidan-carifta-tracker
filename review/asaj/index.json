@@ -1,0 +1,849 @@
+{
+  "athlete_identity": "Aidan Seaton",
+  "identity_policy": "Club, school and national affiliation do not restrict matching.",
+  "documents": {
+    "https://asaj.com.jm/rankings": {
+      "category": "rankings",
+      "title": "ASAJ listing: rankings",
+      "sha256": "064451c51f23e6c4238794987624f6c3ee2082b54fbf5992577e0e7946943a15",
+      "content_type": "html",
+      "links": [
+        {
+          "url": "https://asaj.com.jm/calendar",
+          "title": "Calendars"
+        },
+        {
+          "url": "https://asaj.com.jm/results",
+          "title": "Results archive"
+        },
+        {
+          "url": "https://asaj.com.jm/results/2019/april/2019-mayberry-high-schools-tertiary-institutions-swim-meet/2019-mayberry-ht-recordbreakers.pdf/@@display-file/file",
+          "title": "2019 Mayberry HT Recordbreakers.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/results/2019/april/2019-mayberry-prep-primary-schools-swim-meet/2019-mayberry-pp-recordbreakers.pdf/@@display-file/file",
+          "title": "2019 Mayberry PP Recordbreakers.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/results/2019/april/ymca-pentathlon/2019-ymca-pentathlon-meet-records.pdf/@@display-file/file",
+          "title": "2019 YMCA Pentathlon Meet Records.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/results/2019/august/2019-goodwill-games/records-broken-goodwill-2019.pdf/@@display-file/file",
+          "title": "records broken goodwill 2019.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/results/2019/december-2019/2019-christmas-open/christmas-open-record-breakers/record-breakers-christmas-open-2019.pdf/@@display-file/file",
+          "title": "RECORD BREAKERS - Christmas Open 2019.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/results/2019/february-2019/2019-walter-rogers-age-group-championships/record-breakers-walter-rogers-age-group-champs-2019.pdf/@@display-file/file",
+          "title": "RECORD BREAKERS - WALTER ROGERS AGE GROUP CHAMPS 2019.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/results/2019/july-2019/2019-western-invitational-swim-event-wise/2019-wise-recordbreakers.pdf/@@display-file/file",
+          "title": "2019 WISE Recordbreakers.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/results/2019/june-2019/milo-prep-primary-swim-meet/2019-milo-day-1-recordbreakers.pdf/@@display-file/file",
+          "title": "2019 MILO Day-1 Recordbreakers.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/results/2019/june-2019/milo-prep-primary-swim-meet/2019-milo-day-2-recordbreakers.pdf/@@display-file/file",
+          "title": "2019 MILO Day-2 Recordbreakers.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/results/2019/may-2019/bk-ymca-swim-meet/2019-bk-ymca-recordbreakers.pdf/@@display-file/file",
+          "title": "2019 BK YMCA Recordbreakers.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/results/2019/november-2019/2-19-ncbic-prep-primary-swim-meet/2019-ncbic-prep-primary-recordbreakers.pdf/@@display-file/file",
+          "title": "2019 NCBIC Prep/Primary Record Breakers"
+        },
+        {
+          "url": "https://asaj.com.jm/results/2019/november-2019/2019-issa-high-tertiary-swim-meet/2019-issa-high-tertiary-recordbreakers.pdf/@@display-file/file",
+          "title": "2019 ISSA High/Tertiary Recordbreakers"
+        },
+        {
+          "url": "https://asaj.com.jm/results/2019/october-2019/2019-dean-martin-memorial-swim-meet/record-breakers-dean-martin-2019-1.pdf/@@display-file/file",
+          "title": "2019 Dean Martin Memorial Swim Meet - Recordbreakers"
+        },
+        {
+          "url": "https://asaj.com.jm/results/2020/february-2020/2020-ncbic-walter-rogers-age-group-championships/record-breakers-ncbic-walter-rogers-2020.pdf/@@display-file/file",
+          "title": "RECORD BREAKERS"
+        },
+        {
+          "url": "https://asaj.com.jm/results/2020/february-2020/asaj-high-tertiary-swimming-championships/2020-asaj-h-t-recordbreakers-friday.pdf/@@display-file/file",
+          "title": "2020 ASAJ H/T Record Breakers Friday"
+        },
+        {
+          "url": "https://asaj.com.jm/results/2020/february-2020/asaj-high-tertiary-swimming-championships/2020-asaj-h-t-saturday-recordbreakers.pdf/@@display-file/file",
+          "title": "2020 ASAJ H/T Saturday Record Breakers"
+        },
+        {
+          "url": "https://asaj.com.jm/results/2020/january-2020/2020-karl-dalhouse-memorial-invitational-swim-meet/kd2020-recordbreakers.pdf/@@display-file/file",
+          "title": "KD2020 Record breakers"
+        },
+        {
+          "url": "https://asaj.com.jm/results/2020/march-2020/mayberry-high-schools-tertiary-institutions-swim-meet/2020-mayberry-h-t-recordbreakers.pdf/@@display-file/file",
+          "title": "Mayberry H/T Recordbreakers"
+        },
+        {
+          "url": "https://asaj.com.jm/results/2020/march-2020/mayberry-prep-primary-school-swim-meet/2020-mayberry-p-p-recordbreakers.pdf/@@display-file/file",
+          "title": "Mayberry Prep/Primary Record Breakers"
+        },
+        {
+          "url": "https://asaj.com.jm/results/2023/2023-christmas-champs/xmas-open-2023-record-breakers.pdf/@@display-file/file",
+          "title": "xmas open 2023 record breakers.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/2026-cac-games-criteria-revised.pdf/@@display-file/file",
+          "title": "2026 CAC Games Criteria Revised.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/carifta-2027-06-09-2026.pdf/@@display-file/file",
+          "title": "Carifta 2027 06-09-2026.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/carifta-2027-29-09-2026.pdf/@@display-file/file",
+          "title": "Carifta 2027 29-09-2026.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/carifta-2027-rankings.pdf/@@display-file/file",
+          "title": "Carifta 2027 Rankings.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/commonwealth-games-qualifiers-and-rankings-10-03-2026.pdf/@@display-file/file",
+          "title": "Commonwealth Games Qualifiers and Rankings 10-03-2026.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/commonwealth-games-qualifiers-rankings-11-04-2026.pdf/@@display-file/file",
+          "title": "Commonwealth Games Qualifiers & Rankings 11-04-2026.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/commonwealth-games-qualifiers-rankings-19-04-2026.pdf/@@display-file/file",
+          "title": "Commonwealth Games Qualifiers & Rankings 19-04-2026.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/general-ranking-21-07-2026.pdf/@@display-file/file",
+          "title": "General Ranking 21-07-2026.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/general-ranking-29-06-2026.pdf/@@display-file/file",
+          "title": "General Ranking 29-06-2026.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/general-rankings-01-06-2026.pdf/@@display-file/file",
+          "title": "General Rankings 01-06-2026.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/general-rankings-06-09-2026.pdf/@@display-file/file",
+          "title": "General Rankings 06-09-2026.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@display-file/file",
+          "title": "General Rankings 29-09-2026.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/goodwill-2025-qualifying-times.pdf/@@display-file/file",
+          "title": "Goodwill 2025 Qualifying Times.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/goodwill-2026-rankings-09-06-2026.pdf/@@display-file/file",
+          "title": "Goodwill 2026 Rankings 09-06-2026.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/goodwill-2026-rankings-22-06-2026-v-2.pdf/@@display-file/file",
+          "title": "Goodwill 2026 Rankings 22-06-2026 v.2.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/goodwill-2026-rankings-22-06-2026-v-4.pdf/@@display-file/file",
+          "title": "Goodwill 2026 Rankings 22-06-2026 v.4.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/goodwill-2026-rankings-22-06-2026-v.pdf/@@display-file/file",
+          "title": "Goodwill 2026 Rankings 22-06-2026 v.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/goodwill-2026-rankings-22-06-2026.pdf/@@display-file/file",
+          "title": "Goodwill 2026 Rankings 22-06-2026.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/goodwill-2026-rankings-27-05-2026.pdf/@@display-file/file",
+          "title": "Goodwill 2026 Rankings 27-05-2026.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/goodwill-2026-rankings-31-05-2026.pdf/@@display-file/file",
+          "title": "Goodwill 2026 Rankings 31-05-2026.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/lima-2027-29-09-2026.pdf/@@display-file/file",
+          "title": "Lima 2027 29-09-2026.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/lima-2027-swimming-qualification-standards.pdf/@@display-file/file",
+          "title": "Lima 2027 Swimming Qualification Standards.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/panam-lima-2027-06-09-2026.pdf/@@display-file/file",
+          "title": "PanAm Lima 2027 06-09-2026.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/selection-criteria-2026-commonwealth-games-revised.pdf/@@display-file/file",
+          "title": "Selection Criteria 2026 Commonwealth Games - Revised.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/selection-criteria-2026-youth-olympic-games.pdf/@@display-file/file",
+          "title": "Selection Criteria 2026 Youth Olympic Games .pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/top-10-rankings-29-09-2026.pdf/@@display-file/file",
+          "title": "Top 10 Rankings 29-09-2026.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/world-sc-championships-2026-rankings-27-08-2026.pdf/@@display-file/file",
+          "title": "World SC Championships 2026 Rankings 27-08-2026.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/world-short-course-championships-2026-rankings-13-07-2026.pdf/@@display-file/file",
+          "title": "World Short Course Championships 2026 Rankings 13-07-2026.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/youth-olympics-2026-qualifiers-and-rankings.pdf/@@display-file/file",
+          "title": "Youth Olympics 2026 Qualifiers and Rankings.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/youth-olympics-qualifiers-rankings-11-04-2026.pdf/@@display-file/file",
+          "title": "Youth Olympics Qualifiers & Rankings 11-04-2026.pdf"
+        },
+        {
+          "url": "https://liveresults.asaj.com.jm",
+          "title": "Live results"
+        }
+      ],
+      "review_status": "listing_only"
+    },
+    "https://asaj.com.jm/swimming/carifta-2027-06-09-2026.pdf": {
+      "category": "rankings",
+      "title": "Carifta 2027 06-09-2026.pdf",
+      "sha256": "7a7cf880181683c2ca19cea5ac0f3e43896b24b86ba5e193cd18789764e445fb",
+      "content_type": "pdf",
+      "download_url": "https://asaj.com.jm/swimming/carifta-2027-06-09-2026.pdf/@@download/file",
+      "review_status": "needs_human_review",
+      "pages": 2,
+      "aidan_mentions": [],
+      "extraction_note": "Candidate text only. Check original PDF tables, age, event, course and times manually."
+    },
+    "https://asaj.com.jm/swimming/carifta-2027-29-09-2026.pdf": {
+      "category": "rankings",
+      "title": "Carifta 2027 29-09-2026.pdf",
+      "sha256": "3718850919d7fa1cc998ac519b8dd5f037b1e729ea6157a92a938b2d20548913",
+      "content_type": "pdf",
+      "download_url": "https://asaj.com.jm/swimming/carifta-2027-29-09-2026.pdf/@@download/file",
+      "review_status": "needs_human_review",
+      "pages": 2,
+      "aidan_mentions": [],
+      "extraction_note": "Candidate text only. Check original PDF tables, age, event, course and times manually."
+    },
+    "https://asaj.com.jm/swimming/carifta-2027-rankings.pdf": {
+      "category": "rankings",
+      "title": "Carifta 2027 Rankings.pdf",
+      "sha256": "0b69d85655958379a074da945b56e2fbfb4b26e71ff2ac7a778cabcf09e7cc2e",
+      "content_type": "pdf",
+      "download_url": "https://asaj.com.jm/swimming/carifta-2027-rankings.pdf/@@download/file",
+      "review_status": "needs_human_review",
+      "pages": 1,
+      "aidan_mentions": [],
+      "extraction_note": "Candidate text only. Check original PDF tables, age, event, course and times manually."
+    },
+    "https://asaj.com.jm/swimming/commonwealth-games-qualifiers-and-rankings-10-03-2026.pdf": {
+      "category": "rankings",
+      "title": "Commonwealth Games Qualifiers and Rankings 10-03-2026.pdf",
+      "sha256": "c97642354f4061f7ac654af4ae46485d867454b331e704913248cb57440b331a",
+      "content_type": "pdf",
+      "download_url": "https://asaj.com.jm/swimming/commonwealth-games-qualifiers-and-rankings-10-03-2026.pdf/@@download/file",
+      "review_status": "needs_human_review",
+      "pages": 2,
+      "aidan_mentions": [],
+      "extraction_note": "Candidate text only. Check original PDF tables, age, event, course and times manually."
+    },
+    "https://asaj.com.jm/swimming/commonwealth-games-qualifiers-rankings-11-04-2026.pdf": {
+      "category": "rankings",
+      "title": "Commonwealth Games Qualifiers & Rankings 11-04-2026.pdf",
+      "sha256": "8f43a0a24d6ef8e81cf3e450dae98eb55dd996de42e12c3028f776412e3bfbb2",
+      "content_type": "pdf",
+      "download_url": "https://asaj.com.jm/swimming/commonwealth-games-qualifiers-rankings-11-04-2026.pdf/@@download/file",
+      "review_status": "needs_human_review",
+      "pages": 2,
+      "aidan_mentions": [],
+      "extraction_note": "Candidate text only. Check original PDF tables, age, event, course and times manually."
+    },
+    "https://asaj.com.jm/swimming/commonwealth-games-qualifiers-rankings-19-04-2026.pdf": {
+      "category": "rankings",
+      "title": "Commonwealth Games Qualifiers & Rankings 19-04-2026.pdf",
+      "sha256": "b8381b15097dcc32ae28a37db960c5a02508984da2f36310ba50419a66e76928",
+      "content_type": "pdf",
+      "download_url": "https://asaj.com.jm/swimming/commonwealth-games-qualifiers-rankings-19-04-2026.pdf/@@download/file",
+      "review_status": "needs_human_review",
+      "pages": 2,
+      "aidan_mentions": [],
+      "extraction_note": "Candidate text only. Check original PDF tables, age, event, course and times manually."
+    },
+    "https://asaj.com.jm/swimming/general-ranking-21-07-2026.pdf": {
+      "category": "rankings",
+      "title": "General Ranking 21-07-2026.pdf",
+      "sha256": "534240d879eb60f9199cabe0089083963408b2061d185209294bc88189d2317c",
+      "content_type": "pdf",
+      "download_url": "https://asaj.com.jm/swimming/general-ranking-21-07-2026.pdf/@@download/file",
+      "review_status": "needs_human_review",
+      "pages": 35,
+      "aidan_mentions": [],
+      "extraction_note": "Candidate text only. Check original PDF tables, age, event, course and times manually."
+    },
+    "https://asaj.com.jm/swimming/general-ranking-29-06-2026.pdf": {
+      "category": "rankings",
+      "title": "General Ranking 29-06-2026.pdf",
+      "sha256": "c29305b3edd2e980165d1bf8a2c5994b9749be7ec82b26402e8acbea0a4790f8",
+      "content_type": "pdf",
+      "download_url": "https://asaj.com.jm/swimming/general-ranking-29-06-2026.pdf/@@download/file",
+      "review_status": "needs_human_review",
+      "pages": 35,
+      "aidan_mentions": [],
+      "extraction_note": "Candidate text only. Check original PDF tables, age, event, course and times manually."
+    },
+    "https://asaj.com.jm/swimming/general-rankings-01-06-2026.pdf": {
+      "category": "rankings",
+      "title": "General Rankings 01-06-2026.pdf",
+      "sha256": "8b5dd3720d66262b57e048c62e675bea115cd3820d383094e68a58cbb4bccecf",
+      "content_type": "pdf",
+      "download_url": "https://asaj.com.jm/swimming/general-rankings-01-06-2026.pdf/@@download/file",
+      "review_status": "needs_human_review",
+      "pages": 35,
+      "aidan_mentions": [],
+      "extraction_note": "Candidate text only. Check original PDF tables, age, event, course and times manually."
+    },
+    "https://asaj.com.jm/swimming/general-rankings-06-09-2026.pdf": {
+      "category": "rankings",
+      "title": "General Rankings 06-09-2026.pdf",
+      "sha256": "3df11c40048d255bc21a9413791d7e800d5442175addbc0031ddb00c1bccf9a5",
+      "content_type": "pdf",
+      "download_url": "https://asaj.com.jm/swimming/general-rankings-06-09-2026.pdf/@@download/file",
+      "review_status": "needs_human_review",
+      "pages": 35,
+      "aidan_mentions": [],
+      "extraction_note": "Candidate text only. Check original PDF tables, age, event, course and times manually."
+    },
+    "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf": {
+      "category": "rankings",
+      "title": "General Rankings 29-09-2026.pdf",
+      "sha256": "213b8a63948ea366f438ff987d4f9562981c15bfb3aab51dd8246e1facd5bad1",
+      "content_type": "pdf",
+      "download_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
+      "review_status": "needs_human_review",
+      "pages": 35,
+      "aidan_mentions": [],
+      "extraction_note": "Candidate text only. Check original PDF tables, age, event, course and times manually."
+    },
+    "https://asaj.com.jm/swimming/goodwill-2026-rankings-09-06-2026.pdf": {
+      "category": "rankings",
+      "title": "Goodwill 2026 Rankings 09-06-2026.pdf",
+      "sha256": "9f6c43a2c2b9f42ba9074a503c608a05e0369018c23b7a6c8826d2af256d7752",
+      "content_type": "pdf",
+      "download_url": "https://asaj.com.jm/swimming/goodwill-2026-rankings-09-06-2026.pdf/@@download/file",
+      "review_status": "needs_human_review",
+      "pages": 7,
+      "aidan_mentions": [],
+      "extraction_note": "Candidate text only. Check original PDF tables, age, event, course and times manually."
+    },
+    "https://asaj.com.jm/swimming/goodwill-2026-rankings-22-06-2026-v-2.pdf": {
+      "category": "rankings",
+      "title": "Goodwill 2026 Rankings 22-06-2026 v.2.pdf",
+      "sha256": "acf1fe8a6b8a0ae3af0ae277e151a216ebf287f612e2949c0a365905d9cecb03",
+      "content_type": "pdf",
+      "download_url": "https://asaj.com.jm/swimming/goodwill-2026-rankings-22-06-2026-v-2.pdf/@@download/file",
+      "review_status": "needs_human_review",
+      "pages": 8,
+      "aidan_mentions": [],
+      "extraction_note": "Candidate text only. Check original PDF tables, age, event, course and times manually."
+    },
+    "https://asaj.com.jm/swimming/goodwill-2026-rankings-22-06-2026-v-4.pdf": {
+      "category": "rankings",
+      "title": "Goodwill 2026 Rankings 22-06-2026 v.4.pdf",
+      "sha256": "926d7d2569887004767ed915a2ed40003fecfec905f0e67e876a81729172f2e1",
+      "content_type": "pdf",
+      "download_url": "https://asaj.com.jm/swimming/goodwill-2026-rankings-22-06-2026-v-4.pdf/@@download/file",
+      "review_status": "needs_human_review",
+      "pages": 7,
+      "aidan_mentions": [],
+      "extraction_note": "Candidate text only. Check original PDF tables, age, event, course and times manually."
+    },
+    "https://asaj.com.jm/swimming/goodwill-2026-rankings-22-06-2026-v.pdf": {
+      "category": "rankings",
+      "title": "Goodwill 2026 Rankings 22-06-2026 v.pdf",
+      "sha256": "c62ce7194b0e34e33ada4235fdc5b014828df00f3091d8829214b7f76b975307",
+      "content_type": "pdf",
+      "download_url": "https://asaj.com.jm/swimming/goodwill-2026-rankings-22-06-2026-v.pdf/@@download/file",
+      "review_status": "needs_human_review",
+      "pages": 7,
+      "aidan_mentions": [],
+      "extraction_note": "Candidate text only. Check original PDF tables, age, event, course and times manually."
+    },
+    "https://asaj.com.jm/swimming/goodwill-2026-rankings-22-06-2026.pdf": {
+      "category": "rankings",
+      "title": "Goodwill 2026 Rankings 22-06-2026.pdf",
+      "sha256": "75af4d9df0d49a97392daf2ba29787fc41eb2a19519b751be50acf890b2ee4f8",
+      "content_type": "pdf",
+      "download_url": "https://asaj.com.jm/swimming/goodwill-2026-rankings-22-06-2026.pdf/@@download/file",
+      "review_status": "needs_human_review",
+      "pages": 8,
+      "aidan_mentions": [],
+      "extraction_note": "Candidate text only. Check original PDF tables, age, event, course and times manually."
+    },
+    "https://asaj.com.jm/swimming/goodwill-2026-rankings-27-05-2026.pdf": {
+      "category": "rankings",
+      "title": "Goodwill 2026 Rankings 27-05-2026.pdf",
+      "sha256": "d928b6e7844a6d11c1e1c98154acb61ecb9a2b8247e9c96e727037d0b67781cb",
+      "content_type": "pdf",
+      "download_url": "https://asaj.com.jm/swimming/goodwill-2026-rankings-27-05-2026.pdf/@@download/file",
+      "review_status": "needs_human_review",
+      "pages": 7,
+      "aidan_mentions": [],
+      "extraction_note": "Candidate text only. Check original PDF tables, age, event, course and times manually."
+    },
+    "https://asaj.com.jm/swimming/goodwill-2026-rankings-31-05-2026.pdf": {
+      "category": "rankings",
+      "title": "Goodwill 2026 Rankings 31-05-2026.pdf",
+      "sha256": "8f354ba1f763fe7eef747a46ec0dc9ce056177692b459bf767df5a8ec9cfb7e2",
+      "content_type": "pdf",
+      "download_url": "https://asaj.com.jm/swimming/goodwill-2026-rankings-31-05-2026.pdf/@@download/file",
+      "review_status": "needs_human_review",
+      "pages": 7,
+      "aidan_mentions": [],
+      "extraction_note": "Candidate text only. Check original PDF tables, age, event, course and times manually."
+    },
+    "https://asaj.com.jm/swimming/top-10-rankings-29-09-2026.pdf": {
+      "category": "rankings",
+      "title": "Top 10 Rankings 29-09-2026.pdf",
+      "sha256": "ed0ece32fab1515d66929f7a425e01f8eb6727bae5d711b9053767639e2522b1",
+      "content_type": "pdf",
+      "download_url": "https://asaj.com.jm/swimming/top-10-rankings-29-09-2026.pdf/@@download/file",
+      "review_status": "needs_human_review",
+      "pages": 7,
+      "aidan_mentions": [],
+      "extraction_note": "Candidate text only. Check original PDF tables, age, event, course and times manually."
+    },
+    "https://asaj.com.jm/swimming/world-sc-championships-2026-rankings-27-08-2026.pdf": {
+      "category": "rankings",
+      "title": "World SC Championships 2026 Rankings 27-08-2026.pdf",
+      "sha256": "e589afc9bcc88a953d5aa182e6b5386e3fce1801a0971125d6ac05e9b31330c5",
+      "content_type": "pdf",
+      "download_url": "https://asaj.com.jm/swimming/world-sc-championships-2026-rankings-27-08-2026.pdf/@@download/file",
+      "review_status": "needs_human_review",
+      "pages": 1,
+      "aidan_mentions": [],
+      "extraction_note": "Candidate text only. Check original PDF tables, age, event, course and times manually."
+    },
+    "https://www.asaj.com.jm/calendar/2027": {
+      "category": "calendar",
+      "title": "ASAJ listing: calendar",
+      "sha256": "2e8d6e3342c65cf5363892f4825fec5216bce4aa3e614fa7bb93e84e45b3d163",
+      "content_type": "html",
+      "links": [
+        {
+          "url": "https://liveresults.asaj.com.jm",
+          "title": "Live results"
+        },
+        {
+          "url": "https://www.asaj.com.jm/calendar",
+          "title": "Calendars"
+        },
+        {
+          "url": "https://www.asaj.com.jm/events/2027-karl-dalhouse-memorial-invitational-swim-meet",
+          "title": "Karl Dalhouse Memorial Swim Meet"
+        },
+        {
+          "url": "https://www.asaj.com.jm/results",
+          "title": "Results archive"
+        }
+      ],
+      "review_status": "listing_only"
+    },
+    "https://www.asaj.com.jm/events/aggregator": {
+      "category": "events",
+      "title": "ASAJ listing: events",
+      "sha256": "83c1993185069a1ed9f7a3c137c757ee6b356a04a434970b858e24b400d25921",
+      "content_type": "html",
+      "links": [
+        {
+          "url": "https://liveresults.asaj.com.jm",
+          "title": "Live results"
+        },
+        {
+          "url": "https://www.asaj.com.jm/calendar",
+          "title": "Calendars"
+        },
+        {
+          "url": "https://www.asaj.com.jm/events",
+          "title": "Meets & Results"
+        },
+        {
+          "url": "https://www.asaj.com.jm/events/2025-asaj-distance-development-meet",
+          "title": "2025 ASAJ Distance Development Meet"
+        },
+        {
+          "url": "https://www.asaj.com.jm/events/2026-asaj-development-meet-september",
+          "title": "2026 ASAJ Development Meet - September"
+        },
+        {
+          "url": "https://www.asaj.com.jm/events/2026-blue-marlin-open-water-meet",
+          "title": "2026 Blue Marlin Open Water Meet"
+        },
+        {
+          "url": "https://www.asaj.com.jm/events/2026-dean-martin-memorial-swim-meet",
+          "title": "2026 Dean Martin Memorial Swim Meet"
+        },
+        {
+          "url": "https://www.asaj.com.jm/events/2026-issa-high-school-swim-meet",
+          "title": "2026 ISSA High School Swim Meet"
+        },
+        {
+          "url": "https://www.asaj.com.jm/events/2026-karl-dalhouse-memorial-invitational-swim-meet",
+          "title": "2026 Karl Dalhouse Memorial Invitational Swim Meet"
+        },
+        {
+          "url": "https://www.asaj.com.jm/events/2026-tornadoes-invitational-swim-meet",
+          "title": "2026 Tornadoes Invitational Swim Meet"
+        },
+        {
+          "url": "https://www.asaj.com.jm/events/2027-karl-dalhouse-memorial-invitational-swim-meet",
+          "title": "2027 Karl Dalhouse Memorial Invitational Swim Meet"
+        },
+        {
+          "url": "https://www.asaj.com.jm/events/asaj-development-meet-january-2026",
+          "title": "ASAJ Development Meet January 2026"
+        },
+        {
+          "url": "https://www.asaj.com.jm/events/asaj-development-meet-sept-2025",
+          "title": "ASAJ Development Meet Sept 2025"
+        },
+        {
+          "url": "https://www.asaj.com.jm/events/asaj-distance-development-meet-2026",
+          "title": "ASAJ Distance Development Meet 2026"
+        },
+        {
+          "url": "https://www.asaj.com.jm/events/carifta-2026-aquatics-championships",
+          "title": "Carifta 2026 Aquatics Championships"
+        },
+        {
+          "url": "https://www.asaj.com.jm/events/dean-martin-memorial-meet",
+          "title": "Dean Martin Memorial Meet"
+        },
+        {
+          "url": "https://www.asaj.com.jm/results",
+          "title": "Results archive"
+        }
+      ],
+      "review_status": "listing_only"
+    },
+    "https://www.asaj.com.jm/resources": {
+      "category": "resources",
+      "title": "ASAJ listing: resources",
+      "sha256": "1db8c0b7f7f760059f3dd13c0bfd3830a4a3ed01fcae2bb9a076f0e89c977a82",
+      "content_type": "html",
+      "links": [
+        {
+          "url": "https://liveresults.asaj.com.jm",
+          "title": "Live results"
+        },
+        {
+          "url": "https://www.asaj.com.jm/calendar",
+          "title": "Calendars"
+        },
+        {
+          "url": "https://www.asaj.com.jm/media/2016-04-25_fina_diving_guide_2015-2017.pdf",
+          "title": "FINA Diving Guide"
+        },
+        {
+          "url": "https://www.asaj.com.jm/media/2016-10-14_fina_wp_guide_2015_-_2017.pdf",
+          "title": "FINA Water Polo Guide"
+        },
+        {
+          "url": "https://www.asaj.com.jm/media/25_fina-by-laws_09_09_2022_clean.pdf",
+          "title": "FINA By Laws"
+        },
+        {
+          "url": "https://www.asaj.com.jm/media/asaj-by-laws-may-2-2002.pdf",
+          "title": "ASAJ By-Laws"
+        },
+        {
+          "url": "https://www.asaj.com.jm/media/asaj-meet-management-guide.pdf",
+          "title": "ASAJ Meet Management Guide"
+        },
+        {
+          "url": "https://www.asaj.com.jm/media/asaj-memorandum-of-association-digital.pdf",
+          "title": "ASAJ Memorandum of Association"
+        },
+        {
+          "url": "https://www.asaj.com.jm/media/asaj-swimming-officials-handbook.pdf",
+          "title": "asaj-swimming-officials-handbook.pdf"
+        },
+        {
+          "url": "https://www.asaj.com.jm/media/asaj-wp-qualifying-standards.pdf",
+          "title": "Water Polo Qualifying Standards"
+        },
+        {
+          "url": "https://www.asaj.com.jm/media/fina_open_water_swimming_manual_2015_edition.pdf",
+          "title": "FINA Open Water Manual"
+        },
+        {
+          "url": "https://www.asaj.com.jm/media/world-juniors-amendment-revised-may-10-2023_240721_101937.pdf",
+          "title": "World Junior Champs"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/2019-10-09-asaj-articles-of-incorporation.pdf",
+          "title": "ASAJ Articles of Incorporation"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/2026-cac-games-criteria-revised.pdf",
+          "title": "2026 CAC Games Criteria"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/2026-carifta-criteria.pdf",
+          "title": "CARIFTA Swimming criteria"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/2026-carifta-ow-criteria.pdf",
+          "title": "2026 Carifta Open Water criteria"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/2026-goodwill-qualifying-times.pdf",
+          "title": "2026 Goodwill Qualifying Times"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/2026-pan-pacific-swimming-championships-criteria.pdf",
+          "title": "2026 Pan Pacific Swimming Championships Criteria"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/2026-world-championships-25m-criteria.pdf/@@download/file",
+          "title": "2026 World Short Course Championships Criteria"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/2026-youth-olympics-and-2026-commonwealth-games-ranking-system-explained.pdf",
+          "title": "Explanation for Youth Olympic and Commonwealth Games"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/2026-youth-olympics-criteria-july-2026.pdf/@@download/file",
+          "title": "2026 Youth Olympics Criteria"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/age-group-development-model.pdf",
+          "title": "National Age Group Swimming Development Model"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/asaj-2022-as-qualify-standards.pdf",
+          "title": "Artistic Swimming Qualifying Standards"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/asaj-athlete-eligibility-national-team-representation.pdf",
+          "title": "Athlete Eligibility – National Team Representation"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/asaj-by-law-procedures-feb-17-2020.pdf",
+          "title": "ASAJ By-Law Procedures"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/asaj-club-registration-contact-forms.pdf",
+          "title": "Club Annual Return"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/asaj-coaches-selection-criteria-2026.pdf",
+          "title": "Coaches Selection Criteria"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/asaj-committee-description.pdf",
+          "title": "ASAJ Administrative Standing Committee Functions"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/asaj-committees.pdf",
+          "title": "ASAJ Aquatics Standing Committee Functions"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/asaj-covid-19-swim-meet-protocols-updated.pdf",
+          "title": "COVID-19 Protocols"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/asaj-member-registration-form.pdf",
+          "title": "Individual Registration: New and Renewal"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/asaj-national-teams-refund-and-funds-management-policy.pdf",
+          "title": "National Teams Refund and Funds Management Policy"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/asaj-performance-gap-analysis-apr-2026.pdf",
+          "title": "Performance Gap Analysis - April 2026"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/asaj-strategic-plan-2024-2027.pdf",
+          "title": "Strategic Plan 2024-2027"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf",
+          "title": "2027 CARIFTA Qualifying Times"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/goodwill-2026-criteria-10-unders.pdf",
+          "title": "2026 Goodwill Selection Criteria 10 & unders"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/goodwill-2026-criteria-11-over-07-10-2025.pdf",
+          "title": "2026 Goodwill Selection Criteria 11 & overs"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/memo-covid-19-nac.pdf",
+          "title": "COVID-19 Quarantine Memo"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/mnr.pdf",
+          "title": "Masters Records"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/national-age-group-records-july-2025.pdf",
+          "title": "National Age Group LC Records"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/national-senior-lc-records-april-15-2019.pdf",
+          "title": "National Senior LC Records"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/nssc-document-november2024.pdf",
+          "title": "National Swimming Squad Group Selection Criteria"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/panam-age-group-championships-criteria.pdf",
+          "title": "2026 PanAm Age Group Championships"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/policy-on-eligibility-for-the-men-s-and-women-s-competiition-categrories-version-on-2023-03-24.pdf",
+          "title": "Policy on Eligibility for the Men's and Women's Competition Categories"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/revised-criteria-for-selecting-alternates-for-jamaica-national-teams-for-swimming-updates-feb-2-2026.pdf",
+          "title": "Criteria for selecting alternates for international swim meets"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/selection-criteria-2026-commonwealth-games-revised.pdf",
+          "title": "2026 Commonwealth Games Criteria"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/snrs-feb2023-1.pdf",
+          "title": "National Senior SC Records"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/updated-aagr-l-july-2019.pdf",
+          "title": "All Comers Age Group LC Records"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/wa-artistic-swimming-rules.pdf",
+          "title": "World Aquatics Artistic Swimming Rules"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/wa-diving-rules.pdf",
+          "title": "World Aquatics Diving & High Diving Rules"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/wa-general-rules.pdf",
+          "title": "World Aquatics General Rules for All Disciplines"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/wa-masters-rules.pdf",
+          "title": "World Aquatics Masters Rules"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/wa-open-water-rules.pdf",
+          "title": "World Aquatics Open Water Swimming Rules"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/wa-swimming-rules.pdf",
+          "title": "World Aquatics Competitive Swimming Rules"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/wa-water-polo-rules.pdf",
+          "title": "World Aquatics Water Polo Rules"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/world-aquatics-by-laws-approved-17-10-2023.pdf",
+          "title": "World Aquatics By Laws"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/world-aquatics-competition-regulations.pdf",
+          "title": "World Aquatics Competition Regulations"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/world-aquatics-constitution-approved-2023-01-30_clean.pdf",
+          "title": "World Aquatics Constitution"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/world-aquatics-doping-control-rules.pdf",
+          "title": "World Aquatics Doping Control Rules"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/world-aquatics-integrity-code-2-approved-12-12-2022-1.pdf",
+          "title": "World Aquatics Integrity Code"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/world-aquatics-points-lcm_2023_female.pdf",
+          "title": "AQUA swimming points women"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/world-aquatics-points-lcm_2023_male.pdf",
+          "title": "AQUA swimming points men"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/world-aquatics-points-lcm_2023_relay.pdf",
+          "title": "AQUA swimming points relays"
+        },
+        {
+          "url": "https://www.asaj.com.jm/resources/world-aquatics-rules-on-the-protection-from-harassment-and-abuse.pdf",
+          "title": "World Aquatics Rules on the Protection from Harassment and Abuse"
+        },
+        {
+          "url": "https://www.asaj.com.jm/results",
+          "title": "Results archive"
+        },
+        {
+          "url": "https://www.asaj.com.jm/tuss-time-standards-2025-2028.pdf",
+          "title": "2025-2028 Swimming Time Standards"
+        }
+      ],
+      "review_status": "listing_only"
+    }
+  },
+  "new_or_changed_documents": [
+    "https://asaj.com.jm/rankings",
+    "https://asaj.com.jm/swimming/carifta-2027-06-09-2026.pdf",
+    "https://asaj.com.jm/swimming/carifta-2027-29-09-2026.pdf",
+    "https://asaj.com.jm/swimming/carifta-2027-rankings.pdf",
+    "https://asaj.com.jm/swimming/commonwealth-games-qualifiers-and-rankings-10-03-2026.pdf",
+    "https://asaj.com.jm/swimming/commonwealth-games-qualifiers-rankings-11-04-2026.pdf",
+    "https://asaj.com.jm/swimming/commonwealth-games-qualifiers-rankings-19-04-2026.pdf",
+    "https://asaj.com.jm/swimming/general-ranking-21-07-2026.pdf",
+    "https://asaj.com.jm/swimming/general-ranking-29-06-2026.pdf",
+    "https://asaj.com.jm/swimming/general-rankings-01-06-2026.pdf",
+    "https://asaj.com.jm/swimming/general-rankings-06-09-2026.pdf",
+    "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf",
+    "https://asaj.com.jm/swimming/goodwill-2026-rankings-09-06-2026.pdf",
+    "https://asaj.com.jm/swimming/goodwill-2026-rankings-22-06-2026-v-2.pdf",
+    "https://asaj.com.jm/swimming/goodwill-2026-rankings-22-06-2026-v-4.pdf",
+    "https://asaj.com.jm/swimming/goodwill-2026-rankings-22-06-2026-v.pdf",
+    "https://asaj.com.jm/swimming/goodwill-2026-rankings-22-06-2026.pdf",
+    "https://asaj.com.jm/swimming/goodwill-2026-rankings-27-05-2026.pdf",
+    "https://asaj.com.jm/swimming/goodwill-2026-rankings-31-05-2026.pdf",
+    "https://asaj.com.jm/swimming/top-10-rankings-29-09-2026.pdf",
+    "https://asaj.com.jm/swimming/world-sc-championships-2026-rankings-27-08-2026.pdf",
+    "https://www.asaj.com.jm/calendar/2027",
+    "https://www.asaj.com.jm/events/aggregator",
+    "https://www.asaj.com.jm/resources"
+  ],
+  "review_policy": "No extracted figures are published automatically. Inspect the original ASAJ PDF and manually approve CSV changes."
+}
