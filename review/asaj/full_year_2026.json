@@ -1,0 +1,49 @@
+{
+  "year": 2026,
+  "swimmer": "Aidan Seaton",
+  "status": "REVIEW_ONLY",
+  "discovery_limit": 75,
+  "discovered_pdf_count": 4,
+  "processed_pdf_count": 4,
+  "total_aidan_mentions": 0,
+  "documents": [
+    {
+      "url": "https://www.asaj.com.jm/resources/panam-age-group-championships-criteria.pdf/@@download/file",
+      "title": "2026 PanAm Age Group Championships",
+      "discovered_from": "https://www.asaj.com.jm/resources",
+      "sha256": "835857faf79e80a94c55796e730e80c33399ab23d60c2dcdb331206f5a6e6fac",
+      "pages": 4,
+      "aidan_mentions": [],
+      "page_errors": []
+    },
+    {
+      "url": "https://www.asaj.com.jm/resources/2026-world-championships-25m-criteria.pdf/@@download/file",
+      "title": "2026 World Short Course Championships Criteria",
+      "discovered_from": "https://www.asaj.com.jm/resources",
+      "sha256": "dc7df4662a58ea7fbc4ba21d854f7ae2c9aa00ea2a2d92fce955f876a9aa6db6",
+      "pages": 2,
+      "aidan_mentions": [],
+      "page_errors": []
+    },
+    {
+      "url": "https://www.asaj.com.jm/resources/2026-pan-pacific-swimming-championships-criteria.pdf/@@download/file",
+      "title": "2026 Pan Pacific Swimming Championships Criteria",
+      "discovered_from": "https://www.asaj.com.jm/resources",
+      "sha256": "933043972c4d04305ee39f94d5f3be755f386ef801d8514b681205b43708f86b",
+      "pages": 3,
+      "aidan_mentions": [],
+      "page_errors": []
+    },
+    {
+      "url": "https://www.asaj.com.jm/resources/revised-criteria-for-selecting-alternates-for-jamaica-national-teams-for-swimming-updates-feb-2-2026.pdf/@@download/file",
+      "title": "Criteria for selecting alternates for international swim meets",
+      "discovered_from": "https://www.asaj.com.jm/resources",
+      "sha256": "fd5d5c49d4f474575884c95251074dd8f0be1184dfbfab3f67e8760e2222c7d3",
+      "pages": 2,
+      "aidan_mentions": [],
+      "page_errors": []
+    }
+  ],
+  "retrieval_warnings": [],
+  "publication_policy": "Evidence is not a race result. Confirm each swim against original official results before entering data/race_history_2026.csv."
+}
