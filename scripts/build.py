@@ -36,7 +36,28 @@ def load(name,allow_other_events=False):
         seconds(r['time']);out.append(r)
     return out
 
-perf=load('performances.csv'); standards=load('standards.csv'); ranks=load('rankings.csv'); emerging=[r for r in load('emerging_boys12.csv',allow_other_events=True)]
+perf=load('performances.csv'); standards=load('standards.csv'); ranks=load('rankings.csv'); emerging=[r for r in load('emerging_boys12.csv',allow_other_events=True)]; emerging13=load('emerging_boys13.csv',allow_other_events=True)
+# All-swimmer results are independently extracted from the same official ASAJ PDFs.
+# Keep mixed-sex heats out of gender-specific comparisons rather than infer gender.
+with (DATA/'asaj_competitor_results.csv').open(newline='') as f:
+    competitor_results=list(csv.DictReader(f))
+for r in competitor_results:
+    if r['verified']!='true' or r['gender'] not in ('Boys','Girls') or r['course']!='LCM' or not r['age'].isdigit():
+        raise ValueError('Invalid competitor record')
+    if not r['source_pdf'].startswith('asaj-pdfs/') or not (DOCS/r['source_pdf']).is_file() or not r['source_page'].isdigit():
+        raise ValueError('Missing competitor PDF evidence')
+    date.fromisoformat(r['meet_start']);date.fromisoformat(r['meet_end']);seconds(r['time'])
+
+def competitor_best(event,age):
+    # One best result per competitor and event, not one entry per race.
+    by_name={}
+    for r in competitor_results:
+        if r['gender']!='Boys' or r['event']!=event or r['age']!=str(age) or r['swimmer'].strip().casefold() in ('seaton, aidan','aidan seaton'):
+            continue
+        name=r['swimmer'].strip().casefold()
+        if name not in by_name or seconds(r['time'])<seconds(by_name[name]['time']):by_name[name]=r
+    return list(by_name.values())
+
 for r in standards:
     if r['age_group']!='13-14' or r['gender'].lower()!='boys': raise ValueError('Wrong qualification age/gender')
 for r in ranks:
@@ -117,11 +138,18 @@ for e in EVENTS:
     rr=sorted((r for r in ranks if r['event']==e and r['age'] in ('13','14')),key=lambda r:int(r['rank']))
     own=next((r for r in rr if r['swimmer'].casefold()=='aidan seaton'),None)
     third=third_by_event.get(e)
-    boys12=[]
+    boys12=[];boys13=[]
     if asec is not None:
-        for r in (ranks+emerging):
-            if r['event']==e and r['age']=='12' and abs(seconds(r['time'])-asec)/asec<=0.10:
-                boys12.append({'name':r['swimmer'],'club':r['club'],'time':r['time'],'difference':fmt(seconds(r['time'])-asec),'source_url':r['source_url']})
+        for age,threshold,destination in ((12,.10,boys12),(13,.05,boys13)):
+            for r in competitor_best(e,age):
+                diff=seconds(r['time'])-asec
+                if abs(diff)/asec<=threshold:
+                    destination.append({'name':r['swimmer'],'club':r['club'],'time':r['time'],
+                        'difference':fmt(diff),'source_url':r['source_url'],'source_pdf':r['source_pdf'],
+                        'source_page':r['source_page'],'meet':r['meet_name'],'meet_start':r['meet_start'],
+                        'meet_end':r['meet_end'],'date_precision':r['date_precision']})
+        boys12.sort(key=lambda r:abs(seconds(r['time'])-asec))
+        boys13.sort(key=lambda r:abs(seconds(r['time'])-asec))
     eligible=[r for r in history if r['event']==e and qualifying_date(r)]
     # Ranking PDF is dated in the window, but does not establish the date
     # of the underlying swim. It cannot establish qualification eligibility.
@@ -155,7 +183,7 @@ for e in EVENTS:
       'provisional_top_two':snapshot_top2,
       'provisional_selection_priority':provisional_priority
     }
-    results.append({'carifta':carifta,'event':e,'personal_best':a['time'] if a else None,'pb_source':a['source_url'] if a else None,'pb_evidence_pdf':a.get('source_pdf') if a else None,'pb_evidence_page':a.get('source_page') if a else None,'standards':{k:{'time':v['time'],'difference':fmt(asec-seconds(v['time'])) if asec is not None else None,'met':asec<=seconds(v['time']) if asec is not None else None,'source_url':v['source_url']} for k,v in std.items()},'rank':int(own['rank']) if own else None,'podium_gap':fmt(asec-seconds(third['time'])) if asec is not None and third else None,'third_place':{'swimmer':third['swimmer'],'time':third['time'],'ranking_date':third['ranking_date'],'source_url':third['source_url']} if third else None,'boys12':boys12})
+    results.append({'carifta':carifta,'event':e,'personal_best':a['time'] if a else None,'pb_source':a['source_url'] if a else None,'pb_evidence_pdf':a.get('source_pdf') if a else None,'pb_evidence_page':a.get('source_page') if a else None,'standards':{k:{'time':v['time'],'difference':fmt(asec-seconds(v['time'])) if asec is not None else None,'met':asec<=seconds(v['time']) if asec is not None else None,'source_url':v['source_url']} for k,v in std.items()},'rank':int(own['rank']) if own else None,'podium_gap':fmt(asec-seconds(third['time'])) if asec is not None and third else None,'third_place':{'swimmer':third['swimmer'],'time':third['time'],'ranking_date':third['ranking_date'],'source_url':third['source_url']} if third else None,'boys12':boys12,'boys13':boys13})
 history.sort(key=lambda r:(r['race_date'],r['event'],seconds(r['time'])))
 meets=json.loads((DATA/'meets.json').read_text()); sources=json.loads((DATA/'official_sources.json').read_text())
 for meet in meets:
@@ -176,6 +204,6 @@ for sr in swimcloud_supplemental:
     if (url and (urlparse(url).scheme!='https' or host not in ('www.swimcloud.com','swimcloud.com'))) or sr.get('swimmer')!='Aidan Seaton' or sr.get('course') not in ('SCM','LCM'):
         raise ValueError(f"Invalid supplemental result at {sr.get('race_date','?')} {sr.get('event','?')} {sr.get('course','?')}: check swimmer, course and source_url")
     seconds(sr['time']);date.fromisoformat(sr['race_date'])
-output={'athlete':json.loads((DATA/'athlete.json').read_text()),'events':results,'race_history_2026':history,'swimcloud_supplemental':swimcloud_supplemental,'usa_motivational':list(csv.DictReader((DATA/'usa_motivational_boys_13_14_lcm.csv').open())),'goodwill':goodwill,'carifta_criteria':CARIFTA_CRITERIA,'meets':meets,'sources':sources,'built_at':datetime.now().astimezone().isoformat(timespec='seconds'),'warning':'Only rows explicitly verified against ASAJ are published; empty fields mean not yet verified.'}
+output={'athlete':json.loads((DATA/'athlete.json').read_text()),'events':results,'race_history_2026':history,'asaj_competitor_results':competitor_results,'swimcloud_supplemental':swimcloud_supplemental,'usa_motivational':list(csv.DictReader((DATA/'usa_motivational_boys_13_14_lcm.csv').open())),'goodwill':goodwill,'carifta_criteria':CARIFTA_CRITERIA,'meets':meets,'sources':sources,'built_at':datetime.now().astimezone().isoformat(timespec='seconds'),'warning':'Only rows explicitly verified against ASAJ are published; empty fields mean not yet verified.'}
 (DOCS/'data.json').write_text(json.dumps(output,indent=2,ensure_ascii=False))
 print('Built',len(results),'events;',len(perf),'verified personal bests;',len(standards),'standards;',len(ranks),'rankings')
