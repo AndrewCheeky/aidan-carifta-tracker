@@ -276,7 +276,9 @@ function championshipOpportunities(d,meet){
   const fieldScore=field?15/(1+nearby/3):0;
   if(meet!=='CARIFTA'){const bestSwims=trendSwims(d,e.event,'LCM').filter(x=>Math.abs(trendSeconds(x.time)-best)<.011&&/^\d{4}-\d{2}-\d{2}/.test(String(x.date)));bestDate=bestSwims.length?bestSwims.at(-1).date:null;}
   const ageDays=bestDate?Math.max(0,Math.floor((Date.now()-Date.parse(bestDate+'T00:00:00Z'))/86400000)):null;
-  return {event:e.event,best,bestDate,ageDays,classification,entry,gap,trend,nearby,field,boys12,entryScore,trendScore,fieldScore,score:entryScore+trendScore+fieldScore};
+  const aStandard=usaSeconds(e.standards?.A?.time);
+  const cariftaLevel=meet==='CARIFTA'?(aStandard!==null&&best<=aStandard?'A':best<=entry?'B':'Below B'):null;
+  return {event:e.event,best,bestDate,ageDays,classification,cariftaLevel,aStandard,entry,gap,trend,nearby,field,boys12,entryScore,trendScore,fieldScore,score:entryScore+trendScore+fieldScore};
  }).filter(Boolean).sort((a,b)=>b.score-a.score).slice(0,5);
 }
 // Complete documented classifications, independent of the five-event strategy score.
@@ -320,12 +322,12 @@ function renderChampionshipShortlist(d){
   const cards=rows.map((r,i)=>{
    const direction=r.trend===null?'No recent trend':r.trend>0.005?'Faster':r.trend<-.005?'Slower':'Stable';
    const change=r.trend===null?'':` · ${Math.abs(r.trend).toFixed(2)}s`;
-   const gap=r.gap<=0?`${Math.abs(r.gap).toFixed(2)}s inside B`:`${r.gap.toFixed(2)}s to B`;
-   return `<article class="intel-card"><h3>${i+1}. <a href="#trends" class="strategy-event-link" data-event="${esc(r.event)}">${esc(r.event)}</a> <strong>${r.score.toFixed(0)}/100</strong></h3><p><strong>${trendTime(r.best)}</strong> best · ${r.ageDays===null?"Date unavailable":`${r.ageDays} days since fastest (${esc(r.bestDate)})`} · ${gap}${meet==='CARIFTA'?` · USA level: <strong>${esc(r.classification||'Unavailable')}</strong>`:''}</p><p>Recent: ${direction}${change}</p><p>ASAJ Boys 13–14: ${r.field} swimmers · ${r.nearby} within ±5%</p><p>ASAJ Boys 12: ${r.boys12} within ±10%</p><p class="muted">Entry ${r.entryScore.toFixed(0)}/60 · Trend ${r.trendScore.toFixed(0)}/25 · Field ${r.fieldScore.toFixed(0)}/15</p></article>`;
+   const gap=r.gap<=0?`${Math.abs(r.gap).toFixed(2)}s faster than CARIFTA B standard`:`${r.gap.toFixed(2)}s slower than CARIFTA B standard`;
+   return `<article class="intel-card"><h3>${i+1}. <a href="#trends" class="strategy-event-link" data-event="${esc(r.event)}">${esc(r.event)}</a> <strong>${r.score.toFixed(0)}/100</strong></h3><p><strong>${trendTime(r.best)}</strong> best · ${r.ageDays===null?"Date unavailable":`${r.ageDays} days since eligible swim (${esc(r.bestDate)})`} · ${meet==='CARIFTA'?`CARIFTA standard: <strong>${esc(r.cariftaLevel)}</strong> · ${gap} · USA Swimming motivational level: ${esc(r.classification||'Unavailable')}`:gap}</p><p>Recent: ${direction}${change}</p><p>ASAJ Boys 13–14: ${r.field} swimmers · ${r.nearby} within ±5%</p><p>ASAJ Boys 12: ${r.boys12} within ±10%</p><p class="muted">Entry ${r.entryScore.toFixed(0)}/60 · Trend ${r.trendScore.toFixed(0)}/25 · Field ${r.fieldScore.toFixed(0)}/15</p></article>`;
   }).join('');
   return `<section class="panel"><h2>${meet} · Top five event priorities</h2><div class="intel-cards">${cards}</div></section>`;
  };
- return `<section class="panel"><h2>🏆 CARIFTA + Goodwill Event Strategy</h2><p>Ranked event priorities, not qualification listings. Scores combine entry readiness (60), recent performance (25), and ASAJ competitor density (15).</p></section>${renderAcquiredClassifications(d)}${panel('CARIFTA')}${panel('Goodwill')}<p class="muted">CARIFTA: only exact-date ASAJ-verified LCM swims from 1 July 2026; qualifying period closing date remains unverified. USA classification is developmental, not selection eligibility. Recent trends may include supplementary results. Goodwill: available 2026 B standards, historical reference only. Competitor counts cover imported ASAJ results, not championship entries. Planning scores are not medal probabilities.</p>`;
+ return `<section class="panel"><h2>🏆 CARIFTA + Goodwill Event Strategy</h2><p>Ranked event priorities, not qualification listings. Scores combine entry readiness (60), recent performance (25), and ASAJ competitor density (15).</p></section>${renderAcquiredClassifications(d)}${panel('CARIFTA')}${panel('Goodwill')}<p class="muted">CARIFTA: only exactly dated ASAJ-verified LCM swims within the qualifying window specified in the loaded criteria (${esc(d.carifta_criteria?.qualifying_period_start||'start unavailable')} to ${esc(d.carifta_criteria?.qualifying_period_end||'closing date not confirmed')}). CARIFTA A/B labels reflect time standards only, not top-two national ranking, two-event qualification, or team selection. USA classification is developmental, not selection eligibility. Recent trends may include supplementary results. Goodwill: available 2026 B standards, historical reference only. Competitor counts cover imported ASAJ results, not championship entries. Planning scores are not medal probabilities.</p>`;
 }
 
 function renderIntelligence(d){
