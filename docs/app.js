@@ -138,6 +138,36 @@ function intelligenceLine(m){
  const dots=m.swims.map((r,i)=>`<circle cx="${x(i)}" cy="${y(v[i])}" r="4.5" fill="${r.origin==='ASAJ verified'?'#e3a300':'#6e80ef'}"><title>${esc(r.date)} · ${esc(r.time)} · ${esc(r.origin)}</title></circle>`).join('');
  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(m.name)} ${m.course} chronological race times">${grid}${segments}${dots}<text x="${L}" y="${H-6}" font-size="11" fill="currentColor">${esc(m.swims[0].date)}</text><text x="${W-R}" y="${H-6}" text-anchor="end" font-size="11" fill="currentColor">${esc(m.swims.at(-1).date)}</text></svg>`;
 }
+// Championship shortlist is a transparent, relative planning score, not a selection or medal probability.
+function championshipOpportunities(d,meet){
+ const standards=meet==='CARIFTA'?(d.events||[]):(d.goodwill?.events||[]);
+ const all=intelligenceMetrics(d,'LCM');
+ return standards.map(e=>{
+  const m=all.find(x=>x.name===e.event);if(!m||typeof m.best!=='number')return null;
+  const target=meet==='CARIFTA'?e.standards?.B?.time:e.standards?.B?.time;
+  const entry=usaSeconds(target),gap=entry===null?null:m.best-entry;
+  const comp=(d.asaj_competitor_results||[]).filter(x=>x.event===e.event&&x.course==='LCM'&&x.gender==='Boys'&&['13','14'].includes(String(x.age))&&x.swimmer&&!/seaton/i.test(x.swimmer));
+  const unique=new Map();comp.forEach(x=>{const key=x.swimmer.trim().toLowerCase(),t=usaSeconds(x.time);if(t!==null&&(!unique.has(key)||t<unique.get(key)))unique.set(key,t)});
+  const nearby=[...unique.values()].filter(t=>Math.abs(t-m.best)/m.best<=.05).length;
+  const field=unique.size;
+  const trend=m.recentChange; // Positive means faster; not an estimate of future times.
+  // Scores only compare events with a sourced entry standard. Missing competition coverage reduces confidence.
+  const entryScore=gap===null?null:Math.max(0,Math.min(60,60-60*Math.max(0,gap)/entry));
+  const trendScore=trend===null?10:Math.max(0,Math.min(25,12.5+trend*5));
+  const fieldScore=field?15/(1+nearby/3):null;
+  const score=entryScore===null?null:entryScore+trendScore+(fieldScore??0);
+  return {event:e.event,best:m.best,entry,gap,trend,nearby,field,score,qualified:gap!==null&&gap<=0};
+ }).filter(Boolean).sort((a,b)=>(b.score??-1)-(a.score??-1));
+}
+function renderChampionshipShortlist(d){
+ const panel=(meet)=>{
+  const rows=championshipOpportunities(d,meet);
+  const label=meet==='CARIFTA'?'2027 CARIFTA B standard':'2026 Goodwill B standard (historical only)';
+  const show=rows.slice(0,3).map((r,i)=>`<tr><td>${i+1}. ${esc(r.event)}</td><td>${trendTime(r.best)}</td><td>${r.entry===null?'Unavailable':trendTime(r.entry)}</td><td>${r.gap===null?'Unavailable':(r.gap>0?'+':'')+r.gap.toFixed(2)+'s'}</td><td>${r.trend===null?'Insufficient races':`${r.trend>0?'Faster':r.trend<0?'Slower':'Stable'} (${Math.abs(r.trend).toFixed(2)}s)`}</td><td>${r.field?`${r.nearby} nearby / ${r.field} observed`:'Coverage unavailable'}</td><td>${r.score===null?'Not scored':r.score.toFixed(0)+'/100'}</td></tr>`).join('');
+  return `<section class="panel"><h3>${meet} · top three planning priorities</h3><p>${label}. Rankings are relative planning scores, <strong>not</strong> medal odds, official entry rankings or a team-selection prediction.</p><div class="visual-scroll">${table(['Event','Best LCM*','B standard','Gap','Recent trend','ASAJ Boys 13–14 field','Priority score'],show)}</div><p class="muted">Field = unique Boys 13–14 swimmers in imported ASAJ PDFs for this event; nearby = within ±5% of Aidan's best. A smaller observed field does not prove weaker championship competition.</p></section>`;
+ };
+ return `<section class="panel"><h2>🏆 Championship Event Intelligence</h2><p>Event priorities combine documented entry-time gap, recent race trend and observed competitor density. Results refresh when the ASAJ importer rebuilds the dataset. Review with the coach before choosing entries.</p><div class="notice"><strong>CARIFTA:</strong> 2027 B standards are a qualification reference, not a confirmed entry. <strong>Goodwill:</strong> only 2026 standards are currently sourced; this comparison is historical and must not be used as a 2027 entry target. No championship medal results or future entry counts are available.</div></section>${panel('CARIFTA')}${panel('Goodwill')}<p class="muted">*Best shown may include supplementary SwimCloud times. Actual eligibility, qualifying windows, selection rankings and championship entry limits must be checked separately. Scores are heuristic, not probabilities; no score means no sourced standard.</p>`;
+}
 function renderIntelligence(d){
  const metrics=['LCM','SCM'].flatMap(course=>intelligenceMetrics(d,course));
  const eligible=metrics.filter(m=>m.pct!==null);
@@ -150,7 +180,7 @@ function renderIntelligence(d){
  const opp=snapshot.map(m=>`<tr><td>${fmt(m)}</td><td>${trendTime(m.best)}</td><td>${trendTime(m.third)}</td><td class="${m.gap<=0?'good':''}">${m.gap>0?'+':''}${m.gap.toFixed(2)}s</td><td>${m.bgap===null?'Unavailable':`${m.bgap>0?'+':''}${m.bgap.toFixed(2)}s`}</td></tr>`);
  const rows=metrics.map(m=>`<tr><td>${fmt(m)}</td><td>${m.swims.length}</td><td>${trendTime(m.best)}</td><td>${m.pct===null?'Not enough history':`${m.pct>0?'+':''}${m.pct.toFixed(1)}%`}</td><td>${m.recentChange===null?'Not enough history':`${m.recentChange>0?'Faster':m.recentChange<0?'Slower':'Unchanged'} (${Math.abs(m.recentChange).toFixed(2)}s)`}</td></tr>`);
  return `<div class="intel-head"><div><div class="visual-eyebrow">AIDAN SEATON · TRAINING DECISION SUPPORT</div><h2>Performance Intelligence</h2><p>Documented strengths, recent trends and evidence-based priorities. Not a medal prediction.</p></div><div class="intel-toggle"><label>Inspect course <select id="intel-course"><option value="LCM">LCM (50m)</option><option value="SCM">SCM (25m)</option></select></label></div></div>
- <div class="intel-cards"><section class="intel-card"><h3>🏆 Closest national podium comparisons</h3><p>September 2026 Jamaica ranking snapshot, LCM only.</p><ol>${snapshot.slice(0,3).map(m=>`<li>${fmt(m)} · ${m.gap>0?m.gap.toFixed(2)+'s behind':Math.abs(m.gap).toFixed(2)+'s ahead'}</li>`).join('')||'<li>No verified snapshot benchmarks</li>'}</ol></section>
+ ${renderChampionshipShortlist(d)}<div class="intel-cards"><section class="intel-card"><h3>🏆 Closest national podium comparisons</h3><p>September 2026 Jamaica ranking snapshot, LCM only.</p><ol>${snapshot.slice(0,3).map(m=>`<li>${fmt(m)} · ${m.gap>0?m.gap.toFixed(2)+'s behind':Math.abs(m.gap).toFixed(2)+'s ahead'}</li>`).join('')||'<li>No verified snapshot benchmarks</li>'}</ol></section>
  <section class="intel-card"><h3>💪 Historical strengths</h3><p>Largest first-to-latest percentage gains.</p><ol>${strong||'<li>Insufficient data</li>'}</ol></section>
  <section class="intel-card"><h3>🎯 Review opportunities</h3><p>Recent race times moving slower, not a diagnosis.</p><ul>${focus}</ul></section>
  <section class="intel-card"><h3>💡 Coach discussion</h3><ul><li>Review splits, turns, starts and race pacing where available.</li><li>Check training load and taper before interpreting slower races.</li><li>Prioritize events with verified qualification gaps and repeatable improvement.</li></ul></section></div>

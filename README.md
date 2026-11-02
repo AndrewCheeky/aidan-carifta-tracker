@@ -154,3 +154,7 @@ The Jamaica Rankings tab shows the named third-place Boys 13–14 swimmer, his o
 ## Automated all-swimmer ASAJ comparisons
 
 `scripts/extract_competitors.py` reads `sources/asaj/2026/*.pdf` and generates `data/asaj_competitor_results.csv` containing all parsable, explicitly Boys/Girls individual result rows, with meet-date range and PDF/page evidence. Mixed-sex results are excluded because gender cannot safely be inferred. `scripts/build.py` compares each swimmer's fastest recorded time to Aidan's verified LCM best: Boys 12 within ±10%, Boys 13 within ±5%. These are comparisons within the supplied meets, **not official national rankings**. GitHub's PDF import workflow updates the CSV through a review PR; the deployment workflow regenerates it. Age is the age printed at each meet, not an inferred current age.
+
+
+## Championship Event Intelligence
+The Performance Intelligence tab now ranks three planning priorities for CARIFTA and Goodwill using LCM race history, sourced B-standard gaps and observed Boys 13–14 competitor density. CARIFTA references 2027 standards; Goodwill uses 2026 historical standards only, never mislabelled as 2027. Scores are transparent relative heuristics, not medal probabilities or selection predictions. Results refresh when `docs/data.json` is rebuilt by the existing importer.
