@@ -11,7 +11,7 @@ import json
 import re
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.parse import urljoin, urlparse, urldefrag
+from urllib.parse import urljoin, urlparse, urldefrag, urlunparse
 
 import requests
 from bs4 import BeautifulSoup
@@ -54,6 +54,29 @@ def get(session, url):
 def normalize(url):
     return urldefrag(url)[0]
 
+def pdf_resource(url):
+    """ASAJ/Plone .pdf paths are HTML landing pages, not raw PDF bytes."""
+    parsed = urlparse(normalize(url))
+    path = parsed.path
+    marker = re.search(r'\.pdf(?=/|$)', path, re.I)
+    if not marker:
+        return None
+    base = path[:marker.end()]
+    return urlunparse((parsed.scheme, parsed.netloc, base, '', '', ''))
+
+def pdf_download(url):
+    """Use the official Plone binary download route, not the landing/view page."""
+    base = pdf_resource(url)
+    return base.rstrip('/') + '/@@download/file' if base else None
+
+def relevant_pdf(category, title, url):
+    text = (title + ' ' + urlparse(url).path).lower()
+    if category == 'rankings':
+        return any(t in text for t in ('carifta', 'ranking', 'top-10', 'top_10', 'top 10', 'general'))
+    if category == 'resources':
+        return 'carifta' in text and any(t in text for t in ('2027', 'criteria', 'qualif', 'select'))
+    return any(t in text for t in ('result', 'psych', 'meet', 'carifta'))
+
 def discover(html, base):
     soup = BeautifulSoup(html, 'html.parser')
     out = []
@@ -64,7 +87,7 @@ def discover(html, base):
         label = ' '.join(a.get_text(' ', strip=True).split())[:160]
         if not label:
             label = urlparse(url).path.rsplit('/', 1)[-1]
-        if re.search(r'\.pdf(?:\?|$)', url, re.I) or re.search(r'rank|carifta|qualif|select|result|meet|calendar', label, re.I):
+        if pdf_resource(url) or re.search(r'rank|carifta|qualif|select|result|meet|calendar', label, re.I):
             out.append({'url':url,'title':label})
     return sorted({x['url']:x for x in out}.values(), key=lambda x:x['url'])
 
@@ -99,25 +122,26 @@ def main():
             documents[source] = {'category':category,'title':'ASAJ listing: '+category,'sha256':digest,
                                  'content_type':'html','links':links,'review_status':'listing_only'}
             for link in links:
-                if re.search(r'\.pdf(?:\?|$)',link['url'],re.I):
+                if pdf_resource(link['url']) and relevant_pdf(category, link['title'], link['url']):
                     pdfs.append((category,link))
         except Exception as exc:
             failures.append({'url':source,'error':str(exc)[:300]})
     seen = set()
     for category, link in pdfs:
-        url = link['url']
+        url = pdf_resource(link['url'])
         if url in seen: continue
         seen.add(url)
         if len(seen) > args.max_pdfs: break
         try:
-            _, raw = get(session, url)
+            download_url = pdf_download(url)
+            _, raw = get(session, download_url)
             if not raw.startswith(b'%PDF'):
                 raise ValueError('Not a PDF document')
             digest = hashlib.sha256(raw).hexdigest()
             if documents.get(url,{}).get('sha256') == digest: continue
             details = extract_candidates(raw)
             documents[url] = {'category':category,'title':link['title'],'sha256':digest,
-                              'content_type':'pdf','review_status':'needs_human_review',**details}
+                              'content_type':'pdf','download_url':download_url,'review_status':'needs_human_review',**details}
         except Exception as exc:
             failures.append({'url':url,'error':str(exc)[:300]})
     changed = sorted(k for k,v in documents.items() if previous_docs.get(k) != v)
