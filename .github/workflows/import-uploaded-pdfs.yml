@@ -26,6 +26,7 @@ jobs:
         run: python scripts/import_uploaded_results.py
       - name: Validate dashboard build and test suite
         run: |
+          python scripts/extract_emerging.py
           python scripts/build.py
           python -m unittest discover -s tests -v
           git checkout -- docs/data.json
