@@ -137,3 +137,11 @@ converted to race results. Its text matches are not reliable enough to publish
 unattended. Rankings PDF source is a fixed September 2026 snapshot: the scheduled
 job does not automatically fetch newer rankings. New source PDFs or changed code
 must be separately reviewed before updating the trusted baseline.
+
+## Upload official ASAJ results PDFs (2026)
+
+The **Upload ASAJ PDFs** dashboard tab opens GitHub's authenticated upload screen for `sources/asaj/2026/`. Upload *meet results*, not psych/seed sheets, and commit to `main`. GitHub Actions **Import uploaded ASAJ meet PDFs** parses the committed files, runs dashboard checks, opens a data-only PR and requests auto-merge. The repository must allow Actions to create PRs and allow auto-merge. For reliable post-merge deployment, add a fine-grained GitHub PAT as repository secret `ASAJ_AUTOMATION_TOKEN` with Contents and Pull requests read/write permission. If that secret is omitted, the workflow uses `GITHUB_TOKEN`, whose resulting merge may not trigger other workflows; run **Validate and deploy tracker** manually in that case.
+
+The parser accepts only explicitly attributable Aidan Seaton age-13 timed HY-TEK result rows with a valid event and context. It excludes NS/DQ, relays and uncertain rows and logs exclusions to `review/asaj/pdf_import_report.txt`. Each published result links to the exact committed source PDF and page. Multi-day reports do **not** identify each race day, so the dashboard displays the meet date range. The CSV's `race_date` is the start of that range for sorting, **not** a claim about the exact swim day. The importer currently supports 2026 ASAJ HY-TEK 3-column results PDFs and age 13. New age/year formats need a reviewed parser change.
+
+To process the four included PDFs now, run **Import uploaded ASAJ meet PDFs** from Actions on `main` after uploading this repository. This package also includes the prepopulated 2026 history and PDF evidence, so the first Pages deployment already displays those rows. The workflow will process later PDF uploads automatically.

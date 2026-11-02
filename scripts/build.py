@@ -67,14 +67,17 @@ with (DATA/'race_history_2026.csv').open(newline='') as f:
     for r in csv.DictReader(f):
         if not verified(r):continue
         if r['swimmer'].strip().casefold()!='aidan seaton':raise ValueError('Race history swimmer mismatch')
-        if r['event'] not in EVENTS:raise ValueError('Race history event not tracked: '+r['event'])
+        if not re.fullmatch(r'(?:50|100|200|400|800|1500) (?:Free|Back|Breast|Fly|IM)',r['event']):raise ValueError('Invalid race history event: '+r['event'])
         if r['course']!='LCM':raise ValueError('Race history must be LCM')
-        if not r['meet_name'].strip() or not r['round'].strip():raise ValueError('Missing meet/round')
+        if not r['meet_name'].strip() or r['round'] not in ('Finals','Preliminaries'):raise ValueError('Missing or invalid meet/round')
+        source_file=r.get('source_pdf','')
+        if not source_file.startswith('asaj-pdfs/') or '/' in source_file[10:] or not (DOCS/source_file).is_file():raise ValueError('Missing official PDF evidence: '+source_file)
+        if not r.get('source_page','').isdigit():raise ValueError('Missing PDF page reference')
         if not r['age'].isdigit():raise ValueError('Invalid swimmer age')
         race_day=date.fromisoformat(r['race_date'])
         if race_day.year!=2026:raise ValueError('Outside 2026 race history')
         seconds(r['time'])
-        history.append({k:r[k] for k in ('event','swimmer','age','club','time','course','meet_name','race_date','round','source_url')})
+        history.append({k:r[k] for k in ('event','swimmer','age','club','time','course','meet_name','race_date','round','source_url','source_pdf','source_page','meet_dates','date_precision')})
 history.sort(key=lambda r:(r['race_date'],r['event'],seconds(r['time'])))
 meets=json.loads((DATA/'meets.json').read_text()); sources=json.loads((DATA/'official_sources.json').read_text())
 for meet in meets:

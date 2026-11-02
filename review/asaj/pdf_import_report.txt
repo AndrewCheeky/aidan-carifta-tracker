@@ -1,0 +1,10 @@
+Published race rows: 24
+
+Held mentions/files:
+('2026 Neville Alexander results.pdf', 2, 'Unattributed or relay name mention', '11  Seaton, Aidan          13 TOR             29.53')
+('2026 Neville Alexander results.pdf', 6, 'Excluded DQ', '---  Seaton, Aidan          13 TOR           DQ')
+('2026 Neville Alexander results.pdf', 7, 'Unattributed or relay name mention', 'Seaton, Aidan M13          Spence, Emanuelle W13')
+('2026 Neville Alexander results.pdf', 18, 'Unrecognized athlete row', 'Preston, Matthew 28        Seaton, Aidan 13')
+('2026 WRAGC - results.pdf', 6, 'Unrecognized athlete row', 'Henry, Hayden 14           Seaton, Aidan 13')
+('2026 WRAGC - results.pdf', 12, 'Unattributed or relay name mention', 'Ismail, Jaiden 13            Seaton, Aidan 13')
+('2026 WRAGC - results.pdf', 19, 'Unrecognized athlete row', 'Ismail, Jaiden 13            Seaton, Aidan 13')
