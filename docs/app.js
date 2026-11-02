@@ -153,6 +153,11 @@ function championshipOpportunities(d,meet){
   const unique=new Map();
   comp.forEach(x=>{const key=x.swimmer.trim().toLowerCase(),t=usaSeconds(x.time);if(t!==null&&(!unique.has(key)||t<unique.get(key)))unique.set(key,t)});
   const field=unique.size;
+  // Boys 12 emerging competitors come from the existing verified rankings comparison.
+  // Count distinct swimmers for this event, excluding Aidan; the ±10% window
+  // has already been applied by the ASAJ rankings builder.
+  const rankEvent=(d.events||[]).find(x=>x.event===e.event);
+  const boys12=new Set((rankEvent?.boys12||[]).map(x=>String(x.name||x.swimmer||'').trim().toLowerCase()).filter(x=>x&&!/seaton/.test(x))).size;
   const nearby=[...unique.values()].filter(t=>Math.abs(t-m.best)/m.best<=.05).length;
   const trend=Number.isFinite(m.recentChange)?m.recentChange:null;
   // Entry readiness: 60 points, recent trend: 25, observed field density: 15.
@@ -160,7 +165,7 @@ function championshipOpportunities(d,meet){
   const entryScore=Math.max(0,Math.min(60,60-60*Math.max(0,gap)/entry));
   const trendScore=trend===null?0:Math.max(0,Math.min(25,12.5+trend*5));
   const fieldScore=field?15/(1+nearby/3):0;
-  return {event:e.event,best:m.best,entry,gap,trend,nearby,field,entryScore,trendScore,fieldScore,score:entryScore+trendScore+fieldScore};
+  return {event:e.event,best:m.best,entry,gap,trend,nearby,field,boys12,entryScore,trendScore,fieldScore,score:entryScore+trendScore+fieldScore};
  }).filter(Boolean).sort((a,b)=>b.score-a.score).slice(0,3);
 }
 function renderChampionshipShortlist(d){
@@ -171,7 +176,7 @@ function renderChampionshipShortlist(d){
    const direction=r.trend===null?'No recent trend':r.trend>0.005?'Faster':r.trend<-.005?'Slower':'Stable';
    const change=r.trend===null?'':` · ${Math.abs(r.trend).toFixed(2)}s`;
    const gap=r.gap<=0?`${Math.abs(r.gap).toFixed(2)}s inside B`:`${r.gap.toFixed(2)}s to B`;
-   return `<article class="intel-card"><h3>${i+1}. ${esc(r.event)} <strong>${r.score.toFixed(0)}/100</strong></h3><p><strong>${trendTime(r.best)}</strong> best · ${gap}</p><p>Recent: ${direction}${change}</p><p>ASAJ Boys 13–14: ${r.field} swimmers · ${r.nearby} within ±5%</p><p class="muted">Entry ${r.entryScore.toFixed(0)}/60 · Trend ${r.trendScore.toFixed(0)}/25 · Field ${r.fieldScore.toFixed(0)}/15</p></article>`;
+   return `<article class="intel-card"><h3>${i+1}. ${esc(r.event)} <strong>${r.score.toFixed(0)}/100</strong></h3><p><strong>${trendTime(r.best)}</strong> best · ${gap}</p><p>Recent: ${direction}${change}</p><p>ASAJ Boys 13–14: ${r.field} swimmers · ${r.nearby} within ±5%</p><p>ASAJ Boys 12: ${r.boys12} within ±10%</p><p class="muted">Entry ${r.entryScore.toFixed(0)}/60 · Trend ${r.trendScore.toFixed(0)}/25 · Field ${r.fieldScore.toFixed(0)}/15</p></article>`;
   }).join('');
   return `<section class="panel"><h2>${meet} · Top three event priorities</h2><div class="intel-cards">${cards}</div></section>`;
  };
