@@ -28,6 +28,7 @@ jobs:
       - name: Validate official source data and generate site JSON
         run: |
           python scripts/extract_emerging.py
+          python scripts/extract_competitors.py
           python scripts/build.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

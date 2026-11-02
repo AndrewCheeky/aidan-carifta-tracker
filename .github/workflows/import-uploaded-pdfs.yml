@@ -5,6 +5,7 @@ on:
     paths:
       - 'sources/asaj/2026/*.pdf'
       - 'scripts/import_uploaded_results.py'
+      - 'scripts/extract_competitors.py'
       - '.github/workflows/import-uploaded-pdfs.yml'
   workflow_dispatch:
 permissions:
@@ -27,6 +28,7 @@ jobs:
       - name: Validate dashboard build and test suite
         run: |
           python scripts/extract_emerging.py
+          python scripts/extract_competitors.py
           python scripts/build.py
           python -m unittest discover -s tests -v
           git checkout -- docs/data.json
@@ -44,6 +46,8 @@ jobs:
           delete-branch: true
           add-paths: |
             data/race_history_2026.csv
+            data/asaj_competitor_results.csv
+            review/asaj/competitor_import_report.txt
             docs/asaj-pdfs/*.pdf
             review/asaj/pdf_import_report.txt
           commit-message: 'Publish validated race history from uploaded ASAJ results'
