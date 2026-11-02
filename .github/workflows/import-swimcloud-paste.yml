@@ -1,0 +1,47 @@
+name: Review pasted SwimCloud results
+on:
+  issues:
+    types: [opened, edited]
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+jobs:
+  parse-and-review:
+    if: startsWith(github.event.issue.title, 'SwimCloud pasted race results') && github.event.issue.user.login == 'AndrewCheeky'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Parse and deduplicate pasted race results
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: python scripts/import_swimcloud_paste.py
+      - name: Validate dashboard build
+        run: |
+          python scripts/build.py
+          python -m unittest discover -s tests/test_trends_sources.py -v
+          git checkout -- docs/data.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: swimcloud-paste-audit
+          path: review/swimcloud/paste_report.txt
+      - name: Open reviewed supplementary data PR
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.ASAJ_AUTOMATION_TOKEN || secrets.GITHUB_TOKEN }}
+          branch: automation/swimcloud-paste-${{ github.event.issue.number }}
+          base: main
+          add-paths: |
+            data/swimcloud_supplemental.csv
+            review/swimcloud/paste_report.txt
+          commit-message: 'Review pasted SwimCloud results from issue #${{ github.event.issue.number }}'
+          title: 'Review SwimCloud pasted results from issue #${{ github.event.issue.number }}'
+          body: |
+            Supplementary SwimCloud results only. ASAJ verified data is unchanged.
+            Review the audit report and any held entries before merging.
+            Closes #${{ github.event.issue.number }}
