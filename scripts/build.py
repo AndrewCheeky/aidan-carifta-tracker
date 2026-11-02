@@ -95,6 +95,16 @@ for t in third_rows:
     if not t['swimmer'].strip() or not t['source_url'].startswith('https://asaj.com.jm/'): raise ValueError('Invalid third-place source')
     if t['source_pdf']!='reference/asaj/General Rankings 29-09-2026.pdf' or not (ROOT/t['source_pdf']).is_file(): raise ValueError('Missing third-place PDF')
     seconds(t['time']); third_by_event[t['event']]=t
+# Official second-place benchmark from the same dated ASAJ ranking PDF.
+with (DATA/'second_place_boys13_14.csv').open(newline='') as f:
+    second_rows=list(csv.DictReader(f))
+second_by_event={}
+for r in second_rows:
+    if r['event'] not in EVENTS or r['event'] in second_by_event or r['rank']!='2' or r['course']!='LCM' or r['ranking_date']!='2026-09-29':
+        raise ValueError('Invalid second-place benchmark')
+    if not r['swimmer'].strip() or not r['source_url'].startswith('https://asaj.com.jm/') or r['source_pdf']!='reference/asaj/General Rankings 29-09-2026.pdf' or not (ROOT/r['source_pdf']).is_file():
+        raise ValueError('Unverified second-place source')
+    seconds(r['time']); second_by_event[r['event']]=r
 by_event={e:[] for e in EVENTS}
 for r in perf: by_event[r['event']].append(r)
 for r in history:
@@ -183,7 +193,7 @@ for e in EVENTS:
       'provisional_top_two':snapshot_top2,
       'provisional_selection_priority':provisional_priority
     }
-    results.append({'carifta':carifta,'event':e,'personal_best':a['time'] if a else None,'pb_source':a['source_url'] if a else None,'pb_evidence_pdf':a.get('source_pdf') if a else None,'pb_evidence_page':a.get('source_page') if a else None,'standards':{k:{'time':v['time'],'difference':fmt(asec-seconds(v['time'])) if asec is not None else None,'met':asec<=seconds(v['time']) if asec is not None else None,'source_url':v['source_url']} for k,v in std.items()},'rank':int(own['rank']) if own else None,'podium_gap':fmt(asec-seconds(third['time'])) if asec is not None and third else None,'third_place':{'swimmer':third['swimmer'],'time':third['time'],'ranking_date':third['ranking_date'],'source_url':third['source_url']} if third else None,'boys12':boys12,'boys13':boys13})
+    results.append({'carifta':carifta,'event':e,'personal_best':a['time'] if a else None,'pb_source':a['source_url'] if a else None,'pb_evidence_pdf':a.get('source_pdf') if a else None,'pb_evidence_page':a.get('source_page') if a else None,'standards':{k:{'time':v['time'],'difference':fmt(asec-seconds(v['time'])) if asec is not None else None,'met':asec<=seconds(v['time']) if asec is not None else None,'source_url':v['source_url']} for k,v in std.items()},'rank':int(own['rank']) if own else None,'podium_gap':fmt(asec-seconds(third['time'])) if asec is not None and third else None,'second_place':{'swimmer':second_by_event[e]['swimmer'],'time':second_by_event[e]['time'],'ranking_date':second_by_event[e]['ranking_date'],'source_url':second_by_event[e]['source_url']} if e in second_by_event else None,'third_place':{'swimmer':third['swimmer'],'time':third['time'],'ranking_date':third['ranking_date'],'source_url':third['source_url']} if third else None,'boys12':boys12,'boys13':boys13})
 history.sort(key=lambda r:(r['race_date'],r['event'],seconds(r['time'])))
 meets=json.loads((DATA/'meets.json').read_text()); sources=json.loads((DATA/'official_sources.json').read_text())
 for meet in meets:
