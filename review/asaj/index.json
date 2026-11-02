@@ -5,7 +5,7 @@
     "https://asaj.com.jm/rankings": {
       "category": "rankings",
       "title": "ASAJ listing: rankings",
-      "sha256": "63546766cdde336a2234765e58cbb3622003a16f5326cc132ab1f5b4ec3a9c8a",
+      "sha256": "e7ca019ff5214ab6422f29e95b6afdbe10c6a15dd584321819cdd53850480093",
       "content_type": "html",
       "links": [
         {
@@ -446,7 +446,7 @@
     "https://www.asaj.com.jm/calendar/2027": {
       "category": "calendar",
       "title": "ASAJ listing: calendar",
-      "sha256": "3d1836e7486302d481233ca209085be51cdd3d35ceebc1aa59e2210ff9a19935",
+      "sha256": "44fb7a9cec5779ed16de460c464fb240252d28288ed05e44c67091f811f23d4d",
       "content_type": "html",
       "links": [
         {
@@ -471,7 +471,7 @@
     "https://www.asaj.com.jm/events/aggregator": {
       "category": "events",
       "title": "ASAJ listing: events",
-      "sha256": "941e66cf29ee0ae98a706091d1e8af5741feefdda83b49ff67dd44bfc48ba2c1",
+      "sha256": "0459bf3de0aeedc8f103a84ecfdf63a477f1d1dce991724b00cf2b6f4e311dee",
       "content_type": "html",
       "links": [
         {
@@ -548,7 +548,7 @@
     "https://www.asaj.com.jm/resources": {
       "category": "resources",
       "title": "ASAJ listing: resources",
-      "sha256": "13bc8969195a4f1c5a22e1125def9835c2908681d8257f2f4d73cdbb2f5c34df",
+      "sha256": "1d6796ab955a9356c538ac339b66500e45f59e062b19d6643ca57b2f6c5dddac",
       "content_type": "html",
       "links": [
         {
