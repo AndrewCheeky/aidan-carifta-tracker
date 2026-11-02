@@ -1,4 +1,5 @@
 let DATA=null, TAB='carifta';
+let TREND_SELECTION={event:null,course:'LCM'};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const link=(url,label='ASAJ source')=>url?`<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>`:'Pending';
 const value=x=>x===null||x===undefined||x===''?'<span class="pending">Pending verification</span>':esc(x);
@@ -69,16 +70,16 @@ const trendSwims=(d,event,course)=>{
 };
 function renderTrends(d){
  const names=trendEventNames(d);
- const options=names.map(name=>`<option value="${esc(name)}">${esc(name)}</option>`).join('');
+ const eventLinks=names.map(name=>`<a href="#trends" class="trend-event-link" data-event="${esc(name)}">${esc(name)}</a>`).join(' · ');
  const summary=names.flatMap(name=>['LCM','SCM'].map(course=>{
   const swims=trendSwims(d,name,course), first=swims[0],last=swims.at(-1),change=swims.length>1?trendSeconds(last.time)-trendSeconds(first.time):null;
   return `<tr><td>${esc(name)}</td><td>${course}</td><td>${swims.length}</td><td>${first?esc(first.time):'—'}</td><td>${last?esc(last.time):'—'}</td><td>${change===null?'—':`${change>0?'+':''}${change.toFixed(2)}s`}</td><td>${change===null?'Insufficient history':change<0?'Improved':change>0?'Slower latest swim':'Unchanged'}</td></tr>`;
  }));
- return `<div class="panel"><h2>Performance Trends · all ${names.length} documented events</h2><p>Official ASAJ results and user-supplied SwimCloud results are shown as distinct series. SwimCloud data is supplementary and not independently verified. SCM and LCM are never mixed or converted. ASAJ meet-range dates are approximate.</p><div class="trend-controls"><label>Event <select id="trend-event">${options}</select></label><label>Course <select id="trend-course"><option value="LCM">Long course (LCM)</option><option value="SCM">Short course (SCM)</option></select></label></div><div id="trend-detail"></div></div><div class="panel"><h2>All-event progress summary · both courses</h2><p>First-to-latest changes include supplementary SwimCloud times and must not be treated as independently verified qualification evidence.</p><div class="visual-scroll">${table(['Event','Course','Swims','First','Latest','Change','Assessment'],summary)}</div></div><div class="notice">Training reference only. Qualification and national rankings continue to use their separate official-source rules.</div>`;
+ return `<div class="panel"><h2>Performance Trends · all ${names.length} documented events</h2><p>Official ASAJ results and user-supplied SwimCloud results are shown as distinct series. SwimCloud data is supplementary and not independently verified. SCM and LCM are never mixed or converted. ASAJ meet-range dates are approximate.</p><div class="trend-controls"><p><strong>Select an event:</strong> ${eventLinks}</p><p><a href="#trends" class="trend-course-link" data-course="LCM">LCM</a> · <a href="#trends" class="trend-course-link" data-course="SCM">SCM</a></p></div><div id="trend-detail"></div></div><div class="panel"><h2>All-event progress summary · both courses</h2><p>First-to-latest changes include supplementary SwimCloud times and must not be treated as independently verified qualification evidence.</p><div class="visual-scroll">${table(['Event','Course','Swims','First','Latest','Change','Assessment'],summary)}</div></div><div class="notice">Training reference only. Qualification and national rankings continue to use their separate official-source rules.</div>`;
 }
 function drawTrendDetail(){
  const target=document.getElementById('trend-detail');if(!target||!DATA)return;
- const name=document.getElementById('trend-event')?.value,course=document.getElementById('trend-course')?.value;
+ const name=TREND_SELECTION.event||trendEventNames(DATA)[0],course=TREND_SELECTION.course;
  const swims=trendSwims(DATA,name,course);
  if(!swims.length){target.innerHTML='<p class="pending">No recorded swims for this event and course.</p>';return;}
  const vals=swims.map(r=>trendSeconds(r.time));let pb=Infinity;
@@ -94,7 +95,7 @@ function drawTrendDetail(){
  target.innerHTML=cards+`<div class="trend-chart"><svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(name)} ${esc(course)} race times and personal-best progression" preserveAspectRatio="xMidYMid meet">${grid}<path d="${line(bests)}" fill="none" stroke="#24a47c" stroke-width="3" stroke-dasharray="7 5"/><path d="${line(vals)}" fill="none" stroke="#e3a300" stroke-width="2" opacity=".65"/>${dots}<text x="${left}" y="${h-13}" fill="currentColor" font-size="12">Earliest recorded swim</text><text x="${w-right}" y="${h-13}" text-anchor="end" fill="currentColor" font-size="12">Latest recorded swim</text></svg></div><p><strong style="color:#e3a300">● ASAJ verified</strong> · <strong style="color:#6e80ef">● SwimCloud supplied, unverified</strong> · <strong style="color:#24a47c">- - Best recorded progression (mixed sources)</strong></p><div class="visual-scroll">${table(['Meet / date','Round','Time','Verification','Source'],swims.map(r=>`<tr><td>${esc(r.meet_name)}<small> · ${esc(r.meet_dates||r.date)}${r.precision==='meet_range'?' (approx.)':''}</small></td><td>${esc(r.round||'Unspecified')}</td><td>${esc(r.time)}</td><td>${esc(r.origin)}</td><td>${r.origin==='ASAJ verified'&&r.source_pdf?`<a href="${encodeURI(esc(r.source_pdf))}#page=${esc(r.source_page)}" target="_blank" rel="noopener">Official PDF p.${esc(r.source_page)}</a>`:r.source_url?link(r.source_url,'SwimCloud result'):'Not linked'}</td></tr>`))}</div>`;
 }
 // The main render replaces the tab content, so install controls after every render.
-const originalRender=render;render=function(){originalRender();if(TAB==='trends'){document.querySelectorAll('#trend-event,#trend-course').forEach(el=>el.addEventListener('change',drawTrendDetail));drawTrendDetail();}};
+const originalRender=render;render=function(){originalRender();if(TAB==='trends'){document.querySelectorAll('.trend-event-link').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();TREND_SELECTION.event=el.dataset.event;drawTrendDetail();}));document.querySelectorAll('.trend-course-link').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();TREND_SELECTION.course=el.dataset.course;drawTrendDetail();}));drawTrendDetail();}};
 
 // All-event small multiples. Faster swim times are better; first/latest are chronological.
 function renderAllEventProgress(d){
@@ -165,20 +166,23 @@ function championshipOpportunities(d,meet){
   const entryScore=Math.max(0,Math.min(60,60-60*Math.max(0,gap)/entry));
   const trendScore=trend===null?0:Math.max(0,Math.min(25,12.5+trend*5));
   const fieldScore=field?15/(1+nearby/3):0;
-  return {event:e.event,best:m.best,entry,gap,trend,nearby,field,boys12,entryScore,trendScore,fieldScore,score:entryScore+trendScore+fieldScore};
- }).filter(Boolean).sort((a,b)=>b.score-a.score).slice(0,3);
+  const bestSwims=trendSwims(d,e.event,'LCM').filter(x=>Math.abs(trendSeconds(x.time)-m.best)<.011&&/^\d{4}-\d{2}-\d{2}/.test(String(x.date)));
+  const bestDate=bestSwims.length?bestSwims.at(-1).date:null;
+  const ageDays=bestDate?Math.max(0,Math.floor((Date.now()-Date.parse(bestDate+'T00:00:00Z'))/86400000)):null;
+  return {event:e.event,best:m.best,bestDate,ageDays,entry,gap,trend,nearby,field,boys12,entryScore,trendScore,fieldScore,score:entryScore+trendScore+fieldScore};
+ }).filter(Boolean).sort((a,b)=>b.score-a.score).slice(0,5);
 }
 function renderChampionshipShortlist(d){
  const panel=meet=>{
   const rows=championshipOpportunities(d,meet);
-  if(!rows.length)return `<section class="panel"><h3>${meet} · Top three priorities</h3><p>No events have both a recorded LCM time and a sourced B standard.</p></section>`;
+  if(!rows.length)return `<section class="panel"><h3>${meet} · Top five priorities</h3><p>No events have both a recorded LCM time and a sourced B standard.</p></section>`;
   const cards=rows.map((r,i)=>{
    const direction=r.trend===null?'No recent trend':r.trend>0.005?'Faster':r.trend<-.005?'Slower':'Stable';
    const change=r.trend===null?'':` · ${Math.abs(r.trend).toFixed(2)}s`;
    const gap=r.gap<=0?`${Math.abs(r.gap).toFixed(2)}s inside B`:`${r.gap.toFixed(2)}s to B`;
-   return `<article class="intel-card"><h3>${i+1}. ${esc(r.event)} <strong>${r.score.toFixed(0)}/100</strong></h3><p><strong>${trendTime(r.best)}</strong> best · ${gap}</p><p>Recent: ${direction}${change}</p><p>ASAJ Boys 13–14: ${r.field} swimmers · ${r.nearby} within ±5%</p><p>ASAJ Boys 12: ${r.boys12} within ±10%</p><p class="muted">Entry ${r.entryScore.toFixed(0)}/60 · Trend ${r.trendScore.toFixed(0)}/25 · Field ${r.fieldScore.toFixed(0)}/15</p></article>`;
+   return `<article class="intel-card"><h3>${i+1}. <a href="#trends" class="strategy-event-link" data-event="${esc(r.event)}">${esc(r.event)}</a> <strong>${r.score.toFixed(0)}/100</strong></h3><p><strong>${trendTime(r.best)}</strong> best · ${r.ageDays===null?"Date unavailable":`${r.ageDays} days since fastest (${esc(r.bestDate)})`} · ${gap}</p><p>Recent: ${direction}${change}</p><p>ASAJ Boys 13–14: ${r.field} swimmers · ${r.nearby} within ±5%</p><p>ASAJ Boys 12: ${r.boys12} within ±10%</p><p class="muted">Entry ${r.entryScore.toFixed(0)}/60 · Trend ${r.trendScore.toFixed(0)}/25 · Field ${r.fieldScore.toFixed(0)}/15</p></article>`;
   }).join('');
-  return `<section class="panel"><h2>${meet} · Top three event priorities</h2><div class="intel-cards">${cards}</div></section>`;
+  return `<section class="panel"><h2>${meet} · Top five event priorities</h2><div class="intel-cards">${cards}</div></section>`;
  };
  return `<section class="panel"><h2>🏆 CARIFTA + Goodwill Event Strategy</h2><p>Ranked event priorities, not qualification listings. Scores combine entry readiness (60), recent performance (25), and ASAJ competitor density (15).</p></section>${panel('CARIFTA')}${panel('Goodwill')}<p class="muted">CARIFTA: 2027 B standards. Goodwill: available 2026 B standards, historical reference only. Competitor counts cover imported ASAJ results, not championship entries. Planning scores are not medal probabilities.</p>`;
 }
@@ -244,3 +248,6 @@ render=function(){renderWithStandards();if(TAB==='intelligence'){
  const main=document.getElementById('content')||document.querySelector('main');
  if(main){const wrap=document.createElement('div');wrap.innerHTML=renderMotivational(DATA)+renderCompetitiveSnapshot(DATA);main.appendChild(wrap);}
 }};
+
+// Strategy event names open their corresponding Performance Trends graph.
+document.addEventListener('click',e=>{const a=e.target.closest('.strategy-event-link');if(!a)return;e.preventDefault();TREND_SELECTION.event=a.dataset.event;TREND_SELECTION.course='LCM';const tab=document.querySelector('[data-tab="trends"]');if(tab)tab.click();else{TAB='trends';render();}});
