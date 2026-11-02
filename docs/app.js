@@ -5,7 +5,8 @@ const value=x=>x===null||x===undefined||x===''?'<span class="pending">Pending ve
 const card=(label,val)=>`<div class="card"><div class="label">${esc(label)}</div><div class="value">${val}</div></div>`;
 const table=(headers,rows)=>`<table><thead><tr>${headers.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table>`;
 function render(){if(!DATA)return;let html='';const ev=DATA.events;
-if(TAB==='progress'){html=renderAllEventProgress(DATA);
+if(TAB==='intelligence'){html=renderIntelligence(DATA);
+}else if(TAB==='progress'){html=renderAllEventProgress(DATA);
 }else if(TAB==='trends'){html=renderTrends(DATA);
 }else if(TAB==='visual'){
 const sec=t=>{if(!t)return null;const a=String(t).replace(/^\+/,'').split(':').map(Number);return a.every(Number.isFinite)?a.reduce((v,x)=>v*60+x,0):null};
@@ -113,3 +114,52 @@ function renderAllEventProgress(d){
  }
  return `<div class="panel"><h2>All-Event Progress · earliest to latest</h2><p>Each event and pool course has its own timeline. Green means the latest time is faster than the first, amber means unchanged, and red means slower. A single swim is grey. The chart's vertical scale adjusts for each event; compare the seconds, not line steepness. LCM and SCM are never combined.</p><div class="progress-legend"><span class="improved">● Improved</span><span class="maintained">● Maintained</span><span class="degraded">● Slower latest</span><span>🟡 ASAJ verified · 🔵 SwimCloud supplied</span></div>${rows.join('')||'<p>No recorded races.</p>'}<p class="muted">Status compares first and latest recorded swims, not the personal best. Some ASAJ dates may reflect meet ranges. SwimCloud data remains supplementary and unverified.</p></div>`;
 }
+
+// Intelligence uses only documented race results and the September 2026 Jamaica ranking snapshot.
+// A national ranking third-place time is NOT a CARIFTA medal benchmark.
+function intelligenceMetrics(d,course){
+ return trendEventNames(d).map(name=>{
+  const swims=trendSwims(d,name,course), vals=swims.map(r=>trendSeconds(r.time));
+  if(!vals.length)return null;
+  const first=vals[0],latest=vals.at(-1),best=Math.min(...vals),pct=vals.length>1?(first-latest)/first*100:null;
+  const recent=vals.slice(-3),recentChange=recent.length>=2?recent[0]-recent.at(-1):null;
+  const e=(d.events||[]).find(x=>x.event===name);
+  const third=course==='LCM'&&e?.third_place?trendSeconds(e.third_place.time):null;
+  const gap=third===null?null:best-third;
+  const B=course==='LCM'&&e?.standards?.B?trendSeconds(e.standards.B.time):null;
+  return {name,course,swims,first,latest,best,pct,recentChange,third,gap,B,bgap:B===null?null:best-B};
+ }).filter(Boolean);
+}
+function intelligenceLine(m){
+ const v=m.swims.map(r=>trendSeconds(r.time)),W=440,H=170,L=44,R=12,T=14,B=28,lo=Math.min(...v)-1,hi=Math.max(...v)+1;
+ const x=i=>L+(v.length===1?.5:i/(v.length-1))*(W-L-R),y=n=>T+(n-lo)/(hi-lo)*(H-T-B);
+ const grid=[0,.5,1].map(f=>{const t=lo+(hi-lo)*f;return `<line x1="${L}" y1="${y(t)}" x2="${W-R}" y2="${y(t)}" stroke="currentColor" opacity=".12"/><text x="${L-5}" y="${y(t)+4}" text-anchor="end" fill="currentColor" font-size="11">${trendTime(t)}</text>`}).join('');
+ const segments=v.slice(1).map((n,i)=>{const change=n-v[i],c=change<-.005?'#20a46d':change>.005?'#d35b66':'#c18b20';return `<line x1="${x(i)}" y1="${y(v[i])}" x2="${x(i+1)}" y2="${y(n)}" stroke="${c}" stroke-width="3"/>`}).join('');
+ const dots=m.swims.map((r,i)=>`<circle cx="${x(i)}" cy="${y(v[i])}" r="4.5" fill="${r.origin==='ASAJ verified'?'#e3a300':'#6e80ef'}"><title>${esc(r.date)} · ${esc(r.time)} · ${esc(r.origin)}</title></circle>`).join('');
+ return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(m.name)} ${m.course} chronological race times">${grid}${segments}${dots}<text x="${L}" y="${H-6}" font-size="11" fill="currentColor">${esc(m.swims[0].date)}</text><text x="${W-R}" y="${H-6}" text-anchor="end" font-size="11" fill="currentColor">${esc(m.swims.at(-1).date)}</text></svg>`;
+}
+function renderIntelligence(d){
+ const metrics=['LCM','SCM'].flatMap(course=>intelligenceMetrics(d,course));
+ const eligible=metrics.filter(m=>m.pct!==null);
+ const strengths=[...eligible].sort((a,b)=>b.pct-a.pct).slice(0,3);
+ const recentSlower=metrics.filter(m=>m.recentChange!==null&&m.recentChange<-.005).sort((a,b)=>a.recentChange-b.recentChange).slice(0,3);
+ const snapshot=metrics.filter(m=>m.course==='LCM'&&m.gap!==null).sort((a,b)=>a.gap-b.gap).slice(0,5);
+ const fmt=m=>`${esc(m.name)} <small>(${m.course})</small>`;
+ const strong=strengths.map(m=>`<li>${fmt(m)} · ${m.pct.toFixed(1)}% faster from first to latest</li>`).join('');
+ const focus=recentSlower.length?recentSlower.map(m=>`<li>${fmt(m)} · latest is ${Math.abs(m.recentChange).toFixed(2)}s slower than the first of the last ${Math.min(3,m.swims.length)} recorded races; review race context with coach</li>`).join(''):'<li>No slower recent trends detected among events with at least two results.</li>';
+ const opp=snapshot.map(m=>`<tr><td>${fmt(m)}</td><td>${trendTime(m.best)}</td><td>${trendTime(m.third)}</td><td class="${m.gap<=0?'good':''}">${m.gap>0?'+':''}${m.gap.toFixed(2)}s</td><td>${m.bgap===null?'Unavailable':`${m.bgap>0?'+':''}${m.bgap.toFixed(2)}s`}</td></tr>`);
+ const rows=metrics.map(m=>`<tr><td>${fmt(m)}</td><td>${m.swims.length}</td><td>${trendTime(m.best)}</td><td>${m.pct===null?'Not enough history':`${m.pct>0?'+':''}${m.pct.toFixed(1)}%`}</td><td>${m.recentChange===null?'Not enough history':`${m.recentChange>0?'Faster':m.recentChange<0?'Slower':'Unchanged'} (${Math.abs(m.recentChange).toFixed(2)}s)`}</td></tr>`);
+ return `<div class="intel-head"><div><div class="visual-eyebrow">AIDAN SEATON · TRAINING DECISION SUPPORT</div><h2>Performance Intelligence</h2><p>Documented strengths, recent trends and evidence-based priorities. Not a medal prediction.</p></div><div class="intel-toggle"><label>Inspect course <select id="intel-course"><option value="LCM">LCM (50m)</option><option value="SCM">SCM (25m)</option></select></label></div></div>
+ <div class="intel-cards"><section class="intel-card"><h3>🏆 Closest national podium comparisons</h3><p>September 2026 Jamaica ranking snapshot, LCM only.</p><ol>${snapshot.slice(0,3).map(m=>`<li>${fmt(m)} · ${m.gap>0?m.gap.toFixed(2)+'s behind':Math.abs(m.gap).toFixed(2)+'s ahead'}</li>`).join('')||'<li>No verified snapshot benchmarks</li>'}</ol></section>
+ <section class="intel-card"><h3>💪 Historical strengths</h3><p>Largest first-to-latest percentage gains.</p><ol>${strong||'<li>Insufficient data</li>'}</ol></section>
+ <section class="intel-card"><h3>🎯 Review opportunities</h3><p>Recent race times moving slower, not a diagnosis.</p><ul>${focus}</ul></section>
+ <section class="intel-card"><h3>💡 Coach discussion</h3><ul><li>Review splits, turns, starts and race pacing where available.</li><li>Check training load and taper before interpreting slower races.</li><li>Prioritize events with verified qualification gaps and repeatable improvement.</li></ul></section></div>
+ <div class="intel-layout"><section class="panel"><h2>Event analysis</h2><p>Official 2027 B-standard gap is shown separately from the September 2026 national third-place comparison. Neither represents a CARIFTA bronze-medal time.</p><div class="visual-scroll">${table(['Event','Course','Swims','Best shown','First → latest','Recent trend'],rows)}</div></section><section class="panel"><h2>Selected event · real race timeline</h2><label>Event <select id="intel-event"></select></label><div id="intel-detail"></div><p class="muted">Green segments = faster; red = slower; amber = unchanged. Yellow dots = ASAJ verified; blue = SwimCloud supplied. SCM and LCM never combined.</p></section></div>
+ <div class="panel"><h2>Closest documented national third-place comparisons</h2><p>Jamaica rankings dated 29 September 2026. This is <strong>not</strong> CARIFTA finals or medal evidence. Qualification and team selection require additional verification.</p><div class="visual-scroll">${table(['Event','Best shown LCM*','National 3rd (Sep)','Gap to national 3rd','2027 CARIFTA B gap*'],opp)}</div><p class="muted">*Best shown may include unverified SwimCloud data. B gap is a mathematical comparison only; eligible race dates and official selection rules still apply.</p></div><div class="notice">Medal opportunity ranking unavailable until actual CARIFTA finalist and bronze-medal results for the correct age group are sourced. No benchmark or intermediate swim time has been invented.</div>`;
+}
+function drawIntelligence(){
+ if(!DATA)return;const course=document.getElementById('intel-course')?.value||'LCM',all=intelligenceMetrics(DATA,course),sel=document.getElementById('intel-event'),target=document.getElementById('intel-detail');if(!sel||!target)return;
+ const previous=sel.value;sel.innerHTML=all.map(m=>`<option value="${esc(m.name)}">${esc(m.name)}</option>`).join('');if(all.some(m=>m.name===previous))sel.value=previous;
+ const draw=()=>{const m=all.find(x=>x.name===sel.value);if(!m){target.innerHTML='<p>No recorded swims.</p>';return;}target.innerHTML=`<div class="intel-stats"><div><small>Earliest</small><strong>${trendTime(m.first)}</strong></div><div><small>Latest</small><strong>${trendTime(m.latest)}</strong></div><div><small>Best shown</small><strong>${trendTime(m.best)}</strong></div></div><div class="intel-chart">${intelligenceLine(m)}</div><p>${m.swims.length} documented result(s) · ${m.pct===null?'Insufficient history for a trend':`${m.pct.toFixed(1)}% first-to-latest improvement`}</p>`};sel.onchange=draw;draw();
+}
+const renderWithIntelligence=render;render=function(){renderWithIntelligence();if(TAB==='intelligence'){const c=document.getElementById('intel-course');if(c)c.onchange=drawIntelligence;drawIntelligence();}};
