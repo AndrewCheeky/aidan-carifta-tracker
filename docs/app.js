@@ -160,18 +160,24 @@ function championshipOpportunities(d,meet){
   const entryScore=Math.max(0,Math.min(60,60-60*Math.max(0,gap)/entry));
   const trendScore=trend===null?0:Math.max(0,Math.min(25,12.5+trend*5));
   const fieldScore=field?15/(1+nearby/3):0;
-  return {event:e.event,best:m.best,entry,gap,trend,nearby,field,score:entryScore+trendScore+fieldScore};
+  return {event:e.event,best:m.best,entry,gap,trend,nearby,field,entryScore,trendScore,fieldScore,score:entryScore+trendScore+fieldScore};
  }).filter(Boolean).sort((a,b)=>b.score-a.score).slice(0,3);
 }
 function renderChampionshipShortlist(d){
  const panel=meet=>{
   const rows=championshipOpportunities(d,meet);
-  if(!rows.length)return `<section class="panel"><h3>${meet}</h3><p>No events with both a recorded LCM time and a sourced B standard.</p></section>`;
-  const body=rows.map((r,i)=>`<tr><td>${i+1}. ${esc(r.event)}</td><td>${trendTime(r.best)}</td><td>${trendTime(r.entry)}</td><td>${r.gap>0?'+':''}${r.gap.toFixed(2)}s</td><td>${r.trend===null?'No recent trend':`${r.trend>0?'Faster':r.trend<0?'Slower':'Stable'} (${Math.abs(r.trend).toFixed(2)}s)`}</td><td>${r.field?`${r.field} swimmers · ${r.nearby} within ±5%`:'No verified field'}</td><td>${r.score.toFixed(0)}/100</td></tr>`).join('');
-  return `<section class="panel"><h3>${meet} · Top 3 Event Priorities</h3><div class="visual-scroll">${table(['Event','Best LCM','B time','Gap to B','Recent trend','ASAJ Boys 13–14','Score'],body)}</div></section>`;
+  if(!rows.length)return `<section class="panel"><h3>${meet} · Top three priorities</h3><p>No events have both a recorded LCM time and a sourced B standard.</p></section>`;
+  const cards=rows.map((r,i)=>{
+   const direction=r.trend===null?'No recent trend':r.trend>0.005?'Faster':r.trend<-.005?'Slower':'Stable';
+   const change=r.trend===null?'':` · ${Math.abs(r.trend).toFixed(2)}s`;
+   const gap=r.gap<=0?`${Math.abs(r.gap).toFixed(2)}s inside B`:`${r.gap.toFixed(2)}s to B`;
+   return `<article class="intel-card"><h3>${i+1}. ${esc(r.event)} <strong>${r.score.toFixed(0)}/100</strong></h3><p><strong>${trendTime(r.best)}</strong> best · ${gap}</p><p>Recent: ${direction}${change}</p><p>ASAJ Boys 13–14: ${r.field} swimmers · ${r.nearby} within ±5%</p><p class="muted">Entry ${r.entryScore.toFixed(0)}/60 · Trend ${r.trendScore.toFixed(0)}/25 · Field ${r.fieldScore.toFixed(0)}/15</p></article>`;
+  }).join('');
+  return `<section class="panel"><h2>${meet} · Top three event priorities</h2><div class="intel-cards">${cards}</div></section>`;
  };
- return `<section class="panel"><h2>CARIFTA + Goodwill Event Strategy</h2><p>Top three events for each championship, ranked by B-standard readiness (60 points), recent improvement (25) and observed ASAJ competition (15). Only events with both recorded times and sourced standards appear.</p></section>${panel('CARIFTA')}${panel('Goodwill')}<p class="muted">CARIFTA uses 2027 B times. Goodwill uses available 2026 B times as historical reference only. Competition counts cover imported ASAJ results, not all championship entrants. Scores are planning indicators, not medal probabilities. Recalculated when the ASAJ data build runs.</p>`;
+ return `<section class="panel"><h2>🏆 CARIFTA + Goodwill Event Strategy</h2><p>Ranked event priorities, not qualification listings. Scores combine entry readiness (60), recent performance (25), and ASAJ competitor density (15).</p></section>${panel('CARIFTA')}${panel('Goodwill')}<p class="muted">CARIFTA: 2027 B standards. Goodwill: available 2026 B standards, historical reference only. Competitor counts cover imported ASAJ results, not championship entries. Planning scores are not medal probabilities.</p>`;
 }
+
 function renderIntelligence(d){
  const metrics=['LCM','SCM'].flatMap(course=>intelligenceMetrics(d,course));
  const eligible=metrics.filter(m=>m.pct!==null);
