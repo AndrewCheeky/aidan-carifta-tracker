@@ -34,6 +34,20 @@ function renderSelectedSwimmer(d){
  const group=(d.asaj_competitor_results||[]).filter(r=>r.gender===sel.gender&&Number(r.age)>=min&&Number(r.age)<=max&&trendSeconds(r.time)!==null);
  const younger=(d.asaj_competitor_results||[]).filter(r=>r.gender===sel.gender&&Number(r.age)===min-1&&trendSeconds(r.time)!==null);
  const keys=[...new Set(rows.map(r=>r.event+'|'+r.course))].sort();
+ // Meet titles are taken from the imported source PDF filename when the extractor supplies a generic 'Results' heading.
+ const meets=new Map();
+ for(const r of rows){
+  const source=String(r.source_pdf||'');
+  const fallback=source.split('/').pop().replace(/\.pdf$/i,'').replace(/[-_]+/g,' ').trim();
+  const raw=String(r.meet_name||'').trim();
+  const title=raw&&!/^results?$/i.test(raw)?raw:(fallback||'Meet name unavailable');
+  const start=String(r.meet_start||'').trim(),end=String(r.meet_end||'').trim();
+  const key=[source||title,start,end].join('|');
+  if(!meets.has(key))meets.set(key,{title,start,end,source,events:new Set(),count:0});
+  const meet=meets.get(key);meet.events.add(r.event+' '+r.course);meet.count++;
+ }
+ const meetRows=[...meets.values()].sort((a,b)=>a.start.localeCompare(b.start)).map(m=>`<tr><td>${esc(m.title)}</td><td>${esc(m.start||'Date unavailable')}${m.end&&m.end!==m.start?' to '+esc(m.end):''}</td><td>${m.count}</td><td>${m.source?`<a href="${encodeURI(esc(m.source))}" target="_blank" rel="noopener noreferrer">ASAJ PDF</a>`:'Unavailable'}</td></tr>`).join('');
+ const meetSummary=`<section class="panel"><h3>ASAJ meets with recorded results</h3><p>${meets.size} distinct imported meet source(s) for ${esc(sel.name)} at recorded age ${sel.age}. Dates are imported meet dates and may not identify the exact race day.</p>${meets.size?`<div class="table-wrap">${table(['Meet','Recorded meet date(s)','Results','Source'],[meetRows])}</div>`:'<p>No meets found for the selected swimmer and recorded age.</p>'}</section>`;
  const cards=keys.map(key=>{const [event,course]=key.split('|'), swims=rows.filter(r=>r.event===event&&r.course===course).sort((a,b)=>String(a.meet_start).localeCompare(String(b.meet_start)));
  const pb=swims.reduce((a,b)=>trendSeconds(a.time)<=trendSeconds(b.time)?a:b),latest=swims.at(-1),delta=trendSeconds(latest.time)-trendSeconds(pb.time);
  const peers=group.filter(r=>r.event===event&&r.course===course),emerging=younger.filter(r=>r.event===event&&r.course===course);
@@ -41,7 +55,7 @@ function renderSelectedSwimmer(d){
  const sourced=r=>r.source_pdf?`<a target="_blank" rel="noopener" href="${encodeURI(esc(r.source_pdf))}#page=${esc(r.source_page||1)}">ASAJ PDF</a>`:'Source unavailable';
  return `<section class="panel"><h3>${esc(event)} · ${esc(course)}</h3><div class="cards">${card('PB (imported ASAJ)',esc(pb.time))}${card('Latest',esc(latest.time))}${card('Latest vs PB',`${Math.abs(delta).toFixed(2)}s ${delta<-.005?'faster':delta>.005?'slower':'equal'}`)}${card('Documented swims',swims.length)}</div><p>PB meet date: ${esc(pb.meet_start||'Unavailable')} · ${sourced(pb)} · ${unique(peers)} age-category competitors · ${unique(emerging)} emerging age ${min-1} competitors</p>${table(['Meet date','Round','Time','Age','Source'],swims.map(r=>`<tr><td>${esc(r.meet_start||'Unknown')}</td><td>${esc(r.round||'')}</td><td>${esc(r.time)}</td><td>${esc(r.age)}</td><td>${sourced(r)}</td></tr>`))}</section>`;
  }).join('');
- return `<section class="panel"><h2>${esc(sel.name)} · ${esc(sel.gender)} age ${sel.age}</h2><p>ASAJ imported race results only. Comparison category ${esc(sel.category)}; emerging age ${min-1}. Results reflect the ages recorded at meets. Race dates may represent meet dates rather than exact swim dates.</p><p><strong>${rows.length} recorded results</strong> across ${keys.length} event/course combinations. Other athletes' CARIFTA qualification, Goodwill selection, USA classification and September ranking cannot be inferred from Aidan's records.</p></section>${cards||'<section class="panel">No matching imported ASAJ results for this swimmer at the selected recorded age. Try another age or swimmer.</section>'}`;
+ return `<section class="panel"><h2>${esc(sel.name)} · ${esc(sel.gender)} age ${sel.age}</h2><p>ASAJ imported race results only. Comparison category ${esc(sel.category)}; emerging age ${min-1}. Results reflect the ages recorded at meets. Race dates may represent meet dates rather than exact swim dates.</p><p><strong>${rows.length} recorded results</strong> across ${keys.length} event/course combinations. Other athletes' CARIFTA qualification, Goodwill selection, USA classification and September ranking cannot be inferred from Aidan's records.</p></section>${meetSummary}${cards||'<section class="panel">No matching imported ASAJ results for this swimmer at the selected recorded age. Try another age or swimmer.</section>'}`;
 }
 
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
