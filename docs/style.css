@@ -16,3 +16,27 @@
 
 /* Hide legacy navigation tabs while preserving internal routes. */
 nav button[data-tab="trends"], nav button[data-tab="sources"] { display: none !important; }
+
+/* Tornadoes Swim Club inspired visual system: orange, black, teal. */
+:root{color-scheme:dark;--t-orange:#ff781f;--t-orange-light:#ffab65;--t-teal:#00b5ad;--t-teal-light:#75e4db;--t-ink:#10151c;--t-card:#1b252c;--t-border:#344a50;--t-text:#f3f7f8;--t-muted:#bdcbd0;--panel:#1b252c;--card:#1b252c;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:var(--t-text);background:var(--t-ink)}
+body{background:radial-gradient(ellipse at 95% 0%,#153e40 0%,transparent 44%),linear-gradient(180deg,#111820,#10151c 60%);color:var(--t-text)}
+.wrap{max-width:1280px}
+header{position:relative;overflow:hidden;background:linear-gradient(112deg,#10151c 0%,#17383b 72%,#164e4c 100%);border:1px solid #346765;border-top:5px solid var(--t-orange);box-shadow:0 12px 35px #0004;padding:34px 38px}
+header:after{content:"";position:absolute;right:-85px;top:-110px;width:360px;height:360px;border:38px solid #ff781f19;border-radius:50%;pointer-events:none}
+.eyebrow{color:var(--t-teal-light);letter-spacing:.17em}
+h1{font-weight:850;letter-spacing:-.035em}h1 span{color:var(--t-orange)}
+p,small,.muted,.pending{color:var(--t-muted)}
+nav{gap:9px;margin:24px 0 18px}nav button{flex:0 0 auto;background:#1a252c;color:#e5f0f0;border:1px solid #355157;border-radius:999px;padding:11px 16px;transition:background .15s,color .15s,border-color .15s}
+nav button:hover{background:#214346;border-color:var(--t-teal)}nav button.active{background:var(--t-orange);color:#151a1c;border-color:var(--t-orange);box-shadow:0 3px 14px #ff781f3d}
+button{background:#1e3d40;color:#f0ffff;border:1px solid #417a7a}button:hover{border-color:var(--t-orange)}button.active{background:var(--t-orange);border-color:var(--t-orange);color:#12171b}
+#status{color:#a9c9c8}.card,.panel{background:linear-gradient(145deg,#1d2b31,#182228);border:1px solid var(--t-border);box-shadow:0 6px 20px #0002}.card .label{color:var(--t-muted)}.card .value{color:var(--t-orange-light)}
+h2,h3{color:#f3f9f9}th{color:var(--t-teal-light)}th,td{border-bottom-color:#35494e}tr:hover td{background:#24404740}a{color:var(--t-teal-light);text-underline-offset:3px}a:hover{color:var(--t-orange-light)}
+.good{color:#73dfb0}.warn{color:#ffb47d}.notice{background:#223437;border-left-color:var(--t-orange)}footer{color:#a9bdc1}
+.visual-head{background:linear-gradient(112deg,#12383b,#087d7c 75%,#10262c);border-color:#5ccac2}.visual-head h2 span,.visual-title span{color:var(--t-orange-light)}
+.visual-metrics>div{background:linear-gradient(150deg,#174b4c,#19282e);border-color:#4b9d99}.visual-metrics strong{color:var(--t-orange-light)}
+.visual-panel{background:#e9f5f4;color:#163239;border-color:#79bdb8}.visual-panel h3{background:#146c6a;color:#fff}.visual-panel p{color:#24434a}.visual-panel th{background:#c6e6e2;color:#17514e}.visual-panel td{color:#20454a;border-color:#c0d8d5}.visual-panel tr:nth-child(even){background:#d9eeeb}.visual-bar-fill{background:#ed7452}.visual-bar-fill.ahead{background:#129e92}
+.intel-card,.intel-stats div{background:#203136;border-color:#406064}.intel-card h3{color:var(--t-teal-light)}.intel-stats strong{color:#fff}.intel-stats small{color:#bdd1d3}
+.trend-controls select,.intel-toggle select,#intel-event{background:#1d3035;color:#fff;border-color:#4c7476}
+.progress-row{border-top-color:#385459}.progress-event a{color:var(--t-teal-light)}.progress-event a:hover{color:var(--t-orange-light)}
+:focus-visible{outline:3px solid var(--t-orange);outline-offset:3px}
+@media(max-width:650px){header{padding:25px 21px}nav button{flex:1 1 auto;font-size:13px;padding:10px 12px}}
