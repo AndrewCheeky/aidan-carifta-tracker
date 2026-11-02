@@ -40,3 +40,6 @@ h2,h3{color:#f3f9f9}th{color:var(--t-teal-light)}th,td{border-bottom-color:#3549
 .progress-row{border-top-color:#385459}.progress-event a{color:var(--t-teal-light)}.progress-event a:hover{color:var(--t-orange-light)}
 :focus-visible{outline:3px solid var(--t-orange);outline-offset:3px}
 @media(max-width:650px){header{padding:25px 21px}nav button{flex:1 1 auto;font-size:13px;padding:10px 12px}}
+
+/* ASAJ multi-swimmer selection */
+.swimmer-selector{background:var(--panel,#fff);border:1px solid #c5d2d4;border-radius:14px;padding:16px;margin:16px 0;color:inherit}.selector-title{font-weight:800;margin-bottom:12px}.selector-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.selector-grid label{font-size:.82rem;font-weight:700;min-width:0}.selector-grid select{display:block;width:100%;margin-top:6px;padding:10px 8px;border:1px solid #849b9f;border-radius:8px;background:#fff;color:#17252a;font:inherit}.selector-note{font-size:.85rem;margin:12px 0 0}@media(max-width:780px){.selector-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:420px){.selector-grid{grid-template-columns:1fr}}

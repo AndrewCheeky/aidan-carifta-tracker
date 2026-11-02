@@ -1,11 +1,55 @@
 let DATA=null, TAB='carifta';
 let TREND_SELECTION={event:null,course:'LCM'};
+
+// Multi-swimmer controls use imported ASAJ results; never reuse Aidan's individual rankings or standards for another swimmer.
+let SWIMMER_SELECTION={name:'Aidan Seaton',gender:'Boys',age:13,category:'13–14'};
+const asajRoster=d=>{
+ const map=new Map();
+ for(const r of d.asaj_competitor_results||[]){
+  const name=String(r.swimmer||'').trim(),gender=String(r.gender||'').trim(),age=Number(r.age);
+  if(!name||!['Boys','Girls'].includes(gender)||!Number.isInteger(age)||age<1||age>25)continue;
+  const key=gender+'|'+name.toLowerCase();
+  if(!map.has(key))map.set(key,{name,gender,ages:new Set()});
+  map.get(key).ages.add(age);
+ }
+ const primary={name:d.athlete?.name||'Aidan Seaton',gender:'Boys',ages:new Set([13])};
+ map.set('Boys|'+primary.name.toLowerCase(),primary);
+ return [...map.values()].sort((a,b)=>a.name.localeCompare(b.name));
+};
+function setupSwimmerControls(){
+ const host=document.getElementById('swimmer-controls');if(!host||!DATA)return;
+ const roster=asajRoster(DATA);
+ const names=roster.filter(x=>x.gender===SWIMMER_SELECTION.gender);
+ const nameOptions=names.map(x=>`<option value="${esc(x.name)}" ${x.name===SWIMMER_SELECTION.name?'selected':''}>${esc(x.name)}</option>`).join('');
+ host.innerHTML=`<div class="selector-title">Swimmer profile · ASAJ results</div><div class="selector-grid"><label>Primary swimmer<select id="swimmer-name">${nameOptions}</select></label><label>Gender<select id="swimmer-gender"><option ${SWIMMER_SELECTION.gender==='Boys'?'selected':''}>Boys</option><option ${SWIMMER_SELECTION.gender==='Girls'?'selected':''}>Girls</option></select></label><label>Recorded age<select id="swimmer-age">${Array.from({length:14},(_,i)=>i+7).map(n=>`<option value="${n}" ${n===SWIMMER_SELECTION.age?'selected':''}>${n}</option>`).join('')}</select></label><label>Age category<select id="swimmer-category">${['9–10','11–12','13–14','15–17','18–25'].map(v=>`<option ${v===SWIMMER_SELECTION.category?'selected':''}>${v}</option>`).join('')}</select></label></div><p class="selector-note">Category ${esc(SWIMMER_SELECTION.category)} · Emerging age ${Number(SWIMMER_SELECTION.category.split('–')[0])-1} · Ages are recorded at meets, not verified championship eligibility.</p>`;
+ const name=host.querySelector('#swimmer-name'),gender=host.querySelector('#swimmer-gender'),age=host.querySelector('#swimmer-age'),category=host.querySelector('#swimmer-category');
+ name.onchange=()=>{SWIMMER_SELECTION.name=name.value;const found=roster.find(x=>x.name===name.value&&x.gender===SWIMMER_SELECTION.gender);if(found?.ages.size)SWIMMER_SELECTION.age=Math.max(...found.ages);setupSwimmerControls();render();};
+ gender.onchange=()=>{SWIMMER_SELECTION.gender=gender.value;SWIMMER_SELECTION.name=asajRoster(DATA).find(x=>x.gender===gender.value)?.name||'';setupSwimmerControls();render();};
+ age.onchange=()=>{SWIMMER_SELECTION.age=Number(age.value);render();};
+ category.onchange=()=>{SWIMMER_SELECTION.category=category.value;render();setupSwimmerControls();};
+}
+function renderSelectedSwimmer(d){
+ const sel=SWIMMER_SELECTION, min=Number(sel.category.split('–')[0]),max=Number(sel.category.split('–')[1]);
+ const rows=(d.asaj_competitor_results||[]).filter(r=>r.gender===sel.gender&&r.swimmer?.toLowerCase()===sel.name.toLowerCase()&&Number(r.age)===sel.age&&trendSeconds(r.time)!==null);
+ const group=(d.asaj_competitor_results||[]).filter(r=>r.gender===sel.gender&&Number(r.age)>=min&&Number(r.age)<=max&&trendSeconds(r.time)!==null);
+ const younger=(d.asaj_competitor_results||[]).filter(r=>r.gender===sel.gender&&Number(r.age)===min-1&&trendSeconds(r.time)!==null);
+ const keys=[...new Set(rows.map(r=>r.event+'|'+r.course))].sort();
+ const cards=keys.map(key=>{const [event,course]=key.split('|'), swims=rows.filter(r=>r.event===event&&r.course===course).sort((a,b)=>String(a.meet_start).localeCompare(String(b.meet_start)));
+ const pb=swims.reduce((a,b)=>trendSeconds(a.time)<=trendSeconds(b.time)?a:b),latest=swims.at(-1),delta=trendSeconds(latest.time)-trendSeconds(pb.time);
+ const peers=group.filter(r=>r.event===event&&r.course===course),emerging=younger.filter(r=>r.event===event&&r.course===course);
+ const unique=arr=>new Set(arr.map(r=>r.swimmer.toLowerCase())).size;
+ const sourced=r=>r.source_pdf?`<a target="_blank" rel="noopener" href="${encodeURI(esc(r.source_pdf))}#page=${esc(r.source_page||1)}">ASAJ PDF</a>`:'Source unavailable';
+ return `<section class="panel"><h3>${esc(event)} · ${esc(course)}</h3><div class="cards">${card('PB (imported ASAJ)',esc(pb.time))}${card('Latest',esc(latest.time))}${card('Latest vs PB',`${Math.abs(delta).toFixed(2)}s ${delta<-.005?'faster':delta>.005?'slower':'equal'}`)}${card('Documented swims',swims.length)}</div><p>PB meet date: ${esc(pb.meet_start||'Unavailable')} · ${sourced(pb)} · ${unique(peers)} age-category competitors · ${unique(emerging)} emerging age ${min-1} competitors</p>${table(['Meet date','Round','Time','Age','Source'],swims.map(r=>`<tr><td>${esc(r.meet_start||'Unknown')}</td><td>${esc(r.round||'')}</td><td>${esc(r.time)}</td><td>${esc(r.age)}</td><td>${sourced(r)}</td></tr>`))}</section>`;
+ }).join('');
+ return `<section class="panel"><h2>${esc(sel.name)} · ${esc(sel.gender)} age ${sel.age}</h2><p>ASAJ imported race results only. Comparison category ${esc(sel.category)}; emerging age ${min-1}. Results reflect the ages recorded at meets. Race dates may represent meet dates rather than exact swim dates.</p><p><strong>${rows.length} recorded results</strong> across ${keys.length} event/course combinations. Other athletes' CARIFTA qualification, Goodwill selection, USA classification and September ranking cannot be inferred from Aidan's records.</p></section>${cards||'<section class="panel">No matching imported ASAJ results for this swimmer at the selected recorded age. Try another age or swimmer.</section>'}`;
+}
+
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const link=(url,label='ASAJ source')=>url?`<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>`:'Pending';
 const value=x=>x===null||x===undefined||x===''?'<span class="pending">Pending verification</span>':esc(x);
 const card=(label,val)=>`<div class="card"><div class="label">${esc(label)}</div><div class="value">${val}</div></div>`;
 const table=(headers,rows)=>`<table><thead><tr>${headers.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table>`;
-function render(){if(!DATA)return;let html='';const ev=DATA.events;
+function render(){if(!DATA)return; if(SWIMMER_SELECTION.name!=='Aidan Seaton'||SWIMMER_SELECTION.gender!=='Boys'||SWIMMER_SELECTION.age!==13||SWIMMER_SELECTION.category!=='13–14'){document.querySelector('#content').innerHTML=renderSelectedSwimmer(DATA);document.querySelector('#status').textContent='ASAJ imported results · Selection-specific standards not inferred';return;}let html='';const ev=DATA.events;
 if(TAB==='championship'){html=renderChampionshipShortlist(DATA);
 }else if(TAB==='intelligence'){html=renderIntelligence(DATA);
 }else if(TAB==='progress'){html=renderAllEventProgress(DATA);
@@ -54,7 +98,7 @@ const today=new Date().toISOString().slice(0,10);html=`<div class="panel"><h2>AS
 document.querySelector('#content').innerHTML=html;document.querySelector('#status').textContent=`Data generated: ${DATA.built_at} · Official-only validation enabled`;
 }
 document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');TAB=b.dataset.tab;render()}));
-fetch('data.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Data not found');return r.json()}).then(d=>{DATA=d;render()}).catch(e=>document.querySelector('#status').textContent='Unable to load verified data: '+e.message);
+fetch('data.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Data not found');return r.json()}).then(d=>{DATA=d;setupSwimmerControls();render()}).catch(e=>document.querySelector('#status').textContent='Unable to load verified data: '+e.message);
 
 // Race-by-race trends. Meet start dates are placement proxies where exact race days are unknown.
 const trendSeconds=t=>{const parts=String(t||'').split(':').map(Number);return parts.length&&parts.every(Number.isFinite)?parts.reduce((v,n)=>v*60+n,0):null};
