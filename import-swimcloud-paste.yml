@@ -1,0 +1,97 @@
+name: Review pasted SwimCloud results
+on:
+  issues:
+    types: [opened, edited]
+  workflow_dispatch:
+    inputs:
+      pasted_results:
+        description: "Paste SwimCloud Markdown table or tab-separated results here. No issue required."
+        required: false
+        type: string
+      issue_number:
+        description: "Optional existing SwimCloud issue number (use instead of pasted results)"
+        required: false
+        type: number
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+jobs:
+  parse-and-review:
+    if: github.event_name == 'workflow_dispatch' || (startsWith(github.event.issue.title, 'SwimCloud pasted race results') && github.event.issue.user.login == 'AndrewCheeky')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Load and validate SwimCloud issue
+        if: github.event_name == 'issues' || (github.event_name == 'workflow_dispatch' && inputs.pasted_results == '' && inputs.issue_number != '')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ github.event_name == 'workflow_dispatch' && inputs.issue_number || github.event.issue.number }}
+        run: |
+          gh api "repos/${GITHUB_REPOSITORY}/issues/${ISSUE_NUMBER}" > /tmp/swimcloud_issue.json
+          python - <<'PYISSUE'
+          import json, os, uuid
+          issue = json.load(open('/tmp/swimcloud_issue.json'))
+          if not issue['title'].startswith('SwimCloud pasted race results') or issue['user']['login'] != 'AndrewCheeky':
+              raise SystemExit('Issue must be a SwimCloud pasted results issue created by AndrewCheeky')
+          body = issue.get('body') or ''
+          if not body.strip():
+              raise SystemExit('Issue body is empty')
+          delimiter = 'SWIMCLOUD_' + uuid.uuid4().hex
+          with open(os.environ['GITHUB_ENV'], 'a') as f:
+              f.write(f'ISSUE_BODY<<{delimiter}\n{body}\n{delimiter}\n')
+              f.write(f'SWIMCLOUD_ISSUE_NUMBER={issue["number"]}\n')
+          PYISSUE
+      - name: Load directly pasted SwimCloud results
+        if: github.event_name == 'workflow_dispatch' && inputs.pasted_results != ''
+        env:
+          PASTED_RESULTS: ${{ inputs.pasted_results }}
+        run: |
+          python - <<'PYPASTE'
+          import os, uuid
+          body = os.environ['PASTED_RESULTS'].strip()
+          if not body:
+              raise SystemExit('No SwimCloud results were pasted')
+          if len(body) > 45000:
+              raise SystemExit('Paste is too long; split into smaller batches')
+          if '<!-- SWIMCLOUD_PASTE_START -->' not in body:
+              body = '<!-- SWIMCLOUD_PASTE_START -->\n' + body + '\n<!-- SWIMCLOUD_PASTE_END -->'
+          delimiter = 'SWIMCLOUD_' + uuid.uuid4().hex
+          with open(os.environ['GITHUB_ENV'], 'a') as f:
+              f.write(f'ISSUE_BODY<<{delimiter}\n{body}\n{delimiter}\n')
+              f.write(f'SWIMCLOUD_IMPORT_ID=manual-{os.environ["GITHUB_RUN_ID"]}\n')
+          PYPASTE
+      - name: Identify import source
+        run: |
+          echo "SWIMCLOUD_IMPORT_ID=${SWIMCLOUD_IMPORT_ID:-issue-${SWIMCLOUD_ISSUE_NUMBER}}" >> "$GITHUB_ENV"
+      - name: Parse and deduplicate pasted race results
+        run: python scripts/import_swimcloud_paste.py
+      - name: Validate dashboard build
+        run: |
+          python scripts/build.py
+          python -m unittest discover -s tests -p "test_*.py" -v
+          git checkout -- docs/data.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: swimcloud-paste-audit
+          path: review/swimcloud/paste_report.txt
+      - name: Open reviewed supplementary data PR
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.ASAJ_AUTOMATION_TOKEN || secrets.GITHUB_TOKEN }}
+          branch: automation/swimcloud-paste-${{ env.SWIMCLOUD_IMPORT_ID }}
+          base: main
+          add-paths: |
+            data/swimcloud_supplemental.csv
+            review/swimcloud/paste_report.txt
+          commit-message: 'Review pasted SwimCloud results (${{ env.SWIMCLOUD_IMPORT_ID }})'
+          title: 'Review SwimCloud pasted results (${{ env.SWIMCLOUD_IMPORT_ID }})'
+          body: |
+            Supplementary SwimCloud results only. ASAJ verified data is unchanged.
+            Review the audit report and any held entries before merging.
+            Source: ${{ env.SWIMCLOUD_IMPORT_ID }}. No automatic merge.

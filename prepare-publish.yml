@@ -1,0 +1,62 @@
+name: Prepare official ASAJ publication review
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '35 12 * * 1'
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-ingest.txt
+          python -m pip install reportlab
+      - name: Extract official source PDFs
+        run: python scripts/prepare_official_review.py
+      - name: Stage only the three approved data files
+        run: cp review/asaj/publish_candidate/*.csv data/
+      - name: Strictly validate against official source PDFs
+        run: |
+          python scripts/validate_publication.py
+          python scripts/build.py
+          python -m unittest discover -s tests -v
+          git checkout -- docs/data.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: asaj-validated-publication
+          path: review/asaj/publish_candidate/*.csv
+      - name: Create verified-data-only pull request
+        id: pr
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
+          branch: automation/asaj-publish-review
+          delete-branch: true
+          add-paths: |
+            data/performances.csv
+            data/rankings.csv
+            data/standards.csv
+          commit-message: 'Publish PDF-validated ASAJ rankings and CARIFTA standards'
+          title: 'Automated ASAJ validated data publication'
+          body: |
+            Generated solely from the bundled official ASAJ rankings and CARIFTA PDFs.
+            Strict validation passed before PR creation. Only three published CSVs are changed.
+            This does not auto-publish uncertain 2026 meet evidence, podium gaps or Boys 12 comparisons.
+      - name: Enable automatic merge for validated data only
+        if: ${{ steps.pr.outputs.pull-request-number != '' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.pr.outputs.pull-request-number }}
+        run: |
+          gh pr merge "$PR_NUMBER" --auto --squash

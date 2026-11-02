@@ -1,0 +1,62 @@
+name: Import uploaded ASAJ meet PDFs
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'sources/asaj/2026/*.pdf'
+      - 'scripts/import_uploaded_results.py'
+      - '.github/workflows/import-uploaded-pdfs.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install PDF parser and test dependencies
+        run: python -m pip install 'pymupdf>=1.24,<2' 'reportlab>=4,<5' 'pypdf>=5,<7'
+      - name: Extract official finished swims, retain evidence and hold uncertain records
+        run: python scripts/import_uploaded_results.py
+      - name: Validate dashboard build and test suite
+        run: |
+          python scripts/extract_emerging.py
+          python scripts/build.py
+          python -m unittest discover -s tests -v
+          git checkout -- docs/data.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: asaj-pdf-import-audit
+          path: review/asaj/pdf_import_report.txt
+      - name: Open race-history-only publication PR
+        id: pr
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.ASAJ_AUTOMATION_TOKEN || secrets.GITHUB_TOKEN }}
+          base: main
+          branch: automation/asaj-pdf-race-history
+          delete-branch: true
+          add-paths: |
+            data/race_history_2026.csv
+            docs/asaj-pdfs/*.pdf
+            review/asaj/pdf_import_report.txt
+          commit-message: 'Publish validated race history from uploaded ASAJ results'
+          title: 'Publish validated ASAJ race results'
+          body: |
+            PDF-only results importer. Every row has athlete name, age, event,
+            time, meet date range, race round, source PDF and page number.
+            Seed sheets, relay-only mentions, DQ and NS are excluded.
+            The meet date range is shown when the individual race day is unknown.
+            Any uncertain entries are listed in review/asaj/pdf_import_report.txt.
+      - name: Request auto-merge of validated data-only PR
+        if: ${{ steps.pr.outputs.pull-request-number != '' }}
+        env:
+          GH_TOKEN: ${{ secrets.ASAJ_AUTOMATION_TOKEN || secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.pr.outputs.pull-request-number }}
+        run: gh pr merge "$PR_NUMBER" --auto --squash

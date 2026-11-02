@@ -1,0 +1,37 @@
+name: Review all available ASAJ 2026 meet results
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '15 12 * * 1'
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-ingest.txt
+      - name: Discover and review official 2026 meet-result PDFs
+        run: python scripts/full_year_2026.py --max-pdfs 75
+      - uses: actions/upload-artifact@v4
+        with:
+          name: asaj-2026-full-year-evidence
+          path: review/asaj/full_year_2026.json
+      - uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
+          branch: automation/asaj-2026-full-year-review
+          add-paths: review/asaj/full_year_2026.json
+          commit-message: 'Stage official ASAJ 2026 meet evidence for review'
+          title: 'Review Aidan Seaton 2026 ASAJ meet evidence'
+          body: |
+            Evidence-only review. Do not interpret name mentions as verified results.
+            Check original PDFs and enter verified race rows in data/race_history_2026.csv.
+            This PR does not change the live dashboard's performance or ranking data.
