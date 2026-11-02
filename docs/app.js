@@ -116,6 +116,16 @@ function renderAllEventProgress(d){
   const days=Math.round((now-stamp)/86400000);
   return days>=0?`${days} day${days===1?'':'s'} since PB`:'PB date is in the future';
  };
+ const pbSourceLink=m=>{
+  const pb=m.swims.filter(r=>Math.abs(trendSeconds(r.time)-m.best)<.005).sort((a,b)=>String(a.date).localeCompare(String(b.date)))[0];
+  if(!pb)return '';
+  if(pb.origin==='ASAJ verified'&&pb.source_pdf){
+   const url=encodeURI(String(pb.source_pdf))+(pb.source_page?`#page=${encodeURIComponent(pb.source_page)}`:'');
+   return `<small><a href="${esc(url)}" target="_blank" rel="noopener noreferrer">View PB race result (ASAJ PDF)</a></small>`;
+  }
+  if(pb.source_url&&/^https?:\/\//i.test(pb.source_url))return `<small><a href="${esc(pb.source_url)}" target="_blank" rel="noopener noreferrer">View PB race result (SwimCloud)</a></small>`;
+  return '<small>PB source link unavailable</small>';
+ };
  const pbGap=m=>{
   const diff=m.latest-m.best;
   return Math.abs(diff)<.005?'Latest equals PB':`${Math.abs(diff).toFixed(2)}s ${diff>0?'slower than PB':'faster than PB'}`;
@@ -125,7 +135,7 @@ function renderAllEventProgress(d){
   const first=m.swims[0],last=m.swims.at(-1),delta=m.latest-m.first;
   const status=m.pct===null?'Insufficient history':delta<-.005?'Faster':delta>.005?'Slower':'Unchanged';
   const recent=m.recentChange===null?'Insufficient history':m.recentChange>.005?`Faster by ${m.recentChange.toFixed(2)}s`:m.recentChange<-.005?`Slower by ${Math.abs(m.recentChange).toFixed(2)}s`:'Unchanged';
-  return `<article class="panel" id="swim-${esc(m.course)}-${esc(m.name).replace(/[^a-zA-Z0-9]/g,'-')}"><h3><a href="#trends" class="progress-event-link" data-event="${esc(m.name)}" data-course="${m.course}" aria-label="View detailed race history for ${esc(m.name)} ${m.course}">${esc(m.name)} · ${m.course}</a></h3><div class="swim-inline-detail" hidden></div><div class="intel-stats"><div><small>Personal best (recorded)</small><strong>${trendTime(m.best)}</strong><small>${bestDate(m)}</small><small>${pbAge(m)}</small></div><div><small>Latest vs PB</small><strong>${pbGap(m)}</strong></div><div><small>First → latest</small><strong>${trendTime(m.first)} → ${trendTime(m.latest)}</strong></div><div><small>Recent trend</small><strong>${recent}</strong></div></div><div class="intel-chart">${intelligenceLine(m)}</div><p>${m.swims.length} documented result(s) · ${m.pct===null?'Insufficient history':`${m.pct.toFixed(1)}% first-to-latest improvement`} · ${status}</p><p class="muted">PB includes documented ASAJ and supplementary SwimCloud results; source and date precision remain as recorded.</p></article>`;
+  return `<article class="panel" id="swim-${esc(m.course)}-${esc(m.name).replace(/[^a-zA-Z0-9]/g,'-')}"><h3><a href="#trends" class="progress-event-link" data-event="${esc(m.name)}" data-course="${m.course}" aria-label="View detailed race history for ${esc(m.name)} ${m.course}">${esc(m.name)} · ${m.course}</a></h3><div class="swim-inline-detail" hidden></div><div class="intel-stats"><div><small>Personal best (recorded)</small><strong>${trendTime(m.best)}</strong><small>${bestDate(m)}</small>${pbSourceLink(m)}</div><div><small>Latest vs PB</small><strong>${pbGap(m)}</strong><small>${pbAge(m)}</small></div><div><small>First → latest</small><strong>${trendTime(m.first)} → ${trendTime(m.latest)}</strong></div><div><small>Recent trend</small><strong>${recent}</strong></div></div><div class="intel-chart">${intelligenceLine(m)}</div><p>${m.swims.length} documented result(s) · ${m.pct===null?'Insufficient history':`${m.pct.toFixed(1)}% first-to-latest improvement`} · ${status}</p><p class="muted">PB includes documented ASAJ and supplementary SwimCloud results; source and date precision remain as recorded.</p></article>`;
  }).join('');
  return `<div class="panel"><h2>Swim Intelligence · all-event progress</h2><p>Separate LCM and SCM race histories. Performance Intelligence summarizes historical strengths and recent patterns; a slower race is not a diagnosis.</p>${summary}<p><strong>Chart key:</strong> Green segments = faster; red = slower; amber = unchanged. Yellow dots = ASAJ verified; blue = SwimCloud supplied (unverified). SCM and LCM are never combined.</p></div>${rows||'<div class="panel">No recorded races.</div>'}<div class="notice">Dates marked approximate are ASAJ meet-start dates. Supplementary swims are not qualification evidence. PB is the fastest documented result, not necessarily the latest result.</div>`;
 }
