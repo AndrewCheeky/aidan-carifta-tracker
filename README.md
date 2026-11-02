@@ -145,3 +145,7 @@ The **Upload ASAJ PDFs** dashboard tab opens GitHub's authenticated upload scree
 The parser accepts only explicitly attributable Aidan Seaton age-13 timed HY-TEK result rows with a valid event and context. It excludes NS/DQ, relays and uncertain rows and logs exclusions to `review/asaj/pdf_import_report.txt`. Each published result links to the exact committed source PDF and page. Multi-day reports do **not** identify each race day, so the dashboard displays the meet date range. The CSV's `race_date` is the start of that range for sorting, **not** a claim about the exact swim day. The importer currently supports 2026 ASAJ HY-TEK 3-column results PDFs and age 13. New age/year formats need a reviewed parser change.
 
 To process the four included PDFs now, run **Import uploaded ASAJ meet PDFs** from Actions on `main` after uploading this repository. This package also includes the prepopulated 2026 history and PDF evidence, so the first Pages deployment already displays those rows. The workflow will process later PDF uploads automatically.
+
+
+### Third-place comparisons (ASAJ 29 September 2026)
+The Jamaica Rankings tab shows the named third-place Boys 13–14 swimmer, his official long-course ranking time, and the gap against Aidan's fastest verified time. Source: `reference/asaj/General Rankings 29-09-2026.pdf`. The benchmark is a dated snapshot and does not automatically change when new meet results are uploaded. The dataset is `data/third_place_boys13_14.csv`. To update rankings, verify a newer official ASAJ ranking PDF and update the CSV together.

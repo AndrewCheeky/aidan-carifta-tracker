@@ -20,6 +20,8 @@
       "event": "50 Free",
       "personal_best": "27.60",
       "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
+      "pb_evidence_pdf": null,
+      "pb_evidence_page": null,
       "standards": {
         "A": {
           "time": "0:25.73",
@@ -35,13 +37,92 @@
         }
       },
       "rank": 8,
-      "podium_gap": null,
-      "boys12": []
+      "podium_gap": "+0.81s",
+      "third_place": {
+        "swimmer": "Joel Sinclair",
+        "time": "26.79",
+        "ranking_date": "2026-09-29",
+        "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+      },
+      "boys12": [
+        {
+          "name": "Miguel Jonas",
+          "club": "JAM",
+          "time": "27.50",
+          "difference": "−0.10s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "William Wan",
+          "club": "SSC",
+          "time": "27.75",
+          "difference": "+0.15s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Noah Spence",
+          "club": "TOR",
+          "time": "28.42",
+          "difference": "+0.82s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Caleb Williams",
+          "club": "TOR",
+          "time": "28.89",
+          "difference": "+1.29s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Caelan Clover",
+          "club": "JAM",
+          "time": "29.02",
+          "difference": "+1.42s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Steven Hoo Fung",
+          "club": "SASC",
+          "time": "29.46",
+          "difference": "+1.86s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Aiden Dennis",
+          "club": "SPE",
+          "time": "29.55",
+          "difference": "+1.95s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Xavi-Alexander Wright",
+          "club": "TOR",
+          "time": "29.56",
+          "difference": "+1.96s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Dominik Linton",
+          "club": "WBS",
+          "time": "30.30",
+          "difference": "+2.70s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Jahi Coke",
+          "club": "SPE",
+          "time": "30.35",
+          "difference": "+2.75s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        }
+      ]
     },
     {
       "event": "100 Free",
       "personal_best": "1:01.20",
       "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
+      "pb_evidence_pdf": null,
+      "pb_evidence_page": null,
       "standards": {
         "A": {
           "time": "0:56.66",
@@ -57,13 +138,78 @@
         }
       },
       "rank": 8,
-      "podium_gap": null,
-      "boys12": []
+      "podium_gap": "+3.06s",
+      "third_place": {
+        "swimmer": "Joel Sinclair",
+        "time": "58.14",
+        "ranking_date": "2026-09-29",
+        "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+      },
+      "boys12": [
+        {
+          "name": "Miguel Jonas",
+          "club": "JAM",
+          "time": "1:00.42",
+          "difference": "−0.78s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "William Wan",
+          "club": "SSC",
+          "time": "1:02.36",
+          "difference": "+1.16s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Noah Spence",
+          "club": "TOR",
+          "time": "1:03.52",
+          "difference": "+2.32s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Sule Morgan",
+          "club": "SASC",
+          "time": "1:04.48",
+          "difference": "+3.28s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Caleb Williams",
+          "club": "TOR",
+          "time": "1:04.79",
+          "difference": "+3.59s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Aiden Dennis",
+          "club": "SPE",
+          "time": "1:05.91",
+          "difference": "+4.71s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Xavi-Alexander Wright",
+          "club": "TOR",
+          "time": "1:05.94",
+          "difference": "+4.74s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Steven Hoo Fung",
+          "club": "SASC",
+          "time": "1:06.40",
+          "difference": "+5.20s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        }
+      ]
     },
     {
       "event": "100 Back",
       "personal_best": null,
       "pb_source": null,
+      "pb_evidence_pdf": null,
+      "pb_evidence_page": null,
       "standards": {
         "A": {
           "time": "1:05.90",
@@ -80,12 +226,20 @@
       },
       "rank": null,
       "podium_gap": null,
+      "third_place": {
+        "swimmer": "Roshan Rao",
+        "time": "1:12.44",
+        "ranking_date": "2026-09-29",
+        "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+      },
       "boys12": []
     },
     {
       "event": "200 Breast",
       "personal_best": "2:53.01",
       "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
+      "pb_evidence_pdf": null,
+      "pb_evidence_page": null,
       "standards": {
         "A": {
           "time": "2:44.09",
@@ -101,35 +255,116 @@
         }
       },
       "rank": 4,
-      "podium_gap": null,
-      "boys12": []
+      "podium_gap": "+0.59s",
+      "third_place": {
+        "swimmer": "Luke Ramdial",
+        "time": "2:52.42",
+        "ranking_date": "2026-09-29",
+        "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+      },
+      "boys12": [
+        {
+          "name": "Aiden Dennis",
+          "club": "SPE",
+          "time": "3:02.94",
+          "difference": "+9.93s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Noah Kim",
+          "club": "SSC",
+          "time": "3:03.07",
+          "difference": "+10.06s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Miguel Jonas",
+          "club": "JAM",
+          "time": "3:03.28",
+          "difference": "+10.27s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Noah Spence",
+          "club": "TOR",
+          "time": "3:03.31",
+          "difference": "+10.30s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "William Wan",
+          "club": "SSC",
+          "time": "3:03.50",
+          "difference": "+10.49s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        }
+      ]
     },
     {
       "event": "100 Fly",
-      "personal_best": null,
-      "pb_source": null,
+      "personal_best": "1:09.22",
+      "pb_source": "https://www.asaj.com.jm/",
+      "pb_evidence_pdf": "asaj-pdfs/2026 Neville Alexander results.pdf",
+      "pb_evidence_page": "8",
       "standards": {
         "A": {
           "time": "1:02.28",
-          "difference": null,
-          "met": null,
+          "difference": "+6.94s",
+          "met": false,
           "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
         },
         "B": {
           "time": "1:03.75",
-          "difference": null,
-          "met": null,
+          "difference": "+5.47s",
+          "met": false,
           "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
         }
       },
       "rank": null,
-      "podium_gap": null,
-      "boys12": []
+      "podium_gap": "+4.22s",
+      "third_place": {
+        "swimmer": "Noah Parker",
+        "time": "1:05.00",
+        "ranking_date": "2026-09-29",
+        "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+      },
+      "boys12": [
+        {
+          "name": "William Wan",
+          "club": "JAM",
+          "time": "1:07.38",
+          "difference": "−1.84s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Miguel Jonas",
+          "club": "JAM",
+          "time": "1:09.90",
+          "difference": "+0.68s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Noah Kim",
+          "club": "SSC",
+          "time": "1:13.62",
+          "difference": "+4.40s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Steven Hoo Fung",
+          "club": "SASC",
+          "time": "1:15.74",
+          "difference": "+6.52s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        }
+      ]
     },
     {
       "event": "200 Fly",
       "personal_best": "2:53.03",
       "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
+      "pb_evidence_pdf": null,
+      "pb_evidence_page": null,
       "standards": {
         "A": {
           "time": "2:28.04",
@@ -145,13 +380,29 @@
         }
       },
       "rank": 7,
-      "podium_gap": null,
-      "boys12": []
+      "podium_gap": "+21.77s",
+      "third_place": {
+        "swimmer": "Noah Parker",
+        "time": "2:31.26",
+        "ranking_date": "2026-09-29",
+        "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+      },
+      "boys12": [
+        {
+          "name": "Noah Kim",
+          "club": "JAM",
+          "time": "2:43.96",
+          "difference": "−9.07s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        }
+      ]
     },
     {
       "event": "200 IM",
       "personal_best": "2:36.66",
       "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
+      "pb_evidence_pdf": null,
+      "pb_evidence_page": null,
       "standards": {
         "A": {
           "time": "2:27.21",
@@ -167,30 +418,95 @@
         }
       },
       "rank": 6,
-      "podium_gap": null,
-      "boys12": []
+      "podium_gap": "+4.18s",
+      "third_place": {
+        "swimmer": "Noah Parker",
+        "time": "2:32.48",
+        "ranking_date": "2026-09-29",
+        "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+      },
+      "boys12": [
+        {
+          "name": "Caelan Clover",
+          "club": "JAM",
+          "time": "2:33.36",
+          "difference": "−3.30s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "William Wan",
+          "club": "SSC",
+          "time": "2:34.32",
+          "difference": "−2.34s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Miguel Jonas",
+          "club": "TOR",
+          "time": "2:45.05",
+          "difference": "+8.39s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Noah Kim",
+          "club": "SSC",
+          "time": "2:45.77",
+          "difference": "+9.11s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Steven Hoo Fung",
+          "club": "SASC",
+          "time": "2:47.53",
+          "difference": "+10.87s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        }
+      ]
     },
     {
       "event": "400 IM",
-      "personal_best": "5:54.93",
-      "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
+      "personal_best": "5:28.27",
+      "pb_source": "https://www.asaj.com.jm/",
+      "pb_evidence_pdf": "asaj-pdfs/2026 ASAJ Distance Meet results.pdf",
+      "pb_evidence_page": "2",
       "standards": {
         "A": {
           "time": "5:18.74",
-          "difference": "+36.19s",
+          "difference": "+9.53s",
           "met": false,
           "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
         },
         "B": {
           "time": "5:32.77",
-          "difference": "+22.16s",
-          "met": false,
+          "difference": "−4.50s",
+          "met": true,
           "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
         }
       },
       "rank": 6,
-      "podium_gap": null,
-      "boys12": []
+      "podium_gap": "−3.50s",
+      "third_place": {
+        "swimmer": "Noah Parker",
+        "time": "5:31.77",
+        "ranking_date": "2026-09-29",
+        "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+      },
+      "boys12": [
+        {
+          "name": "William Wan",
+          "club": "JAM",
+          "time": "5:27.85",
+          "difference": "−0.42s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Noah Kim",
+          "club": "JAM",
+          "time": "5:48.75",
+          "difference": "+20.48s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        }
+      ]
     }
   ],
   "race_history_2026": [
@@ -648,6 +964,6 @@
       "status": "verified_listing"
     }
   },
-  "built_at": "2026-11-02T03:58:20+00:00",
+  "built_at": "2026-11-02T04:10:31+00:00",
   "warning": "Only rows explicitly verified against ASAJ are published; empty fields mean not yet verified."
 }

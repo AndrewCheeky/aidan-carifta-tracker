@@ -26,17 +26,17 @@ def verified(row):
     if host not in OFFICIAL_HOSTS or not row.get('source_date','').strip(): raise ValueError('Verified row requires official ASAJ URL and source date: '+str(row))
     date.fromisoformat(row['source_date']); return True
 
-def load(name):
+def load(name,allow_other_events=False):
     with (DATA/name).open(newline='') as f: rows=list(csv.DictReader(f))
     out=[]
     for r in rows:
         if not verified(r): continue
-        if r['event'] not in EVENTS: raise ValueError('Unknown event: '+r['event'])
+        if r['event'] not in EVENTS and not allow_other_events: raise ValueError('Unknown event: '+r['event'])
         if r.get('course')!='LCM': raise ValueError('Non-long-course row')
         seconds(r['time']);out.append(r)
     return out
 
-perf=load('performances.csv'); standards=load('standards.csv'); ranks=load('rankings.csv')
+perf=load('performances.csv'); standards=load('standards.csv'); ranks=load('rankings.csv'); emerging=[r for r in load('emerging_boys12.csv',allow_other_events=True)]
 for r in standards:
     if r['age_group']!='13-14' or r['gender'].lower()!='boys': raise ValueError('Wrong qualification age/gender')
 for r in ranks:
@@ -45,22 +45,6 @@ for r in ranks:
 for r in perf:
     if ' '.join(r['swimmer'].casefold().split())!='aidan seaton': raise ValueError('Performance not Aidan Seaton')
 
-by_event={e:[] for e in EVENTS}
-for r in perf: by_event[r['event']].append(r)
-results=[]
-for e in EVENTS:
-    a=min(by_event[e],key=lambda r:seconds(r['time'])) if by_event[e] else None
-    asec=seconds(a['time']) if a else None
-    std={r['standard_type']:r for r in standards if r['event']==e}
-    rr=sorted((r for r in ranks if r['event']==e and r['age'] in ('13','14')),key=lambda r:int(r['rank']))
-    own=next((r for r in rr if r['swimmer'].casefold()=='aidan seaton'),None)
-    third=next((r for r in rr if r['rank']=='3'),None)
-    boys12=[]
-    if asec is not None:
-        for r in ranks:
-            if r['event']==e and r['age']=='12' and abs(seconds(r['time'])-asec)/asec<=0.10:
-                boys12.append({'name':r['swimmer'],'club':r['club'],'time':r['time'],'difference':fmt(seconds(r['time'])-asec),'source_url':r['source_url']})
-    results.append({'event':e,'personal_best':a['time'] if a else None,'pb_source':a['source_url'] if a else None,'standards':{k:{'time':v['time'],'difference':fmt(asec-seconds(v['time'])) if asec is not None else None,'met':asec<=seconds(v['time']) if asec is not None else None,'source_url':v['source_url']} for k,v in std.items()},'rank':int(own['rank']) if own else None,'podium_gap':fmt(asec-seconds(third['time'])) if asec is not None and third else None,'boys12':boys12})
 # Separate verified 2026 race history from ASAJ top-times rankings.
 history=[]
 with (DATA/'race_history_2026.csv').open(newline='') as f:
@@ -78,6 +62,36 @@ with (DATA/'race_history_2026.csv').open(newline='') as f:
         if race_day.year!=2026:raise ValueError('Outside 2026 race history')
         seconds(r['time'])
         history.append({k:r[k] for k in ('event','swimmer','age','club','time','course','meet_name','race_date','round','source_url','source_pdf','source_page','meet_dates','date_precision')})
+
+# Third-place national benchmarks are from the dated ASAJ ranking snapshot,
+# not inferred from the limited Aidan-only rankings.csv file.
+with (DATA/'third_place_boys13_14.csv').open(newline='') as f:
+    third_rows=list(csv.DictReader(f))
+third_by_event={}
+for t in third_rows:
+    if t['event'] not in EVENTS or t['event'] in third_by_event: raise ValueError('Invalid/duplicate third-place event')
+    if t['rank']!='3' or t['course']!='LCM' or t['ranking_date']!='2026-09-29': raise ValueError('Invalid podium ranking metadata')
+    if not t['swimmer'].strip() or not t['source_url'].startswith('https://asaj.com.jm/'): raise ValueError('Invalid third-place source')
+    if t['source_pdf']!='reference/asaj/General Rankings 29-09-2026.pdf' or not (ROOT/t['source_pdf']).is_file(): raise ValueError('Missing third-place PDF')
+    seconds(t['time']); third_by_event[t['event']]=t
+by_event={e:[] for e in EVENTS}
+for r in perf: by_event[r['event']].append(r)
+for r in history:
+    if r['event'] in by_event: by_event[r['event']].append(r)
+results=[]
+for e in EVENTS:
+    a=min(by_event[e],key=lambda r:seconds(r['time'])) if by_event[e] else None
+    asec=seconds(a['time']) if a else None
+    std={r['standard_type']:r for r in standards if r['event']==e}
+    rr=sorted((r for r in ranks if r['event']==e and r['age'] in ('13','14')),key=lambda r:int(r['rank']))
+    own=next((r for r in rr if r['swimmer'].casefold()=='aidan seaton'),None)
+    third=third_by_event.get(e)
+    boys12=[]
+    if asec is not None:
+        for r in (ranks+emerging):
+            if r['event']==e and r['age']=='12' and abs(seconds(r['time'])-asec)/asec<=0.10:
+                boys12.append({'name':r['swimmer'],'club':r['club'],'time':r['time'],'difference':fmt(seconds(r['time'])-asec),'source_url':r['source_url']})
+    results.append({'event':e,'personal_best':a['time'] if a else None,'pb_source':a['source_url'] if a else None,'pb_evidence_pdf':a.get('source_pdf') if a else None,'pb_evidence_page':a.get('source_page') if a else None,'standards':{k:{'time':v['time'],'difference':fmt(asec-seconds(v['time'])) if asec is not None else None,'met':asec<=seconds(v['time']) if asec is not None else None,'source_url':v['source_url']} for k,v in std.items()},'rank':int(own['rank']) if own else None,'podium_gap':fmt(asec-seconds(third['time'])) if asec is not None and third else None,'third_place':{'swimmer':third['swimmer'],'time':third['time'],'ranking_date':third['ranking_date'],'source_url':third['source_url']} if third else None,'boys12':boys12})
 history.sort(key=lambda r:(r['race_date'],r['event'],seconds(r['time'])))
 meets=json.loads((DATA/'meets.json').read_text()); sources=json.loads((DATA/'official_sources.json').read_text())
 for meet in meets:
