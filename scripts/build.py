@@ -61,10 +61,25 @@ for e in EVENTS:
             if r['event']==e and r['age']=='12' and abs(seconds(r['time'])-asec)/asec<=0.10:
                 boys12.append({'name':r['swimmer'],'club':r['club'],'time':r['time'],'difference':fmt(seconds(r['time'])-asec),'source_url':r['source_url']})
     results.append({'event':e,'personal_best':a['time'] if a else None,'pb_source':a['source_url'] if a else None,'standards':{k:{'time':v['time'],'difference':fmt(asec-seconds(v['time'])) if asec is not None else None,'met':asec<=seconds(v['time']) if asec is not None else None,'source_url':v['source_url']} for k,v in std.items()},'rank':int(own['rank']) if own else None,'podium_gap':fmt(asec-seconds(third['time'])) if asec is not None and third else None,'boys12':boys12})
+# Separate verified 2026 race history from ASAJ top-times rankings.
+history=[]
+with (DATA/'race_history_2026.csv').open(newline='') as f:
+    for r in csv.DictReader(f):
+        if not verified(r):continue
+        if r['swimmer'].strip().casefold()!='aidan seaton':raise ValueError('Race history swimmer mismatch')
+        if r['event'] not in EVENTS:raise ValueError('Race history event not tracked: '+r['event'])
+        if r['course']!='LCM':raise ValueError('Race history must be LCM')
+        if not r['meet_name'].strip() or not r['round'].strip():raise ValueError('Missing meet/round')
+        if not r['age'].isdigit():raise ValueError('Invalid swimmer age')
+        race_day=date.fromisoformat(r['race_date'])
+        if race_day.year!=2026:raise ValueError('Outside 2026 race history')
+        seconds(r['time'])
+        history.append({k:r[k] for k in ('event','swimmer','age','club','time','course','meet_name','race_date','round','source_url')})
+history.sort(key=lambda r:(r['race_date'],r['event'],seconds(r['time'])))
 meets=json.loads((DATA/'meets.json').read_text()); sources=json.loads((DATA/'official_sources.json').read_text())
 for meet in meets:
     if urlparse(meet['url']).hostname not in OFFICIAL_HOSTS: raise ValueError('Unofficial meet URL')
     if date.fromisoformat(meet['start'])>date.fromisoformat(meet['end']): raise ValueError('Bad meet date')
-output={'athlete':json.loads((DATA/'athlete.json').read_text()),'events':results,'meets':meets,'sources':sources,'built_at':datetime.now().astimezone().isoformat(timespec='seconds'),'warning':'Only rows explicitly verified against ASAJ are published; empty fields mean not yet verified.'}
+output={'athlete':json.loads((DATA/'athlete.json').read_text()),'events':results,'race_history_2026':history,'meets':meets,'sources':sources,'built_at':datetime.now().astimezone().isoformat(timespec='seconds'),'warning':'Only rows explicitly verified against ASAJ are published; empty fields mean not yet verified.'}
 (DOCS/'data.json').write_text(json.dumps(output,indent=2,ensure_ascii=False))
 print('Built',len(results),'events;',len(perf),'verified personal bests;',len(standards),'standards;',len(ranks),'rankings')

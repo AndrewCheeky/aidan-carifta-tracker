@@ -18,19 +18,45 @@
   "events": [
     {
       "event": "50 Free",
-      "personal_best": null,
-      "pb_source": null,
-      "standards": {},
-      "rank": null,
+      "personal_best": "27.60",
+      "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
+      "standards": {
+        "A": {
+          "time": "0:25.73",
+          "difference": "+1.87s",
+          "met": false,
+          "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
+        },
+        "B": {
+          "time": "0:26.19",
+          "difference": "+1.41s",
+          "met": false,
+          "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
+        }
+      },
+      "rank": 8,
       "podium_gap": null,
       "boys12": []
     },
     {
       "event": "100 Free",
-      "personal_best": null,
-      "pb_source": null,
-      "standards": {},
-      "rank": null,
+      "personal_best": "1:01.20",
+      "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
+      "standards": {
+        "A": {
+          "time": "0:56.66",
+          "difference": "+4.54s",
+          "met": false,
+          "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
+        },
+        "B": {
+          "time": "0:57.92",
+          "difference": "+3.28s",
+          "met": false,
+          "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
+        }
+      },
+      "rank": 8,
       "podium_gap": null,
       "boys12": []
     },
@@ -38,17 +64,43 @@
       "event": "100 Back",
       "personal_best": null,
       "pb_source": null,
-      "standards": {},
+      "standards": {
+        "A": {
+          "time": "1:05.90",
+          "difference": null,
+          "met": null,
+          "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
+        },
+        "B": {
+          "time": "1:07.32",
+          "difference": null,
+          "met": null,
+          "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
+        }
+      },
       "rank": null,
       "podium_gap": null,
       "boys12": []
     },
     {
       "event": "200 Breast",
-      "personal_best": null,
-      "pb_source": null,
-      "standards": {},
-      "rank": null,
+      "personal_best": "2:53.01",
+      "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
+      "standards": {
+        "A": {
+          "time": "2:44.09",
+          "difference": "+8.92s",
+          "met": false,
+          "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
+        },
+        "B": {
+          "time": "2:47.08",
+          "difference": "+5.93s",
+          "met": false,
+          "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
+        }
+      },
+      "rank": 4,
       "podium_gap": null,
       "boys12": []
     },
@@ -56,39 +108,92 @@
       "event": "100 Fly",
       "personal_best": null,
       "pb_source": null,
-      "standards": {},
+      "standards": {
+        "A": {
+          "time": "1:02.28",
+          "difference": null,
+          "met": null,
+          "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
+        },
+        "B": {
+          "time": "1:03.75",
+          "difference": null,
+          "met": null,
+          "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
+        }
+      },
       "rank": null,
       "podium_gap": null,
       "boys12": []
     },
     {
       "event": "200 Fly",
-      "personal_best": null,
-      "pb_source": null,
-      "standards": {},
-      "rank": null,
+      "personal_best": "2:53.03",
+      "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
+      "standards": {
+        "A": {
+          "time": "2:28.04",
+          "difference": "+24.99s",
+          "met": false,
+          "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
+        },
+        "B": {
+          "time": "2:33.61",
+          "difference": "+19.42s",
+          "met": false,
+          "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
+        }
+      },
+      "rank": 7,
       "podium_gap": null,
       "boys12": []
     },
     {
       "event": "200 IM",
-      "personal_best": null,
-      "pb_source": null,
-      "standards": {},
-      "rank": null,
+      "personal_best": "2:36.66",
+      "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
+      "standards": {
+        "A": {
+          "time": "2:27.21",
+          "difference": "+9.45s",
+          "met": false,
+          "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
+        },
+        "B": {
+          "time": "2:30.52",
+          "difference": "+6.14s",
+          "met": false,
+          "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
+        }
+      },
+      "rank": 6,
       "podium_gap": null,
       "boys12": []
     },
     {
       "event": "400 IM",
-      "personal_best": null,
-      "pb_source": null,
-      "standards": {},
-      "rank": null,
+      "personal_best": "5:54.93",
+      "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
+      "standards": {
+        "A": {
+          "time": "5:18.74",
+          "difference": "+36.19s",
+          "met": false,
+          "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
+        },
+        "B": {
+          "time": "5:32.77",
+          "difference": "+22.16s",
+          "met": false,
+          "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
+        }
+      },
+      "rank": 6,
       "podium_gap": null,
       "boys12": []
     }
   ],
+  "race_history_2026": [],
   "meets": [
     {
       "name": "2026 ASAJ Walter Lowi Memorial Sprint Classic",
@@ -158,6 +263,6 @@
       "status": "verified_listing"
     }
   },
-  "built_at": "2026-11-02T02:23:16+00:00",
+  "built_at": "2026-11-02T03:01:10+00:00",
   "warning": "Only rows explicitly verified against ASAJ are published; empty fields mean not yet verified."
 }

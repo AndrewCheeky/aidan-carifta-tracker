@@ -105,3 +105,35 @@ The official CARIFTA 2027 download link is configured in `review/asaj/qualificat
 Run **Actions → Prepare official ASAJ publication review → Run workflow (main)**.
 The action validates the extracted CSVs and opens a PR targeting `main`. Review the official PDF evidence and merge the PR to publish. GitHub repository Actions settings may require **Allow GitHub Actions to create and approve pull requests**.
 The review PR contains Aidan's extracted top times and qualification standards. Podium and Boys 12 comparison data remain pending rather than fabricated.
+
+## 2026 full-year official meet review
+
+Run **Actions → Review all available ASAJ 2026 meet results → Run workflow** on `main`.
+The job discovers official ASAJ-linked 2026 result PDFs, downloads up to 75, and records each occurrence of `Aidan Seaton` with nearby PDF text and page number in `review/asaj/full_year_2026.json`. The job uploads this JSON as an artifact and opens a review PR if the evidence changes. **This is not an exhaustive guarantee:** ASAJ may omit historical result PDFs from current listing pages, or publish scanned/HTML results that require separate handling. It does not interpret seed times as results.
+
+To publish individual race history, verify each race against its original official ASAJ PDF, then add it to `data/race_history_2026.csv` with `verified=true`, an ASAJ URL, the document publication date in `source_date`, exact `race_date`, `meet_name`, `round`, affiliation, age, event, course `LCM`, and official race time. Commit the verified CSV via a reviewed PR. The deploy workflow validates every row and populates the new **2026 Race History** tab. Existing qualification and national ranking datasets are unchanged. For offline tests, run `python scripts/full_year_2026.py --pdf 'path/to/official-meet-results.pdf'`.
+
+## Automatic publication and merging (November 2026)
+
+Run **Prepare official ASAJ publication review** on `main`, or let its Monday schedule run.
+It generates three CSVs, checks each row against the two bundled ASAJ PDFs,
+runs the dashboard builder and tests, opens a data-only PR, and requests GitHub
+**auto-merge**. Validation happens before the PR is created. Once repository protections permit,
+GitHub merges it and `deploy.yml` updates Pages.
+
+**One-time repository configuration:** Settings → General → Pull Requests →
+**Allow auto-merge** and **Allow squash merging**. Settings → Actions → General →
+Workflow permissions → **Read and write permissions** and **Allow GitHub Actions
+to create and approve pull requests**. Do not require the separate PR validation check unless using a GitHub App or PAT
+for PR creation: PRs opened with the default GITHUB_TOKEN do not trigger
+`pull_request` workflows. The publication job itself performs the strict checks.
+If the organization disallows these settings, the workflow will report an error
+instead of silently bypassing protection.
+
+**Safety boundary:** Auto-merge applies ONLY to `data/performances.csv`,
+`data/rankings.csv`, and `data/standards.csv`, matched against the bundled ASAJ
+PDFs. The full-year meet evidence workflow is deliberately NOT auto-merged or
+converted to race results. Its text matches are not reliable enough to publish
+unattended. Rankings PDF source is a fixed September 2026 snapshot: the scheduled
+job does not automatically fetch newer rankings. New source PDFs or changed code
+must be separately reviewed before updating the trusted baseline.
