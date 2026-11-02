@@ -1,4 +1,4 @@
-Published race rows: 29
+Published race rows: 31
 
 Held mentions/files:
 ('2026 Neville Alexander results.pdf', 2, 'Unattributed or relay name mention', '11  Seaton, Aidan          13 TOR             29.53')
