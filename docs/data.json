@@ -29,7 +29,11 @@
         "B_gap": null,
         "selection_priority": "Pending current qualifying-period ranking and eligibility verification",
         "selection_projection": "Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable",
-        "ranking_verified_for_selection": false
+        "ranking_verified_for_selection": false,
+        "provisional_ranking_date": "2026-09-29",
+        "provisional_snapshot_rank": 8,
+        "provisional_top_two": false,
+        "provisional_selection_priority": "No qualifying time yet"
       },
       "event": "50 Free",
       "personal_best": "27.60",
@@ -144,7 +148,11 @@
         "B_gap": null,
         "selection_priority": "Pending current qualifying-period ranking and eligibility verification",
         "selection_projection": "Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable",
-        "ranking_verified_for_selection": false
+        "ranking_verified_for_selection": false,
+        "provisional_ranking_date": "2026-09-29",
+        "provisional_snapshot_rank": 8,
+        "provisional_top_two": false,
+        "provisional_selection_priority": "No qualifying time yet"
       },
       "event": "100 Free",
       "personal_best": "1:01.20",
@@ -245,7 +253,11 @@
         "B_gap": null,
         "selection_priority": "Pending current qualifying-period ranking and eligibility verification",
         "selection_projection": "Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable",
-        "ranking_verified_for_selection": false
+        "ranking_verified_for_selection": false,
+        "provisional_ranking_date": "2026-09-29",
+        "provisional_snapshot_rank": null,
+        "provisional_top_two": false,
+        "provisional_selection_priority": "No qualifying time yet"
       },
       "event": "100 Back",
       "personal_best": null,
@@ -289,7 +301,11 @@
         "B_gap": "+6.29s",
         "selection_priority": "Pending current qualifying-period ranking and eligibility verification",
         "selection_projection": "Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable",
-        "ranking_verified_for_selection": false
+        "ranking_verified_for_selection": false,
+        "provisional_ranking_date": "2026-09-29",
+        "provisional_snapshot_rank": 4,
+        "provisional_top_two": false,
+        "provisional_selection_priority": "No qualifying time yet"
       },
       "event": "200 Breast",
       "personal_best": "2:53.01",
@@ -369,7 +385,11 @@
         "B_gap": null,
         "selection_priority": "Pending current qualifying-period ranking and eligibility verification",
         "selection_projection": "Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable",
-        "ranking_verified_for_selection": false
+        "ranking_verified_for_selection": false,
+        "provisional_ranking_date": "2026-09-29",
+        "provisional_snapshot_rank": null,
+        "provisional_top_two": false,
+        "provisional_selection_priority": "No qualifying time yet"
       },
       "event": "100 Fly",
       "personal_best": "1:09.22",
@@ -442,7 +462,11 @@
         "B_gap": null,
         "selection_priority": "Pending current qualifying-period ranking and eligibility verification",
         "selection_projection": "Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable",
-        "ranking_verified_for_selection": false
+        "ranking_verified_for_selection": false,
+        "provisional_ranking_date": "2026-09-29",
+        "provisional_snapshot_rank": 7,
+        "provisional_top_two": false,
+        "provisional_selection_priority": "No qualifying time yet"
       },
       "event": "200 Fly",
       "personal_best": "2:53.03",
@@ -494,7 +518,11 @@
         "B_gap": null,
         "selection_priority": "Pending current qualifying-period ranking and eligibility verification",
         "selection_projection": "Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable",
-        "ranking_verified_for_selection": false
+        "ranking_verified_for_selection": false,
+        "provisional_ranking_date": "2026-09-29",
+        "provisional_snapshot_rank": 6,
+        "provisional_top_two": false,
+        "provisional_selection_priority": "No qualifying time yet"
       },
       "event": "200 IM",
       "personal_best": "2:36.66",
@@ -574,7 +602,11 @@
         "B_gap": "−4.50s",
         "selection_priority": "Pending current qualifying-period ranking and eligibility verification",
         "selection_projection": "Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable",
-        "ranking_verified_for_selection": false
+        "ranking_verified_for_selection": false,
+        "provisional_ranking_date": "2026-09-29",
+        "provisional_snapshot_rank": 6,
+        "provisional_top_two": false,
+        "provisional_selection_priority": "Time met; September snapshot rank outside top 2"
       },
       "event": "400 IM",
       "personal_best": "5:28.27",
@@ -1066,6 +1098,12 @@
     },
     "source_standards": "reference/asaj/2026 Goodwill Qualifying Times.pdf",
     "source_criteria": "reference/asaj/Goodwill 2026 Criteria 11 & Over.pdf",
+    "ranking_snapshot": {
+      "date": "2026-09-29",
+      "source_pdf": "reference/asaj/General Rankings 29-09-2026.pdf",
+      "status": "Historical comparison only: September 2026 is after the 2026 Goodwill qualifying window; cannot establish 2026 selection ranking or eligibility.",
+      "selection_confirmed": false
+    },
     "events": [
       {
         "event": "50 Free",
@@ -1073,6 +1111,10 @@
         "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
         "pb_evidence_pdf": null,
         "pb_evidence_page": null,
+        "snapshot_rank": 8,
+        "snapshot_top_two": false,
+        "snapshot_date": "2026-09-29",
+        "selection_priority": "Not determinable from post-competition September snapshot",
         "standards": {
           "A": {
             "time": "26.44",
@@ -1092,6 +1134,10 @@
         "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
         "pb_evidence_pdf": null,
         "pb_evidence_page": null,
+        "snapshot_rank": 8,
+        "snapshot_top_two": false,
+        "snapshot_date": "2026-09-29",
+        "selection_priority": "Not determinable from post-competition September snapshot",
         "standards": {
           "A": {
             "time": "58.85",
@@ -1111,6 +1157,10 @@
         "pb_source": null,
         "pb_evidence_pdf": null,
         "pb_evidence_page": null,
+        "snapshot_rank": null,
+        "snapshot_top_two": false,
+        "snapshot_date": "2026-09-29",
+        "selection_priority": "Not determinable from post-competition September snapshot",
         "standards": {
           "A": {
             "time": "1:10.19",
@@ -1130,6 +1180,10 @@
         "pb_source": "https://www.asaj.com.jm/",
         "pb_evidence_pdf": "asaj-pdfs/2026 Neville Alexander results.pdf",
         "pb_evidence_page": "8",
+        "snapshot_rank": null,
+        "snapshot_top_two": false,
+        "snapshot_date": "2026-09-29",
+        "selection_priority": "Not determinable from post-competition September snapshot",
         "standards": {
           "A": {
             "time": "1:05.15",
@@ -1149,6 +1203,10 @@
         "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
         "pb_evidence_pdf": null,
         "pb_evidence_page": null,
+        "snapshot_rank": 6,
+        "snapshot_top_two": false,
+        "snapshot_date": "2026-09-29",
+        "selection_priority": "Not determinable from post-competition September snapshot",
         "standards": {
           "A": {
             "time": "2:33.84",
@@ -1182,7 +1240,10 @@
     "eligibility": "ASAJ registration, nationality/passport or residency, availability, and ASAJ Council ratification must be checked",
     "ranking_note": "September 2026 snapshot ranks are not selection-period final rankings",
     "source_pdf": "carifta-documents/2026 Carifta Criteria.pdf",
-    "selection_confirmed": false
+    "selection_confirmed": false,
+    "provisional_ranking_date": "2026-09-29",
+    "provisional_ranking_source": "reference/asaj/General Rankings 29-09-2026.pdf",
+    "provisional_only": true
   },
   "meets": [
     {
@@ -1253,6 +1314,6 @@
       "status": "verified_listing"
     }
   },
-  "built_at": "2026-11-02T04:24:37+00:00",
+  "built_at": "2026-11-02T04:32:21+00:00",
   "warning": "Only rows explicitly verified against ASAJ are published; empty fields mean not yet verified."
 }

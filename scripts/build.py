@@ -98,7 +98,10 @@ CARIFTA_CRITERIA={
  'eligibility':'ASAJ registration, nationality/passport or residency, availability, and ASAJ Council ratification must be checked',
  'ranking_note':'September 2026 snapshot ranks are not selection-period final rankings',
  'source_pdf':'carifta-documents/2026 Carifta Criteria.pdf',
- 'selection_confirmed':False
+ 'selection_confirmed':False,
+ 'provisional_ranking_date':'2026-09-29',
+ 'provisional_ranking_source':'reference/asaj/General Rankings 29-09-2026.pdf',
+ 'provisional_only':True
 }
 def qualifying_date(r):
     # Meet-range starts before July 1 are excluded unless independently
@@ -126,6 +129,15 @@ for e in EVENTS:
     eligible_sec=seconds(eligible_best['time']) if eligible_best else None
     qualified_A=('A' in std and eligible_sec is not None and eligible_sec<=seconds(std['A']['time']))
     qualified_B=('B' in std and eligible_sec is not None and eligible_sec<=seconds(std['B']['time']))
+    # September ASAJ ranking is a historical snapshot, not a qualifying-period
+    # final ranking. Never convert a missing ranking into a verified position.
+    snapshot_rank=int(own['rank']) if own else None
+    snapshot_top2=snapshot_rank is not None and snapshot_rank<=2
+    provisional_priority=('A-standard / top-2 snapshot' if qualified_A and snapshot_top2 else
+                          'B-standard / top-2 snapshot' if qualified_B and snapshot_top2 else
+                          'Time met; September snapshot rank outside top 2' if (qualified_A or qualified_B) and snapshot_rank is not None else
+                          'Time met; no September snapshot rank' if (qualified_A or qualified_B) else
+                          'No qualifying time yet')
     carifta={
       'eligible_best':eligible_best['time'] if eligible_best else None,
       'eligible_source_pdf':eligible_best['source_pdf'] if eligible_best else None,
@@ -137,7 +149,11 @@ for e in EVENTS:
       'B_gap':fmt(eligible_sec-seconds(std['B']['time'])) if eligible_sec is not None and 'B' in std else None,
       'selection_priority':'Pending current qualifying-period ranking and eligibility verification',
       'selection_projection':'Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable',
-      'ranking_verified_for_selection':False
+      'ranking_verified_for_selection':False,
+      'provisional_ranking_date':'2026-09-29',
+      'provisional_snapshot_rank':snapshot_rank,
+      'provisional_top_two':snapshot_top2,
+      'provisional_selection_priority':provisional_priority
     }
     results.append({'carifta':carifta,'event':e,'personal_best':a['time'] if a else None,'pb_source':a['source_url'] if a else None,'pb_evidence_pdf':a.get('source_pdf') if a else None,'pb_evidence_page':a.get('source_page') if a else None,'standards':{k:{'time':v['time'],'difference':fmt(asec-seconds(v['time'])) if asec is not None else None,'met':asec<=seconds(v['time']) if asec is not None else None,'source_url':v['source_url']} for k,v in std.items()},'rank':int(own['rank']) if own else None,'podium_gap':fmt(asec-seconds(third['time'])) if asec is not None and third else None,'third_place':{'swimmer':third['swimmer'],'time':third['time'],'ranking_date':third['ranking_date'],'source_url':third['source_url']} if third else None,'boys12':boys12})
 history.sort(key=lambda r:(r['race_date'],r['event'],seconds(r['time'])))
@@ -149,7 +165,8 @@ goodwill=json.loads((DATA/'goodwill_2026_boys13_14.json').read_text())
 for event,limits in goodwill['standards'].items():
     if event not in ('50 Free','100 Free','200 Free','50 Back','100 Back','50 Breast','100 Breast','50 Fly','100 Fly','200 IM'): raise ValueError('Unknown Goodwill event')
     for t in limits.values(): seconds(t)
-goodwill['events']=[{'event':r['event'],'personal_best':r['personal_best'],'pb_source':r['pb_source'],'pb_evidence_pdf':r['pb_evidence_pdf'],'pb_evidence_page':r['pb_evidence_page'],'standards':{k:{'time':t,'gap':fmt(seconds(r['personal_best'])-seconds(t)) if r['personal_best'] else None,'met':seconds(r['personal_best'])<=seconds(t) if r['personal_best'] else None} for k,t in goodwill['standards'][r['event']].items()}} for r in results if r['event'] in goodwill['standards']]
+goodwill['ranking_snapshot']={'date':'2026-09-29','source_pdf':'reference/asaj/General Rankings 29-09-2026.pdf','status':'Historical comparison only: September 2026 is after the 2026 Goodwill qualifying window; cannot establish 2026 selection ranking or eligibility.','selection_confirmed':False}
+goodwill['events']=[{'event':r['event'],'personal_best':r['personal_best'],'pb_source':r['pb_source'],'pb_evidence_pdf':r['pb_evidence_pdf'],'pb_evidence_page':r['pb_evidence_page'],'snapshot_rank':r['rank'],'snapshot_top_two':r['rank'] is not None and r['rank']<=2,'snapshot_date':'2026-09-29','selection_priority':'Not determinable from post-competition September snapshot','standards':{k:{'time':t,'gap':fmt(seconds(r['personal_best'])-seconds(t)) if r['personal_best'] else None,'met':seconds(r['personal_best'])<=seconds(t) if r['personal_best'] else None} for k,t in goodwill['standards'][r['event']].items()}} for r in results if r['event'] in goodwill['standards']]
 output={'athlete':json.loads((DATA/'athlete.json').read_text()),'events':results,'race_history_2026':history,'goodwill':goodwill,'carifta_criteria':CARIFTA_CRITERIA,'meets':meets,'sources':sources,'built_at':datetime.now().astimezone().isoformat(timespec='seconds'),'warning':'Only rows explicitly verified against ASAJ are published; empty fields mean not yet verified.'}
 (DOCS/'data.json').write_text(json.dumps(output,indent=2,ensure_ascii=False))
 print('Built',len(results),'events;',len(perf),'verified personal bests;',len(standards),'standards;',len(ranks),'rankings')
