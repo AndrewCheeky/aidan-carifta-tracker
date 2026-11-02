@@ -1,0 +1,163 @@
+{
+  "athlete": {
+    "name": "Aidan Seaton",
+    "club": "Tornadoes Swim Club",
+    "category": "Boys 13–14",
+    "course": "LCM",
+    "events": [
+      "50 Free",
+      "100 Free",
+      "100 Back",
+      "200 Breast",
+      "100 Fly",
+      "200 Fly",
+      "200 IM",
+      "400 IM"
+    ]
+  },
+  "events": [
+    {
+      "event": "50 Free",
+      "personal_best": null,
+      "pb_source": null,
+      "standards": {},
+      "rank": null,
+      "podium_gap": null,
+      "boys12": []
+    },
+    {
+      "event": "100 Free",
+      "personal_best": null,
+      "pb_source": null,
+      "standards": {},
+      "rank": null,
+      "podium_gap": null,
+      "boys12": []
+    },
+    {
+      "event": "100 Back",
+      "personal_best": null,
+      "pb_source": null,
+      "standards": {},
+      "rank": null,
+      "podium_gap": null,
+      "boys12": []
+    },
+    {
+      "event": "200 Breast",
+      "personal_best": null,
+      "pb_source": null,
+      "standards": {},
+      "rank": null,
+      "podium_gap": null,
+      "boys12": []
+    },
+    {
+      "event": "100 Fly",
+      "personal_best": null,
+      "pb_source": null,
+      "standards": {},
+      "rank": null,
+      "podium_gap": null,
+      "boys12": []
+    },
+    {
+      "event": "200 Fly",
+      "personal_best": null,
+      "pb_source": null,
+      "standards": {},
+      "rank": null,
+      "podium_gap": null,
+      "boys12": []
+    },
+    {
+      "event": "200 IM",
+      "personal_best": null,
+      "pb_source": null,
+      "standards": {},
+      "rank": null,
+      "podium_gap": null,
+      "boys12": []
+    },
+    {
+      "event": "400 IM",
+      "personal_best": null,
+      "pb_source": null,
+      "standards": {},
+      "rank": null,
+      "podium_gap": null,
+      "boys12": []
+    }
+  ],
+  "meets": [
+    {
+      "name": "2026 ASAJ Walter Lowi Memorial Sprint Classic",
+      "start": "2026-11-14",
+      "end": "2026-11-15",
+      "url": "https://www.asaj.com.jm/events/aggregator",
+      "status": "ASAJ listed"
+    },
+    {
+      "name": "2026 ASAJ Christmas Open",
+      "start": "2026-12-17",
+      "end": "2026-12-20",
+      "url": "https://www.asaj.com.jm/events/aggregator",
+      "status": "ASAJ listed"
+    },
+    {
+      "name": "2027 Karl Dalhouse Memorial Invitational Swim Meet",
+      "start": "2027-01-29",
+      "end": "2027-01-31",
+      "url": "https://www.asaj.com.jm/events/aggregator",
+      "status": "ASAJ listed"
+    },
+    {
+      "name": "Walter Rogers National Age Group Championships",
+      "start": "2027-02-09",
+      "end": "2027-02-14",
+      "url": "https://www.asaj.com.jm/calendar/2027",
+      "status": "ASAJ calendar"
+    },
+    {
+      "name": "CARIFTA Team Ratification",
+      "start": "2027-02-17",
+      "end": "2027-02-17",
+      "url": "https://www.asaj.com.jm/calendar/2027",
+      "status": "ASAJ calendar"
+    },
+    {
+      "name": "CARIFTA Aquatics Championships",
+      "start": "2027-03-25",
+      "end": "2027-03-28",
+      "url": "https://www.asaj.com.jm/calendar/2027",
+      "status": "ASAJ calendar"
+    }
+  ],
+  "sources": {
+    "qualifying_standards": {
+      "url": "https://www.asaj.com.jm/resources",
+      "document": "2027 CARIFTA Qualifying Times",
+      "published": "2026-06-25",
+      "status": "awaiting_extraction"
+    },
+    "selection_criteria": {
+      "url": "https://www.asaj.com.jm/resources",
+      "document": "BLP16.1.1 CARIFTA Swimming criteria",
+      "published": "2025-12-18",
+      "status": "awaiting_extraction"
+    },
+    "rankings": {
+      "url": "https://asaj.com.jm/rankings",
+      "document": "Carifta 2027 29-09-2026.pdf",
+      "published": "2026-09-29",
+      "status": "awaiting_extraction"
+    },
+    "calendar": {
+      "url": "https://www.asaj.com.jm/events/aggregator",
+      "document": "ASAJ official event listings",
+      "status": "verified_listing"
+    }
+  },
+  "built_at": "2026-11-02T00:51:53+00:00",
+  "warning": "Only rows explicitly verified against ASAJ are published; empty fields mean not yet verified."
+}
