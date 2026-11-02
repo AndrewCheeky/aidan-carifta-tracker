@@ -11,7 +11,12 @@
       "100 Fly",
       "200 Fly",
       "200 IM",
-      "400 IM"
+      "400 IM",
+      "50 Breast",
+      "50 Fly",
+      "100 Breast",
+      "200 Free",
+      "800 Free"
     ],
     "identity_policy": "Match swimmer across club, school and national-team affiliations; preserve affiliation per result."
   },
@@ -651,6 +656,364 @@
           "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
         }
       ]
+    },
+    {
+      "carifta": {
+        "eligible_best": null,
+        "eligible_source_pdf": null,
+        "eligible_source_page": null,
+        "eligible_meet": null,
+        "standard_status": "No date-verified eligible swim",
+        "A_met": false,
+        "B_met": false,
+        "A_gap": null,
+        "B_gap": null,
+        "selection_priority": "Pending current qualifying-period ranking and eligibility verification",
+        "selection_projection": "Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable",
+        "ranking_verified_for_selection": false,
+        "provisional_ranking_date": "2026-09-29",
+        "provisional_snapshot_rank": null,
+        "provisional_top_two": false,
+        "provisional_selection_priority": "No qualifying time yet"
+      },
+      "event": "50 Breast",
+      "personal_best": "36.15",
+      "pb_source": "https://www.asaj.com.jm/",
+      "pb_evidence_pdf": "asaj-pdfs/2026 WRAGC - results.pdf",
+      "pb_evidence_page": "14",
+      "standards": {},
+      "rank": null,
+      "podium_gap": null,
+      "third_place": null,
+      "boys12": [
+        {
+          "name": "Steven Hoo Fung",
+          "club": "SASC",
+          "time": "35.98",
+          "difference": "−0.17s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Aiden Dennis",
+          "club": "SPE",
+          "time": "36.41",
+          "difference": "+0.26s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Miguel Jonas",
+          "club": "TOR",
+          "time": "36.69",
+          "difference": "+0.54s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Noah Spence",
+          "club": "TOR",
+          "time": "37.04",
+          "difference": "+0.89s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Sule Morgan",
+          "club": "SASC",
+          "time": "39.67",
+          "difference": "+3.52s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        }
+      ]
+    },
+    {
+      "carifta": {
+        "eligible_best": null,
+        "eligible_source_pdf": null,
+        "eligible_source_page": null,
+        "eligible_meet": null,
+        "standard_status": "No date-verified eligible swim",
+        "A_met": false,
+        "B_met": false,
+        "A_gap": null,
+        "B_gap": null,
+        "selection_priority": "Pending current qualifying-period ranking and eligibility verification",
+        "selection_projection": "Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable",
+        "ranking_verified_for_selection": false,
+        "provisional_ranking_date": "2026-09-29",
+        "provisional_snapshot_rank": null,
+        "provisional_top_two": false,
+        "provisional_selection_priority": "No qualifying time yet"
+      },
+      "event": "50 Fly",
+      "personal_best": "29.97",
+      "pb_source": "https://www.asaj.com.jm/",
+      "pb_evidence_pdf": "asaj-pdfs/2026 WRAGC - results.pdf",
+      "pb_evidence_page": "8",
+      "standards": {},
+      "rank": null,
+      "podium_gap": null,
+      "third_place": null,
+      "boys12": [
+        {
+          "name": "Miguel Jonas",
+          "club": "TOR",
+          "time": "29.92",
+          "difference": "−0.05s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "William Wan",
+          "club": "SSC",
+          "time": "30.14",
+          "difference": "+0.17s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Caleb Williams",
+          "club": "TOR",
+          "time": "30.55",
+          "difference": "+0.58s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Caelan Clover",
+          "club": "TVSC",
+          "time": "31.14",
+          "difference": "+1.17s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Steven Hoo Fung",
+          "club": "SASC",
+          "time": "31.62",
+          "difference": "+1.65s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Xavi-Alexander Wright",
+          "club": "TOR",
+          "time": "32.06",
+          "difference": "+2.09s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        }
+      ]
+    },
+    {
+      "carifta": {
+        "eligible_best": null,
+        "eligible_source_pdf": null,
+        "eligible_source_page": null,
+        "eligible_meet": null,
+        "standard_status": "No date-verified eligible swim",
+        "A_met": false,
+        "B_met": false,
+        "A_gap": null,
+        "B_gap": null,
+        "selection_priority": "Pending current qualifying-period ranking and eligibility verification",
+        "selection_projection": "Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable",
+        "ranking_verified_for_selection": false,
+        "provisional_ranking_date": "2026-09-29",
+        "provisional_snapshot_rank": null,
+        "provisional_top_two": false,
+        "provisional_selection_priority": "No qualifying time yet"
+      },
+      "event": "100 Breast",
+      "personal_best": "1:19.83",
+      "pb_source": "https://www.asaj.com.jm/",
+      "pb_evidence_pdf": "asaj-pdfs/2026 Neville Alexander results.pdf",
+      "pb_evidence_page": "14",
+      "standards": {},
+      "rank": null,
+      "podium_gap": null,
+      "third_place": null,
+      "boys12": [
+        {
+          "name": "Miguel Jonas",
+          "club": "TOR",
+          "time": "1:22.70",
+          "difference": "+2.87s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Noah Spence",
+          "club": "TOR",
+          "time": "1:24.73",
+          "difference": "+4.90s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "William Wan",
+          "club": "SSC",
+          "time": "1:25.25",
+          "difference": "+5.42s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Aiden Dennis",
+          "club": "SPE",
+          "time": "1:25.87",
+          "difference": "+6.04s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Steven Hoo Fung",
+          "club": "SASC",
+          "time": "1:26.11",
+          "difference": "+6.28s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Noah Kim",
+          "club": "SSC",
+          "time": "1:26.58",
+          "difference": "+6.75s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        }
+      ]
+    },
+    {
+      "carifta": {
+        "eligible_best": null,
+        "eligible_source_pdf": null,
+        "eligible_source_page": null,
+        "eligible_meet": null,
+        "standard_status": "No date-verified eligible swim",
+        "A_met": false,
+        "B_met": false,
+        "A_gap": null,
+        "B_gap": null,
+        "selection_priority": "Pending current qualifying-period ranking and eligibility verification",
+        "selection_projection": "Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable",
+        "ranking_verified_for_selection": false,
+        "provisional_ranking_date": "2026-09-29",
+        "provisional_snapshot_rank": null,
+        "provisional_top_two": false,
+        "provisional_selection_priority": "No qualifying time yet"
+      },
+      "event": "200 Free",
+      "personal_best": "2:21.77",
+      "pb_source": "https://www.asaj.com.jm/",
+      "pb_evidence_pdf": "asaj-pdfs/2026 Neville Alexander results.pdf",
+      "pb_evidence_page": "3",
+      "standards": {},
+      "rank": null,
+      "podium_gap": null,
+      "third_place": null,
+      "boys12": [
+        {
+          "name": "William Wan",
+          "club": "SSC",
+          "time": "2:12.95",
+          "difference": "−8.82s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Noah Spence",
+          "club": "TOR",
+          "time": "2:21.55",
+          "difference": "−0.22s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Miguel Jonas",
+          "club": "TOR",
+          "time": "2:21.56",
+          "difference": "−0.21s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Sule Morgan",
+          "club": "SASC",
+          "time": "2:24.78",
+          "difference": "+3.01s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Noah Kim",
+          "club": "SSC",
+          "time": "2:25.57",
+          "difference": "+3.80s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Aiden Dennis",
+          "club": "SPE",
+          "time": "2:28.87",
+          "difference": "+7.10s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Steven Hoo Fung",
+          "club": "SASC",
+          "time": "2:30.34",
+          "difference": "+8.57s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Caleb Williams",
+          "club": "TOR",
+          "time": "2:30.88",
+          "difference": "+9.11s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Alex Rainford",
+          "club": "SPE",
+          "time": "2:35.33",
+          "difference": "+13.56s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        }
+      ]
+    },
+    {
+      "carifta": {
+        "eligible_best": "10:22.59",
+        "eligible_source_pdf": "asaj-pdfs/2026 ASAJ Distance Meet results.pdf",
+        "eligible_source_page": "1",
+        "eligible_meet": "2026 ASAJ BB Distance Dvelopment Meet",
+        "standard_status": "Not yet achieved",
+        "A_met": false,
+        "B_met": false,
+        "A_gap": null,
+        "B_gap": null,
+        "selection_priority": "Pending current qualifying-period ranking and eligibility verification",
+        "selection_projection": "Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable",
+        "ranking_verified_for_selection": false,
+        "provisional_ranking_date": "2026-09-29",
+        "provisional_snapshot_rank": null,
+        "provisional_top_two": false,
+        "provisional_selection_priority": "No qualifying time yet"
+      },
+      "event": "800 Free",
+      "personal_best": "10:22.59",
+      "pb_source": "https://www.asaj.com.jm/",
+      "pb_evidence_pdf": "asaj-pdfs/2026 ASAJ Distance Meet results.pdf",
+      "pb_evidence_page": "1",
+      "standards": {},
+      "rank": null,
+      "podium_gap": null,
+      "third_place": null,
+      "boys12": [
+        {
+          "name": "William Wan",
+          "club": "SSC",
+          "time": "9:48.52",
+          "difference": "−34.07s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Noah Kim",
+          "club": "SSC",
+          "time": "10:36.67",
+          "difference": "+14.08s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        },
+        {
+          "name": "Miguel Jonas",
+          "club": "TOR",
+          "time": "11:18.01",
+          "difference": "+55.42s",
+          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
+        }
+      ]
     }
   ],
   "race_history_2026": [
@@ -1219,6 +1582,98 @@
             "met": true
           }
         }
+      },
+      {
+        "event": "50 Breast",
+        "personal_best": "36.15",
+        "pb_source": "https://www.asaj.com.jm/",
+        "pb_evidence_pdf": "asaj-pdfs/2026 WRAGC - results.pdf",
+        "pb_evidence_page": "14",
+        "snapshot_rank": null,
+        "snapshot_top_two": false,
+        "snapshot_date": "2026-09-29",
+        "selection_priority": "Not determinable from post-competition September snapshot",
+        "standards": {
+          "A": {
+            "time": "34.73",
+            "gap": "+1.42s",
+            "met": false
+          },
+          "B": {
+            "time": "35.80",
+            "gap": "+0.35s",
+            "met": false
+          }
+        }
+      },
+      {
+        "event": "50 Fly",
+        "personal_best": "29.97",
+        "pb_source": "https://www.asaj.com.jm/",
+        "pb_evidence_pdf": "asaj-pdfs/2026 WRAGC - results.pdf",
+        "pb_evidence_page": "8",
+        "snapshot_rank": null,
+        "snapshot_top_two": false,
+        "snapshot_date": "2026-09-29",
+        "selection_priority": "Not determinable from post-competition September snapshot",
+        "standards": {
+          "A": {
+            "time": "28.21",
+            "gap": "+1.76s",
+            "met": false
+          },
+          "B": {
+            "time": "29.42",
+            "gap": "+0.55s",
+            "met": false
+          }
+        }
+      },
+      {
+        "event": "100 Breast",
+        "personal_best": "1:19.83",
+        "pb_source": "https://www.asaj.com.jm/",
+        "pb_evidence_pdf": "asaj-pdfs/2026 Neville Alexander results.pdf",
+        "pb_evidence_page": "14",
+        "snapshot_rank": null,
+        "snapshot_top_two": false,
+        "snapshot_date": "2026-09-29",
+        "selection_priority": "Not determinable from post-competition September snapshot",
+        "standards": {
+          "A": {
+            "time": "1:17.09",
+            "gap": "+2.74s",
+            "met": false
+          },
+          "B": {
+            "time": "1:20.46",
+            "gap": "−0.63s",
+            "met": true
+          }
+        }
+      },
+      {
+        "event": "200 Free",
+        "personal_best": "2:21.77",
+        "pb_source": "https://www.asaj.com.jm/",
+        "pb_evidence_pdf": "asaj-pdfs/2026 Neville Alexander results.pdf",
+        "pb_evidence_page": "3",
+        "snapshot_rank": null,
+        "snapshot_top_two": false,
+        "snapshot_date": "2026-09-29",
+        "selection_priority": "Not determinable from post-competition September snapshot",
+        "standards": {
+          "A": {
+            "time": "2:12.18",
+            "gap": "+9.59s",
+            "met": false
+          },
+          "B": {
+            "time": "2:18.24",
+            "gap": "+3.53s",
+            "met": false
+          }
+        }
       }
     ]
   },
@@ -1314,6 +1769,6 @@
       "status": "verified_listing"
     }
   },
-  "built_at": "2026-11-02T04:34:56+00:00",
+  "built_at": "2026-11-02T04:43:22+00:00",
   "warning": "Only rows explicitly verified against ASAJ are published; empty fields mean not yet verified."
 }

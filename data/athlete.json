@@ -10,7 +10,12 @@
     "100 Fly",
     "200 Fly",
     "200 IM",
-    "400 IM"
+    "400 IM",
+    "50 Breast",
+    "50 Fly",
+    "100 Breast",
+    "200 Free",
+    "800 Free"
   ],
   "identity_policy": "Match swimmer across club, school and national-team affiliations; preserve affiliation per result."
 }
