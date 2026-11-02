@@ -158,3 +158,7 @@ The Jamaica Rankings tab shows the named third-place Boys 13–14 swimmer, his o
 
 ## Championship Event Intelligence
 The Performance Intelligence tab now ranks three planning priorities for CARIFTA and Goodwill using LCM race history, sourced B-standard gaps and observed Boys 13–14 competitor density. CARIFTA references 2027 standards; Goodwill uses 2026 historical standards only, never mislabelled as 2027. Scores are transparent relative heuristics, not medal probabilities or selection predictions. Results refresh when `docs/data.json` is rebuilt by the existing importer.
+
+
+## CARIFTA + Goodwill Strategy tab
+Championship planning comparisons are in their own combined tab, separate from Performance Intelligence. The rankings are heuristic and do not represent medal odds. Goodwill uses historical 2026 standards until updated standards are available.
