@@ -1,0 +1,38 @@
+name: Monitor official ASAJ publications
+on:
+  workflow_dispatch:
+  schedule:
+    # 06:00 Jamaica time (UTC-5 year-round)
+    - cron: '0 11 * * *'
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-ingest.txt
+      - name: Check official ASAJ sources and stage review candidates
+        run: python scripts/ingest_asaj.py
+      - name: Open review-only pull request when official documents change
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: automation/asaj-document-review
+          delete-branch: true
+          title: 'Review: official ASAJ publication changes'
+          commit-message: 'Stage official ASAJ publication metadata for manual review'
+          body: |
+            Official ASAJ publication metadata has changed.
+
+            Review `review/asaj/index.json` and each original ASAJ document.
+            This PR does NOT modify live athlete results, rankings, qualifying standards, or calendar.
+            After verifying original documents, create a separate approved data change.
+
+            Swimmer identity: Aidan Seaton, regardless of club, school or Jamaica representation.
+          add-paths: |
+            review/asaj/index.json
