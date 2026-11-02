@@ -98,22 +98,23 @@ const originalRender=render;render=function(){originalRender();if(TAB==='trends'
 
 // All-event small multiples. Faster swim times are better; first/latest are chronological.
 function renderAllEventProgress(d){
- const names=trendEventNames(d);let rows=[];
- for(const name of names)for(const course of ['LCM','SCM']){
-  const swims=trendSwims(d,name,course);if(!swims.length)continue;
-  const values=swims.map(x=>trendSeconds(x.time));const first=values[0],last=values.at(-1),delta=last-first;
-  // 0.01s is the smallest recorded unit. Treat changes smaller than that as unchanged.
-  const state=swims.length<2?'insufficient':delta<-.005?'improved':delta>.005?'degraded':'maintained';
-  const color={improved:'#55d99a',maintained:'#f6c85f',degraded:'#ff7d87',insufficient:'#91a8bf'}[state];
-  const W=330,H=82,L=14,R=14,T=12,B=17,lo=Math.min(...values),hi=Math.max(...values),span=Math.max(hi-lo,.4);
-  const x=i=>L+(swims.length===1?.5:i/(swims.length-1))*(W-L-R);
-  const y=v=>T+(v-lo+.2)/(span+.4)*(H-T-B); // lower times appear higher on chart
-  const points=values.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
-  const dots=swims.map((r,i)=>`<circle cx="${x(i)}" cy="${y(values[i])}" r="3.6" fill="${r.origin==='ASAJ verified'?'#f5c94b':'#8fa3ff'}"><title>${esc(r.date)} · ${esc(r.time)} · ${esc(r.origin)} · ${esc(r.meet_name)}</title></circle>`).join('');
-  const svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(name)} ${course}: ${swims.length} swims, ${state}" preserveAspectRatio="xMidYMid meet"><line x1="${L}" y1="${H-B}" x2="${W-R}" y2="${H-B}" stroke="currentColor" opacity=".2"/><polyline points="${points}" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${dots}<text x="${L}" y="${H-2}" font-size="10" fill="currentColor">${esc(swims[0].date||'First')}</text><text x="${W-R}" y="${H-2}" text-anchor="end" font-size="10" fill="currentColor">${esc(swims.at(-1).date||'Latest')}</text></svg>`;
-  rows.push(`<div class="progress-row"><div class="progress-event"><strong><a href="#trends" class="progress-event-link" data-event="${esc(name)}" data-course="${course}">${esc(name)} · ${course}</a></strong><small>${swims.length} swim${swims.length===1?'':'s'} · ${esc(swims[0].time)} → ${esc(swims.at(-1).time)}</small><span class="progress-status ${state}">${state==='insufficient'?'Only one swim':state==='degraded'?'Slower latest swim':state[0].toUpperCase()+state.slice(1)}${swims.length>1?' · '+(delta>0?'+':'')+delta.toFixed(2)+'s':''}</span></div><div class="progress-spark">${svg}</div></div>`);
- }
- return `<div class="panel"><h2>All-Event Progress · earliest to latest</h2><p>Each event and pool course has its own timeline. Green means the latest time is faster than the first, amber means unchanged, and red means slower. A single swim is grey. The chart's vertical scale adjusts for each event; compare the seconds, not line steepness. LCM and SCM are never combined.</p><div class="progress-legend"><span class="improved">● Improved</span><span class="maintained">● Maintained</span><span class="degraded">● Slower latest</span><span>🟡 ASAJ verified · 🔵 SwimCloud supplied</span></div>${rows.join('')||'<p>No recorded races.</p>'}<p class="muted">Status compares first and latest recorded swims, not the personal best. Some ASAJ dates may reflect meet ranges. SwimCloud data remains supplementary and unverified.</p></div>`;
+ const metrics=['LCM','SCM'].flatMap(course=>intelligenceMetrics(d,course));
+ const eligible=metrics.filter(m=>m.pct!==null);
+ const strongest=[...eligible].sort((a,b)=>b.pct-a.pct).slice(0,3);
+ const slower=metrics.filter(m=>m.recentChange!==null&&m.recentChange<-.005).sort((a,b)=>a.recentChange-b.recentChange).slice(0,3);
+ const bestDate=m=>{
+  const matches=m.swims.filter(r=>Math.abs(trendSeconds(r.time)-m.best)<.005);
+  const r=matches.sort((a,b)=>String(a.date).localeCompare(String(b.date)))[0];
+  return r?`${esc(r.date||'Date unavailable')}${r.precision==='meet_range'?' (approx.)':''}`:'Date unavailable';
+ };
+ const summary=`<div class="intel-cards"><section class="intel-card"><h3>Historical strengths</h3><ol>${strongest.map(m=>`<li>${esc(m.name)} (${m.course}) · ${m.pct.toFixed(1)}% faster</li>`).join('')||'<li>Insufficient history</li>'}</ol></section><section class="intel-card"><h3>Recent performance to review</h3><ul>${slower.map(m=>`<li>${esc(m.name)} (${m.course}) · ${Math.abs(m.recentChange).toFixed(2)}s slower over last ${Math.min(3,m.swims.length)} races</li>`).join('')||'<li>No slower recent trends in recorded results</li>'}</ul></section><section class="intel-card"><h3>Coach discussion</h3><p>Review race pacing, starts, turns and training load before interpreting slower times. Prioritize repeatable gains.</p></section></div>`;
+ const rows=metrics.map(m=>{
+  const first=m.swims[0],last=m.swims.at(-1),delta=m.latest-m.first;
+  const status=m.pct===null?'Insufficient history':delta<-.005?'Faster':delta>.005?'Slower':'Unchanged';
+  const recent=m.recentChange===null?'Insufficient history':m.recentChange>.005?`Faster by ${m.recentChange.toFixed(2)}s`:m.recentChange<-.005?`Slower by ${Math.abs(m.recentChange).toFixed(2)}s`:'Unchanged';
+  return `<article class="panel" id="swim-${esc(m.course)}-${esc(m.name).replace(/[^a-zA-Z0-9]/g,'-')}"><h3><a href="#trends" class="progress-event-link" data-event="${esc(m.name)}" data-course="${m.course}">${esc(m.name)} · ${m.course}</a></h3><div class="intel-stats"><div><small>Personal best (recorded)</small><strong>${trendTime(m.best)}</strong><small>${bestDate(m)}</small></div><div><small>First → latest</small><strong>${trendTime(m.first)} → ${trendTime(m.latest)}</strong></div><div><small>Recent trend</small><strong>${recent}</strong></div></div><div class="intel-chart">${intelligenceLine(m)}</div><p>${m.swims.length} documented result(s) · ${m.pct===null?'Insufficient history':`${m.pct.toFixed(1)}% first-to-latest improvement`} · ${status}</p><p class="muted">PB includes documented ASAJ and supplementary SwimCloud results; source and date precision remain as recorded.</p></article>`;
+ }).join('');
+ return `<div class="panel"><h2>Swim Intelligence · all-event progress</h2><p>Separate LCM and SCM race histories. Performance Intelligence summarizes historical strengths and recent patterns; a slower race is not a diagnosis.</p>${summary}<p><strong>Chart key:</strong> Green segments = faster; red = slower; amber = unchanged. Yellow dots = ASAJ verified; blue = SwimCloud supplied (unverified). SCM and LCM are never combined.</p></div>${rows||'<div class="panel">No recorded races.</div>'}<div class="notice">Dates marked approximate are ASAJ meet-start dates. Supplementary swims are not qualification evidence. PB is the fastest documented result, not necessarily the latest result.</div>`;
 }
 
 // Intelligence uses only documented race results and the September 2026 Jamaica ranking snapshot.
