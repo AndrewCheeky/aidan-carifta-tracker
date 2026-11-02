@@ -1,1 +1,16 @@
-{"name":"Aidan Seaton","club":"Tornadoes Swim Club","category":"Boys 13–14","course":"LCM","events":["50 Free","100 Free","100 Back","200 Breast","100 Fly","200 Fly","200 IM","400 IM"]}
+{
+  "name": "Aidan Seaton",
+  "category": "Boys 13–14",
+  "course": "LCM",
+  "events": [
+    "50 Free",
+    "100 Free",
+    "100 Back",
+    "200 Breast",
+    "100 Fly",
+    "200 Fly",
+    "200 IM",
+    "400 IM"
+  ],
+  "identity_policy": "Match swimmer across club, school and national-team affiliations; preserve affiliation per result."
+}

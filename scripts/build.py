@@ -43,7 +43,7 @@ for r in ranks:
     if not r['age'].isdigit() or int(r['age'])<0: raise ValueError('Invalid age')
     if not r['rank'].isdigit() or int(r['rank'])<1: raise ValueError('Invalid rank')
 for r in perf:
-    if r['swimmer'].casefold()!='aidan seaton': raise ValueError('Performance not Aidan Seaton')
+    if ' '.join(r['swimmer'].casefold().split())!='aidan seaton': raise ValueError('Performance not Aidan Seaton')
 
 by_event={e:[] for e in EVENTS}
 for r in perf: by_event[r['event']].append(r)

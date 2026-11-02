@@ -46,3 +46,17 @@ Open http://localhost:8000
 - https://asaj.com.jm/rankings
 - https://www.asaj.com.jm/events/aggregator
 - https://www.asaj.com.jm/calendar/2027
+
+## ASAJ publication monitor (new)
+
+Workflow: `.github/workflows/ingest-asaj.yml`. Runs at 06:00 Jamaica time daily or manually through **Actions → Monitor official ASAJ publications → Run workflow**.
+
+- `scripts/ingest_asaj.py` checks ASAJ rankings, resources, events and calendar listing pages, discovers official-domain PDF links, fingerprints content using SHA-256, and extracts **review-only** PDF text lines mentioning Aidan Seaton.
+- `review/asaj/index.json` records source links, document checksums, PDF page counts and candidate swimmer mentions. It contains no approved numeric figures.
+- On changes, GitHub Actions proposes a pull request to `automation/asaj-document-review`. **No new performance, ranking, standard or meet value is automatically published.** Review the original PDF and enter validated figures in `data/*.csv` in a separate reviewed commit/PR.
+- Aidan's identity is his full name across any club, school or Jamaica representation. Affiliation is stored per performance, not used as an exclusion criterion. If names collide, require additional official identifying evidence before approval.
+- PDF extraction is best-effort: scanned documents, table layouts, non-PDF result pages, and changes to ASAJ site structure require manual handling. Listing-page changes can produce review PRs even without a new PDF.
+- GitHub repository setting: **Settings → Actions → General → Workflow permissions** must permit **Read and write permissions** and **Allow GitHub Actions to create and approve pull requests** for automated PR creation. If organization policy blocks this, use a dedicated appropriately scoped token or review manually.
+- This monitor is deliberately separate from the working `deploy.yml` workflow, and cannot modify live `data/*.csv` by itself.
+
+Local test: `pip install -r requirements-ingest.txt && python scripts/ingest_asaj.py`. This command needs network access. It is not a guarantee that ASAJ pages are accessible from GitHub-hosted runners.

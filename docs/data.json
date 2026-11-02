@@ -1,7 +1,6 @@
 {
   "athlete": {
     "name": "Aidan Seaton",
-    "club": "Tornadoes Swim Club",
     "category": "Boys 13–14",
     "course": "LCM",
     "events": [
@@ -13,7 +12,8 @@
       "200 Fly",
       "200 IM",
       "400 IM"
-    ]
+    ],
+    "identity_policy": "Match swimmer across club, school and national-team affiliations; preserve affiliation per result."
   },
   "events": [
     {
@@ -158,6 +158,6 @@
       "status": "verified_listing"
     }
   },
-  "built_at": "2026-11-02T00:51:53+00:00",
+  "built_at": "2026-11-02T01:17:42+00:00",
   "warning": "Only rows explicitly verified against ASAJ are published; empty fields mean not yet verified."
 }
