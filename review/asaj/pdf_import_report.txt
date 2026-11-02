@@ -1,11 +1,22 @@
-Published race rows: 31
+Published race rows: 47
 
 Held mentions/files:
+('2026 ASAJ BB Distance Challenge results.pdf', 8, 'Excluded DQ', '---  Seaton, Aidan          13 TOR           DQ')
+('2026 ASAJ BB Distance Challenge results.pdf', 8, 'Unattributed or relay name mention', 'Lawson, Kai W13           Seaton, Aidan M13')
 ('2026 Neville Alexander results.pdf', 2, 'Unattributed or relay name mention', '11  Seaton, Aidan          13 TOR             29.53')
 ('2026 Neville Alexander results.pdf', 6, 'Excluded DQ', '---  Seaton, Aidan          13 TOR           DQ')
 ('2026 Neville Alexander results.pdf', 7, 'Unattributed or relay name mention', 'Seaton, Aidan M13          Spence, Emanuelle W13')
 ('2026 Neville Alexander results.pdf', 18, 'Unrecognized athlete row', 'Preston, Matthew 28        Seaton, Aidan 13')
 ('2026 Swimaz results.pdf', 9, 'Unrecognized athlete row', 'Henry, Hayden 14           Seaton, Aidan 13')
+('2026 Tornadoes Invitational Swim Meet - results.pdf', 4, 'Unrecognized athlete row', 'Lawson, Kai W13           Seaton, Aidan M13')
+('2026 Tornadoes Invitational Swim Meet - results.pdf', 14, 'Unrecognized athlete row', 'Seaton, Aidan 13             Ismail, Jaiden 13')
+('2026 Tornadoes Invitational Swim Meet - results.pdf', 17, 'Unattributed or relay name mention', '6  Seaton, Aidan          13 TOR             27.67')
+('2026 Tornadoes Invitational Swim Meet - results.pdf', 20, 'Unattributed or relay name mention', 'Ismail, Jaiden 13            Seaton, Aidan 13')
 ('2026 WRAGC - results.pdf', 6, 'Unrecognized athlete row', 'Henry, Hayden 14           Seaton, Aidan 13')
 ('2026 WRAGC - results.pdf', 12, 'Unattributed or relay name mention', 'Ismail, Jaiden 13            Seaton, Aidan 13')
 ('2026 WRAGC - results.pdf', 19, 'Unrecognized athlete row', 'Ismail, Jaiden 13            Seaton, Aidan 13')
+('Mayberry 2026 High Tertiary - results.pdf', 1, 'Unattributed or relay name mention', 'Seaton, Aidan 13           Heaven, Matthew 14')
+('Mayberry 2026 High Tertiary - results.pdf', 8, 'Unrecognized athlete row', 'Chin, Ethan 13              Seaton, Aidan 13')
+('Mayberry 2026 High Tertiary - results.pdf', 8, 'Unrecognized athlete row', 'Chin, Ethan 13              Seaton, Aidan 13')
+('Mayberry 2026 High Tertiary - results.pdf', 10, 'Unrecognized athlete row', 'Chin, Ethan 13              Seaton, Aidan 13')
+('Mayberry 2026 High Tertiary - results.pdf', 10, 'Unrecognized athlete row', 'Chin, Ethan 13              Seaton, Aidan 13')
