@@ -76,8 +76,8 @@ function renderTrends(d){
  }));
  return `<div class="panel"><h2>Performance Trends · all ${names.length} documented events</h2><p>Official ASAJ results and user-supplied SwimCloud results are shown as distinct series. SwimCloud data is supplementary and not independently verified. SCM and LCM are never mixed or converted. ASAJ meet-range dates are approximate.</p><div id="trend-detail"></div></div><div class="panel"><h2>All-event progress summary · both courses</h2><p>First-to-latest changes include supplementary SwimCloud times and must not be treated as independently verified qualification evidence.</p><div class="visual-scroll">${table(['Event','Course','Swims','First','Latest','Change','Assessment'],summary)}</div></div><div class="notice">Training reference only. Qualification and national rankings continue to use their separate official-source rules.</div>`;
 }
-function drawTrendDetail(){
- const target=document.getElementById('trend-detail');if(!target||!DATA)return;
+function drawTrendDetail(targetOverride){
+ const target=targetOverride||document.getElementById('trend-detail');if(!target||!DATA)return;
  const name=TREND_SELECTION.event||trendEventNames(DATA)[0],course=TREND_SELECTION.course;
  const swims=trendSwims(DATA,name,course);
  if(!swims.length){target.innerHTML='<p class="pending">No recorded swims for this event and course.</p>';return;}
@@ -112,7 +112,7 @@ function renderAllEventProgress(d){
   const first=m.swims[0],last=m.swims.at(-1),delta=m.latest-m.first;
   const status=m.pct===null?'Insufficient history':delta<-.005?'Faster':delta>.005?'Slower':'Unchanged';
   const recent=m.recentChange===null?'Insufficient history':m.recentChange>.005?`Faster by ${m.recentChange.toFixed(2)}s`:m.recentChange<-.005?`Slower by ${Math.abs(m.recentChange).toFixed(2)}s`:'Unchanged';
-  return `<article class="panel" id="swim-${esc(m.course)}-${esc(m.name).replace(/[^a-zA-Z0-9]/g,'-')}"><h3><a href="#trends" class="progress-event-link" data-event="${esc(m.name)}" data-course="${m.course}">${esc(m.name)} · ${m.course}</a></h3><div class="intel-stats"><div><small>Personal best (recorded)</small><strong>${trendTime(m.best)}</strong><small>${bestDate(m)}</small></div><div><small>First → latest</small><strong>${trendTime(m.first)} → ${trendTime(m.latest)}</strong></div><div><small>Recent trend</small><strong>${recent}</strong></div></div><div class="intel-chart">${intelligenceLine(m)}</div><p>${m.swims.length} documented result(s) · ${m.pct===null?'Insufficient history':`${m.pct.toFixed(1)}% first-to-latest improvement`} · ${status}</p><p class="muted">PB includes documented ASAJ and supplementary SwimCloud results; source and date precision remain as recorded.</p></article>`;
+  return `<article class="panel" id="swim-${esc(m.course)}-${esc(m.name).replace(/[^a-zA-Z0-9]/g,'-')}"><h3><a href="#trends" class="progress-event-link" data-event="${esc(m.name)}" data-course="${m.course}" aria-label="View detailed race history for ${esc(m.name)} ${m.course}">${esc(m.name)} · ${m.course}</a></h3><div class="swim-inline-detail" hidden></div><div class="intel-stats"><div><small>Personal best (recorded)</small><strong>${trendTime(m.best)}</strong><small>${bestDate(m)}</small></div><div><small>First → latest</small><strong>${trendTime(m.first)} → ${trendTime(m.latest)}</strong></div><div><small>Recent trend</small><strong>${recent}</strong></div></div><div class="intel-chart">${intelligenceLine(m)}</div><p>${m.swims.length} documented result(s) · ${m.pct===null?'Insufficient history':`${m.pct.toFixed(1)}% first-to-latest improvement`} · ${status}</p><p class="muted">PB includes documented ASAJ and supplementary SwimCloud results; source and date precision remain as recorded.</p></article>`;
  }).join('');
  return `<div class="panel"><h2>Swim Intelligence · all-event progress</h2><p>Separate LCM and SCM race histories. Performance Intelligence summarizes historical strengths and recent patterns; a slower race is not a diagnosis.</p>${summary}<p><strong>Chart key:</strong> Green segments = faster; red = slower; amber = unchanged. Yellow dots = ASAJ verified; blue = SwimCloud supplied (unverified). SCM and LCM are never combined.</p></div>${rows||'<div class="panel">No recorded races.</div>'}<div class="notice">Dates marked approximate are ASAJ meet-start dates. Supplementary swims are not qualification evidence. PB is the fastest documented result, not necessarily the latest result.</div>`;
 }
@@ -266,9 +266,20 @@ render=function(){renderWithStandards();if(TAB==='intelligence'){
 // Strategy event names open their corresponding Performance Trends graph.
 document.addEventListener('click',e=>{const a=e.target.closest('.strategy-event-link');if(!a)return;e.preventDefault();TREND_SELECTION.event=a.dataset.event;TREND_SELECTION.course='LCM';const tab=document.querySelector('[data-tab="trends"]');if(tab)tab.click();else{TAB='trends';render();}});
 
-// Navigate from All-Event Progress event labels to the matching Performance Trends graph.
+// Swim Intelligence links reveal race details inline without leaving or replacing this tab.
 document.addEventListener('click',event=>{
  const anchor=event.target.closest?.('.progress-event-link');if(!anchor)return;
- event.preventDefault();TREND_SELECTION.event=anchor.dataset.event;TREND_SELECTION.course=anchor.dataset.course;
- TAB='trends';render();document.getElementById('trend-detail')?.scrollIntoView({behavior:'smooth',block:'start'});
+ event.preventDefault();
+ const panel=anchor.closest('article');
+ const detail=panel?.querySelector('.swim-inline-detail');
+ if(!detail||!DATA)return;
+ if(!detail.hidden){detail.hidden=true;anchor.setAttribute('aria-expanded','false');return;}
+ document.querySelectorAll('.swim-inline-detail').forEach(el=>{el.hidden=true;});
+ document.querySelectorAll('.progress-event-link').forEach(el=>el.setAttribute('aria-expanded','false'));
+ TREND_SELECTION.event=anchor.dataset.event;
+ TREND_SELECTION.course=anchor.dataset.course;
+ detail.hidden=false;
+ anchor.setAttribute('aria-expanded','true');
+ drawTrendDetail(detail);
+ detail.scrollIntoView({behavior:'smooth',block:'nearest'});
 });
