@@ -16,6 +16,7 @@ from urllib.parse import urljoin, urlparse, urldefrag, urlunparse
 import requests
 from bs4 import BeautifulSoup
 from pypdf import PdfReader
+from extract_asaj import extract as extract_structured
 
 ROOT = Path(__file__).resolve().parents[1]
 STAGING = ROOT / 'review' / 'asaj'
@@ -109,6 +110,7 @@ def main():
     STAGING.mkdir(parents=True, exist_ok=True)
     previous = json.loads(INDEX.read_text()) if INDEX.exists() else {'documents':{}}
     previous_docs = previous.get('documents', {})
+    structured = []
     documents = dict(previous_docs)
     failures = []
     session = requests.Session()
@@ -138,8 +140,9 @@ def main():
             if not raw.startswith(b'%PDF'):
                 raise ValueError('Not a PDF document')
             digest = hashlib.sha256(raw).hexdigest()
-            if documents.get(url,{}).get('sha256') == digest: continue
+            # Always extract to keep proposal output deterministic on repeated runs.
             details = extract_candidates(raw)
+            structured.extend(extract_structured(raw, download_url, digest, category))
             documents[url] = {'category':category,'title':link['title'],'sha256':digest,
                               'content_type':'pdf','download_url':download_url,'review_status':'needs_human_review',**details}
         except Exception as exc:
@@ -151,6 +154,11 @@ def main():
               'new_or_changed_documents':changed,
               'review_policy':'No extracted figures are published automatically. Inspect the original ASAJ PDF and manually approve CSV changes.'}
     INDEX.write_text(json.dumps(output,indent=2,ensure_ascii=False)+'\n')
+    # This is an unverified review queue, never an input to scripts/build.py.
+    proposals = {'status':'UNVERIFIED_REVIEW_ONLY','identity':'Aidan Seaton',
+                 'candidates':sorted(structured,key=lambda c:(c['source_url'],c['page'],c['line'],c['kind']))}
+    (STAGING/'proposals.json').write_text(json.dumps(proposals,indent=2,ensure_ascii=False)+'\n')
+    print('Staged',len(structured),'unverified line-level candidates; published CSVs untouched')
     print(f'Checked {len(SOURCES)} listings; indexed {len(documents)} records; {len(changed)} new/changed; {len(failures)} retrieval failures')
     if failures:
         print('Retrieval warnings:', json.dumps(failures,indent=2))

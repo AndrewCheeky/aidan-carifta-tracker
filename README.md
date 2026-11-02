@@ -60,3 +60,23 @@ Workflow: `.github/workflows/ingest-asaj.yml`. Runs at 06:00 Jamaica time daily 
 - This monitor is deliberately separate from the working `deploy.yml` workflow, and cannot modify live `data/*.csv` by itself.
 
 Local test: `pip install -r requirements-ingest.txt && python scripts/ingest_asaj.py`. This command needs network access. It is not a guarantee that ASAJ pages are accessible from GitHub-hosted runners.
+
+## Stage 2: review-only PDF line extraction
+
+The monitor now writes `review/asaj/proposals.json` containing candidate references to
+Aidan Seaton from official ASAJ PDFs, plus possible qualification-table references.
+Every candidate has an original PDF URL, page, line, checksum, and evidence text.
+All candidates are explicitly `verified: false` and **are not imported** into
+`data/performances.csv`, `data/standards.csv`, or `data/rankings.csv`.
+
+A reviewer must inspect the source PDF and distinguish results from seed times,
+confirm the course, age group, event, time, and CARIFTA selection period, then
+prepare a separate approved data change. Aidan's club/school/national affiliation
+is preserved as source metadata and is never used to exclude his results.
+
+This is intentionally a conservative first structured-extraction implementation:
+it does **not** yet reliably parse full ranking tables, Boys 12 competitors,
+qualifying standard column values, or all meet results. Those require layout-aware
+parsers tailored to each ASAJ document type and additional fixture tests.
+
+To run tests locally: `python -m unittest discover -s tests -v`.
