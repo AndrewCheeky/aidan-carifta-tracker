@@ -1,0 +1,53 @@
+name: Prepare official ASAJ publication review
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-ingest.txt
+      - name: Extract official PDFs into review candidates
+        run: python scripts/prepare_official_review.py
+      - name: Validate candidates using the website builder
+        run: |
+          cp data/performances.csv /tmp/performances-original.csv
+          cp data/rankings.csv /tmp/rankings-original.csv
+          cp data/standards.csv /tmp/standards-original.csv
+          cp review/asaj/publish_candidate/*.csv data/
+          python scripts/build.py
+          cp /tmp/performances-original.csv data/performances.csv
+          cp /tmp/rankings-original.csv data/rankings.csv
+          cp /tmp/standards-original.csv data/standards.csv
+          git checkout -- docs/data.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: official-asaj-publication-candidates
+          path: review/asaj/publish_candidate/*.csv
+      - name: Stage publication files for a human-reviewed pull request
+        run: cp review/asaj/publish_candidate/*.csv data/
+      - name: Open publication review pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
+          branch: automation/asaj-publish-review
+          delete-branch: true
+          add-paths: |
+            data/performances.csv
+            data/rankings.csv
+            data/standards.csv
+          commit-message: 'Stage ASAJ official rankings and CARIFTA 2027 standards for review'
+          title: 'Review ASAJ official rankings and CARIFTA 2027 qualification data'
+          body: |
+            Review every row against the bundled official ASAJ PDFs before merging.
+            This PR stages official ASAJ top times, not independently established lifetime personal bests.
+            Podium gaps and age-12 comparisons remain pending until validated.
