@@ -139,35 +139,38 @@ function intelligenceLine(m){
  const dots=m.swims.map((r,i)=>`<circle cx="${x(i)}" cy="${y(v[i])}" r="4.5" fill="${r.origin==='ASAJ verified'?'#e3a300':'#6e80ef'}"><title>${esc(r.date)} · ${esc(r.time)} · ${esc(r.origin)}</title></circle>`).join('');
  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(m.name)} ${m.course} chronological race times">${grid}${segments}${dots}<text x="${L}" y="${H-6}" font-size="11" fill="currentColor">${esc(m.swims[0].date)}</text><text x="${W-R}" y="${H-6}" text-anchor="end" font-size="11" fill="currentColor">${esc(m.swims.at(-1).date)}</text></svg>`;
 }
-// Championship shortlist is a transparent, relative planning score, not a selection or medal probability.
+// Championship strategy: show only events supported by recorded times and a sourced B standard.
+// This is a relative planning score, never a medal probability or selection forecast.
 function championshipOpportunities(d,meet){
  const standards=meet==='CARIFTA'?(d.events||[]):(d.goodwill?.events||[]);
  const all=intelligenceMetrics(d,'LCM');
  return standards.map(e=>{
-  const m=all.find(x=>x.name===e.event);if(!m||typeof m.best!=='number')return null;
-  const target=meet==='CARIFTA'?e.standards?.B?.time:e.standards?.B?.time;
-  const entry=usaSeconds(target),gap=entry===null?null:m.best-entry;
+  const m=all.find(x=>x.name===e.event);
+  const entry=usaSeconds(e.standards?.B?.time);
+  if(!m||!Number.isFinite(m.best)||entry===null||entry<=0)return null;
+  const gap=m.best-entry;
   const comp=(d.asaj_competitor_results||[]).filter(x=>x.event===e.event&&x.course==='LCM'&&x.gender==='Boys'&&['13','14'].includes(String(x.age))&&x.swimmer&&!/seaton/i.test(x.swimmer));
-  const unique=new Map();comp.forEach(x=>{const key=x.swimmer.trim().toLowerCase(),t=usaSeconds(x.time);if(t!==null&&(!unique.has(key)||t<unique.get(key)))unique.set(key,t)});
-  const nearby=[...unique.values()].filter(t=>Math.abs(t-m.best)/m.best<=.05).length;
+  const unique=new Map();
+  comp.forEach(x=>{const key=x.swimmer.trim().toLowerCase(),t=usaSeconds(x.time);if(t!==null&&(!unique.has(key)||t<unique.get(key)))unique.set(key,t)});
   const field=unique.size;
-  const trend=m.recentChange; // Positive means faster; not an estimate of future times.
-  // Scores only compare events with a sourced entry standard. Missing competition coverage reduces confidence.
-  const entryScore=gap===null?null:Math.max(0,Math.min(60,60-60*Math.max(0,gap)/entry));
-  const trendScore=trend===null?10:Math.max(0,Math.min(25,12.5+trend*5));
-  const fieldScore=field?15/(1+nearby/3):null;
-  const score=entryScore===null?null:entryScore+trendScore+(fieldScore??0);
-  return {event:e.event,best:m.best,entry,gap,trend,nearby,field,score,qualified:gap!==null&&gap<=0};
- }).filter(Boolean).sort((a,b)=>(b.score??-1)-(a.score??-1));
+  const nearby=[...unique.values()].filter(t=>Math.abs(t-m.best)/m.best<=.05).length;
+  const trend=Number.isFinite(m.recentChange)?m.recentChange:null;
+  // Entry readiness: 60 points, recent trend: 25, observed field density: 15.
+  // No competitor coverage earns zero field points, not a fictitious low-competition bonus.
+  const entryScore=Math.max(0,Math.min(60,60-60*Math.max(0,gap)/entry));
+  const trendScore=trend===null?0:Math.max(0,Math.min(25,12.5+trend*5));
+  const fieldScore=field?15/(1+nearby/3):0;
+  return {event:e.event,best:m.best,entry,gap,trend,nearby,field,score:entryScore+trendScore+fieldScore};
+ }).filter(Boolean).sort((a,b)=>b.score-a.score).slice(0,3);
 }
 function renderChampionshipShortlist(d){
- const panel=(meet)=>{
+ const panel=meet=>{
   const rows=championshipOpportunities(d,meet);
-  const label=meet==='CARIFTA'?'2027 CARIFTA B standard':'2026 Goodwill B standard (historical only)';
-  const show=rows.slice(0,3).map((r,i)=>`<tr><td>${i+1}. ${esc(r.event)}</td><td>${trendTime(r.best)}</td><td>${r.entry===null?'Unavailable':trendTime(r.entry)}</td><td>${r.gap===null?'Unavailable':(r.gap>0?'+':'')+r.gap.toFixed(2)+'s'}</td><td>${r.trend===null?'Insufficient races':`${r.trend>0?'Faster':r.trend<0?'Slower':'Stable'} (${Math.abs(r.trend).toFixed(2)}s)`}</td><td>${r.field?`${r.nearby} nearby / ${r.field} observed`:'Coverage unavailable'}</td><td>${r.score===null?'Not scored':r.score.toFixed(0)+'/100'}</td></tr>`).join('');
-  return `<section class="panel"><h3>${meet} · top three planning priorities</h3><p>${label}. Rankings are relative planning scores, <strong>not</strong> medal odds, official entry rankings or a team-selection prediction.</p><div class="visual-scroll">${table(['Event','Best LCM*','B standard','Gap','Recent trend','ASAJ Boys 13–14 field','Priority score'],show)}</div><p class="muted">Field = unique Boys 13–14 swimmers in imported ASAJ PDFs for this event; nearby = within ±5% of Aidan's best. A smaller observed field does not prove weaker championship competition.</p></section>`;
+  if(!rows.length)return `<section class="panel"><h3>${meet}</h3><p>No events with both a recorded LCM time and a sourced B standard.</p></section>`;
+  const body=rows.map((r,i)=>`<tr><td>${i+1}. ${esc(r.event)}</td><td>${trendTime(r.best)}</td><td>${trendTime(r.entry)}</td><td>${r.gap>0?'+':''}${r.gap.toFixed(2)}s</td><td>${r.trend===null?'No recent trend':`${r.trend>0?'Faster':r.trend<0?'Slower':'Stable'} (${Math.abs(r.trend).toFixed(2)}s)`}</td><td>${r.field?`${r.field} swimmers · ${r.nearby} within ±5%`:'No verified field'}</td><td>${r.score.toFixed(0)}/100</td></tr>`).join('');
+  return `<section class="panel"><h3>${meet} · Top 3 Event Priorities</h3><div class="visual-scroll">${table(['Event','Best LCM','B time','Gap to B','Recent trend','ASAJ Boys 13–14','Score'],body)}</div></section>`;
  };
- return `<section class="panel"><h2>🏆 Championship Event Intelligence</h2><p>Event priorities combine documented entry-time gap, recent race trend and observed competitor density. Results refresh when the ASAJ importer rebuilds the dataset. Review with the coach before choosing entries.</p><div class="notice"><strong>CARIFTA:</strong> 2027 B standards are a qualification reference, not a confirmed entry. <strong>Goodwill:</strong> only 2026 standards are currently sourced; this comparison is historical and must not be used as a 2027 entry target. No championship medal results or future entry counts are available.</div></section>${panel('CARIFTA')}${panel('Goodwill')}<p class="muted">*Best shown may include supplementary SwimCloud times. Actual eligibility, qualifying windows, selection rankings and championship entry limits must be checked separately. Scores are heuristic, not probabilities; no score means no sourced standard.</p>`;
+ return `<section class="panel"><h2>CARIFTA + Goodwill Event Strategy</h2><p>Top three events for each championship, ranked by B-standard readiness (60 points), recent improvement (25) and observed ASAJ competition (15). Only events with both recorded times and sourced standards appear.</p></section>${panel('CARIFTA')}${panel('Goodwill')}<p class="muted">CARIFTA uses 2027 B times. Goodwill uses available 2026 B times as historical reference only. Competition counts cover imported ASAJ results, not all championship entrants. Scores are planning indicators, not medal probabilities. Recalculated when the ASAJ data build runs.</p>`;
 }
 function renderIntelligence(d){
  const metrics=['LCM','SCM'].flatMap(course=>intelligenceMetrics(d,course));
