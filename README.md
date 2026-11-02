@@ -80,3 +80,11 @@ qualifying standard column values, or all meet results. Those require layout-awa
 parsers tailored to each ASAJ document type and additional fixture tests.
 
 To run tests locally: `python -m unittest discover -s tests -v`.
+
+## Workflow fix: review outputs and branch selection
+
+The ingestion workflow **always checks out `main`**, even if someone manually selects a different branch in the GitHub Actions UI. Pull requests explicitly target `main` and use `automation/asaj-document-review` as the head branch, avoiding the previous same-branch PR failure.
+
+After every run, look under the workflow run's **Artifacts** for `asaj-review-outputs-<run number>`; it contains `index.json` and `proposals.json` even when no changes warrant a pull request. The job also validates that both files exist and that the proposals are marked unverified. A proposal file with `candidates: []` is valid but means no candidate times were extracted, **not** that the tracker has verified athlete performances.
+
+Run **Actions → Monitor official ASAJ publications → Run workflow** (choose `main` for clarity). A deployment triggered by merging a PR is a separate workflow and will not extract PDFs. Never merge proposed numerical figures into `data/*.csv` without checking the official ASAJ source document.
