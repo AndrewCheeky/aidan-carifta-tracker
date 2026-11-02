@@ -672,17 +672,30 @@
         "selection_projection": "Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable",
         "ranking_verified_for_selection": false,
         "provisional_ranking_date": "2026-09-29",
-        "provisional_snapshot_rank": null,
+        "provisional_snapshot_rank": 7,
         "provisional_top_two": false,
         "provisional_selection_priority": "No qualifying time yet"
       },
       "event": "50 Breast",
-      "personal_best": "36.15",
-      "pb_source": "https://www.asaj.com.jm/",
-      "pb_evidence_pdf": "asaj-pdfs/2026 WRAGC - results.pdf",
-      "pb_evidence_page": "14",
-      "standards": {},
-      "rank": null,
+      "personal_best": "35.32",
+      "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
+      "pb_evidence_pdf": null,
+      "pb_evidence_page": null,
+      "standards": {
+        "A": {
+          "time": "0:33.01",
+          "difference": "+2.31s",
+          "met": false,
+          "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
+        },
+        "B": {
+          "time": "0:34.52",
+          "difference": "+0.80s",
+          "met": false,
+          "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
+        }
+      },
+      "rank": 7,
       "podium_gap": null,
       "third_place": null,
       "boys12": [
@@ -690,35 +703,28 @@
           "name": "Steven Hoo Fung",
           "club": "SASC",
           "time": "35.98",
-          "difference": "−0.17s",
+          "difference": "+0.66s",
           "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
         },
         {
           "name": "Aiden Dennis",
           "club": "SPE",
           "time": "36.41",
-          "difference": "+0.26s",
+          "difference": "+1.09s",
           "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
         },
         {
           "name": "Miguel Jonas",
           "club": "TOR",
           "time": "36.69",
-          "difference": "+0.54s",
+          "difference": "+1.37s",
           "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
         },
         {
           "name": "Noah Spence",
           "club": "TOR",
           "time": "37.04",
-          "difference": "+0.89s",
-          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
-        },
-        {
-          "name": "Sule Morgan",
-          "club": "SASC",
-          "time": "39.67",
-          "difference": "+3.52s",
+          "difference": "+1.72s",
           "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
         }
       ]
@@ -738,17 +744,30 @@
         "selection_projection": "Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable",
         "ranking_verified_for_selection": false,
         "provisional_ranking_date": "2026-09-29",
-        "provisional_snapshot_rank": null,
+        "provisional_snapshot_rank": 6,
         "provisional_top_two": false,
         "provisional_selection_priority": "No qualifying time yet"
       },
       "event": "50 Fly",
-      "personal_best": "29.97",
-      "pb_source": "https://www.asaj.com.jm/",
-      "pb_evidence_pdf": "asaj-pdfs/2026 WRAGC - results.pdf",
-      "pb_evidence_page": "8",
-      "standards": {},
-      "rank": null,
+      "personal_best": "29.22",
+      "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
+      "pb_evidence_pdf": null,
+      "pb_evidence_page": null,
+      "standards": {
+        "A": {
+          "time": "0:27.73",
+          "difference": "+1.49s",
+          "met": false,
+          "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
+        },
+        "B": {
+          "time": "0:27.89",
+          "difference": "+1.33s",
+          "met": false,
+          "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
+        }
+      },
+      "rank": 6,
       "podium_gap": null,
       "third_place": null,
       "boys12": [
@@ -756,42 +775,42 @@
           "name": "Miguel Jonas",
           "club": "TOR",
           "time": "29.92",
-          "difference": "−0.05s",
+          "difference": "+0.70s",
           "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
         },
         {
           "name": "William Wan",
           "club": "SSC",
           "time": "30.14",
-          "difference": "+0.17s",
+          "difference": "+0.92s",
           "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
         },
         {
           "name": "Caleb Williams",
           "club": "TOR",
           "time": "30.55",
-          "difference": "+0.58s",
+          "difference": "+1.33s",
           "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
         },
         {
           "name": "Caelan Clover",
           "club": "TVSC",
           "time": "31.14",
-          "difference": "+1.17s",
+          "difference": "+1.92s",
           "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
         },
         {
           "name": "Steven Hoo Fung",
           "club": "SASC",
           "time": "31.62",
-          "difference": "+1.65s",
+          "difference": "+2.40s",
           "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
         },
         {
           "name": "Xavi-Alexander Wright",
           "club": "TOR",
           "time": "32.06",
-          "difference": "+2.09s",
+          "difference": "+2.84s",
           "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
         }
       ]
@@ -811,17 +830,30 @@
         "selection_projection": "Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable",
         "ranking_verified_for_selection": false,
         "provisional_ranking_date": "2026-09-29",
-        "provisional_snapshot_rank": null,
+        "provisional_snapshot_rank": 5,
         "provisional_top_two": false,
         "provisional_selection_priority": "No qualifying time yet"
       },
       "event": "100 Breast",
-      "personal_best": "1:19.83",
-      "pb_source": "https://www.asaj.com.jm/",
-      "pb_evidence_pdf": "asaj-pdfs/2026 Neville Alexander results.pdf",
-      "pb_evidence_page": "14",
-      "standards": {},
-      "rank": null,
+      "personal_best": "1:19.20",
+      "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
+      "pb_evidence_pdf": null,
+      "pb_evidence_page": null,
+      "standards": {
+        "A": {
+          "time": "1:14.66",
+          "difference": "+4.54s",
+          "met": false,
+          "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
+        },
+        "B": {
+          "time": "1:16.18",
+          "difference": "+3.02s",
+          "met": false,
+          "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
+        }
+      },
+      "rank": 5,
       "podium_gap": null,
       "third_place": null,
       "boys12": [
@@ -829,42 +861,42 @@
           "name": "Miguel Jonas",
           "club": "TOR",
           "time": "1:22.70",
-          "difference": "+2.87s",
+          "difference": "+3.50s",
           "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
         },
         {
           "name": "Noah Spence",
           "club": "TOR",
           "time": "1:24.73",
-          "difference": "+4.90s",
+          "difference": "+5.53s",
           "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
         },
         {
           "name": "William Wan",
           "club": "SSC",
           "time": "1:25.25",
-          "difference": "+5.42s",
+          "difference": "+6.05s",
           "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
         },
         {
           "name": "Aiden Dennis",
           "club": "SPE",
           "time": "1:25.87",
-          "difference": "+6.04s",
+          "difference": "+6.67s",
           "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
         },
         {
           "name": "Steven Hoo Fung",
           "club": "SASC",
           "time": "1:26.11",
-          "difference": "+6.28s",
+          "difference": "+6.91s",
           "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
         },
         {
           "name": "Noah Kim",
           "club": "SSC",
           "time": "1:26.58",
-          "difference": "+6.75s",
+          "difference": "+7.38s",
           "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
         }
       ]
@@ -884,17 +916,30 @@
         "selection_projection": "Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable",
         "ranking_verified_for_selection": false,
         "provisional_ranking_date": "2026-09-29",
-        "provisional_snapshot_rank": null,
+        "provisional_snapshot_rank": 9,
         "provisional_top_two": false,
         "provisional_selection_priority": "No qualifying time yet"
       },
       "event": "200 Free",
-      "personal_best": "2:21.77",
-      "pb_source": "https://www.asaj.com.jm/",
-      "pb_evidence_pdf": "asaj-pdfs/2026 Neville Alexander results.pdf",
-      "pb_evidence_page": "3",
-      "standards": {},
-      "rank": null,
+      "personal_best": "2:18.64",
+      "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
+      "pb_evidence_pdf": null,
+      "pb_evidence_page": null,
+      "standards": {
+        "A": {
+          "time": "2:07.26",
+          "difference": "+11.38s",
+          "met": false,
+          "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
+        },
+        "B": {
+          "time": "2:08.92",
+          "difference": "+9.72s",
+          "met": false,
+          "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
+        }
+      },
+      "rank": 9,
       "podium_gap": null,
       "third_place": null,
       "boys12": [
@@ -902,63 +947,56 @@
           "name": "William Wan",
           "club": "SSC",
           "time": "2:12.95",
-          "difference": "−8.82s",
+          "difference": "−5.69s",
           "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
         },
         {
           "name": "Noah Spence",
           "club": "TOR",
           "time": "2:21.55",
-          "difference": "−0.22s",
+          "difference": "+2.91s",
           "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
         },
         {
           "name": "Miguel Jonas",
           "club": "TOR",
           "time": "2:21.56",
-          "difference": "−0.21s",
+          "difference": "+2.92s",
           "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
         },
         {
           "name": "Sule Morgan",
           "club": "SASC",
           "time": "2:24.78",
-          "difference": "+3.01s",
+          "difference": "+6.14s",
           "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
         },
         {
           "name": "Noah Kim",
           "club": "SSC",
           "time": "2:25.57",
-          "difference": "+3.80s",
+          "difference": "+6.93s",
           "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
         },
         {
           "name": "Aiden Dennis",
           "club": "SPE",
           "time": "2:28.87",
-          "difference": "+7.10s",
+          "difference": "+10.23s",
           "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
         },
         {
           "name": "Steven Hoo Fung",
           "club": "SASC",
           "time": "2:30.34",
-          "difference": "+8.57s",
+          "difference": "+11.70s",
           "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
         },
         {
           "name": "Caleb Williams",
           "club": "TOR",
           "time": "2:30.88",
-          "difference": "+9.11s",
-          "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
-        },
-        {
-          "name": "Alex Rainford",
-          "club": "SPE",
-          "time": "2:35.33",
-          "difference": "+13.56s",
+          "difference": "+12.24s",
           "source_url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file"
         }
       ]
@@ -972,8 +1010,8 @@
         "standard_status": "Not yet achieved",
         "A_met": false,
         "B_met": false,
-        "A_gap": null,
-        "B_gap": null,
+        "A_gap": "+38.23s",
+        "B_gap": "+23.82s",
         "selection_priority": "Pending current qualifying-period ranking and eligibility verification",
         "selection_projection": "Not determinable: current rankings, eligible competitors, AQUA points and team-wide entries unavailable",
         "ranking_verified_for_selection": false,
@@ -987,7 +1025,20 @@
       "pb_source": "https://www.asaj.com.jm/",
       "pb_evidence_pdf": "asaj-pdfs/2026 ASAJ Distance Meet results.pdf",
       "pb_evidence_page": "1",
-      "standards": {},
+      "standards": {
+        "A": {
+          "time": "9:44.36",
+          "difference": "+38.23s",
+          "met": false,
+          "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
+        },
+        "B": {
+          "time": "9:58.77",
+          "difference": "+23.82s",
+          "met": false,
+          "source_url": "https://www.asaj.com.jm/resources/carifta-2027-qt.pdf/@@download/file"
+        }
+      },
       "rank": null,
       "podium_gap": null,
       "third_place": null,
@@ -1354,6 +1405,86 @@
       "date_precision": "meet_range"
     },
     {
+      "event": "100 Free",
+      "swimmer": "Aidan Seaton",
+      "age": "13",
+      "club": "TOR",
+      "time": "1:01.33",
+      "course": "LCM",
+      "meet_name": "2026 Swimaz Aquatic LC Championships",
+      "race_date": "2026-06-20",
+      "round": "Finals",
+      "source_url": "https://www.asaj.com.jm/",
+      "source_pdf": "asaj-pdfs/2026 Swimaz results.pdf",
+      "source_page": "2",
+      "meet_dates": "2026-06-20",
+      "date_precision": "exact"
+    },
+    {
+      "event": "200 Free",
+      "swimmer": "Aidan Seaton",
+      "age": "13",
+      "club": "TOR",
+      "time": "2:18.64",
+      "course": "LCM",
+      "meet_name": "2026 Swimaz Aquatic LC Championships",
+      "race_date": "2026-06-20",
+      "round": "Finals",
+      "source_url": "https://www.asaj.com.jm/",
+      "source_pdf": "asaj-pdfs/2026 Swimaz results.pdf",
+      "source_page": "11",
+      "meet_dates": "2026-06-20",
+      "date_precision": "exact"
+    },
+    {
+      "event": "50 Breast",
+      "swimmer": "Aidan Seaton",
+      "age": "13",
+      "club": "TOR",
+      "time": "35.68",
+      "course": "LCM",
+      "meet_name": "2026 Swimaz Aquatic LC Championships",
+      "race_date": "2026-06-20",
+      "round": "Finals",
+      "source_url": "https://www.asaj.com.jm/",
+      "source_pdf": "asaj-pdfs/2026 Swimaz results.pdf",
+      "source_page": "7",
+      "meet_dates": "2026-06-20",
+      "date_precision": "exact"
+    },
+    {
+      "event": "50 Fly",
+      "swimmer": "Aidan Seaton",
+      "age": "13",
+      "club": "TOR",
+      "time": "29.24",
+      "course": "LCM",
+      "meet_name": "2026 Swimaz Aquatic LC Championships",
+      "race_date": "2026-06-20",
+      "round": "Finals",
+      "source_url": "https://www.asaj.com.jm/",
+      "source_pdf": "asaj-pdfs/2026 Swimaz results.pdf",
+      "source_page": "13",
+      "meet_dates": "2026-06-20",
+      "date_precision": "exact"
+    },
+    {
+      "event": "50 Free",
+      "swimmer": "Aidan Seaton",
+      "age": "13",
+      "club": "TOR",
+      "time": "27.74",
+      "course": "LCM",
+      "meet_name": "2026 Swimaz Aquatic LC Championships",
+      "race_date": "2026-06-20",
+      "round": "Finals",
+      "source_url": "https://www.asaj.com.jm/",
+      "source_pdf": "asaj-pdfs/2026 Swimaz results.pdf",
+      "source_page": "15",
+      "meet_dates": "2026-06-20",
+      "date_precision": "exact"
+    },
+    {
       "event": "200 Breast",
       "swimmer": "Aidan Seaton",
       "age": "13",
@@ -1400,6 +1531,512 @@
       "source_page": "1",
       "meet_dates": "2026-10-10",
       "date_precision": "exact"
+    }
+  ],
+  "swimcloud_supplemental": [
+    {
+      "event": "50 Free",
+      "course": "SCM",
+      "time": "28.06",
+      "meet_name": "The 29th Goodwill Swimming Championship",
+      "race_date": "2025-08-16",
+      "source_url": "https://www.swimcloud.com/results/353810/event/53/?id=157968587#time157968587",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "50 Free",
+      "course": "LCM",
+      "time": "28.28",
+      "meet_name": "Dean Martin Memorial Swim Meet",
+      "race_date": "2025-11-16",
+      "source_url": "https://www.swimcloud.com/results/362458/event/78/?id=162640867#time162640867",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "100 Free",
+      "course": "SCM",
+      "time": "1:01.80",
+      "meet_name": "The 29th Goodwill Swimming Championship",
+      "race_date": "2025-08-15",
+      "source_url": "https://www.swimcloud.com/results/353810/event/6/?id=157968668#time157968668",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "100 Free",
+      "course": "LCM",
+      "time": "1:03.72",
+      "meet_name": "Dean Martin Memorial Swim Meet",
+      "race_date": "2025-11-15",
+      "source_url": "https://www.swimcloud.com/results/362458/event/46/?id=162640791#time162640791",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "200 Free",
+      "course": "SCM",
+      "time": "2:19.32",
+      "meet_name": "The 29th Goodwill Swimming Championship",
+      "race_date": "2025-08-17",
+      "source_url": "https://www.swimcloud.com/results/353810/event/89/?id=157968622#time157968622",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "200 Free",
+      "course": "LCM",
+      "time": "2:27.88",
+      "meet_name": "Neville Alexander Memorial",
+      "race_date": "2025-05-10",
+      "source_url": "https://www.swimcloud.com/results/343881/event/14/?id=151896954#time151896954",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "400 Free",
+      "course": "LCM",
+      "time": "5:26.46",
+      "meet_name": "ASAJ Christmas Open",
+      "race_date": "2025-12-23",
+      "source_url": "https://www.swimcloud.com/results/368807/event/124/?id=166795445#time166795445",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "800 Free",
+      "course": "LCM",
+      "time": "11:06.54",
+      "meet_name": "ASAJ Distance Development",
+      "race_date": "2025-10-11",
+      "source_url": "https://www.swimcloud.com/results/357537/event/6/?id=159515403#time159515403",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "50 Back",
+      "course": "LCM",
+      "time": "35.98",
+      "meet_name": "Dean Martin Memorial Swim Meet",
+      "race_date": "2025-11-15",
+      "source_url": "https://www.swimcloud.com/results/362458/event/15/?id=162640701#time162640701",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "100 Back",
+      "course": "LCM",
+      "time": "1:25.09",
+      "meet_name": "Neville Alexander Memorial",
+      "race_date": "2025-05-10",
+      "source_url": "https://www.swimcloud.com/results/343881/event/22/?id=151897091#time151897091",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "50 Breast",
+      "course": "SCM",
+      "time": "36.30",
+      "meet_name": "The 29th Goodwill Swimming Championship",
+      "race_date": "2025-08-15",
+      "source_url": "https://www.swimcloud.com/results/353810/event/16/?id=157968686#time157968686",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "50 Breast",
+      "course": "LCM",
+      "time": "36.00",
+      "meet_name": "Dean Martin Memorial Swim Meet",
+      "race_date": "2025-11-16",
+      "source_url": "https://www.swimcloud.com/results/362458/event/62/?id=162640819#time162640819",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "100 Breast",
+      "course": "SCM",
+      "time": "1:17.56",
+      "meet_name": "The 29th Goodwill Swimming Championship",
+      "race_date": "2025-08-16",
+      "source_url": "https://www.swimcloud.com/results/353810/event/61/?id=157968910#time157968910",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "100 Breast",
+      "course": "LCM",
+      "time": "1:20.28",
+      "meet_name": "Dean Martin Memorial Swim Meet",
+      "race_date": "2025-11-15",
+      "source_url": "https://www.swimcloud.com/results/362458/event/38/?id=162640766#time162640766",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "200 Breast",
+      "course": "LCM",
+      "time": "2:59.46",
+      "meet_name": "ASAJ Christmas Open",
+      "race_date": "2025-12-20",
+      "source_url": "https://www.swimcloud.com/results/368807/event/6/?id=166794509#time166794509",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "50 Fly",
+      "course": "SCM",
+      "time": "30.96",
+      "meet_name": "The 29th Goodwill Swimming Championship",
+      "race_date": "2025-08-16",
+      "source_url": "https://www.swimcloud.com/results/353810/event/71/?id=157968604#time157968604",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "50 Fly",
+      "course": "LCM",
+      "time": "30.29",
+      "meet_name": "ASAJ Christmas Open",
+      "race_date": "2025-12-21",
+      "source_url": "https://www.swimcloud.com/results/368807/event/50/?id=166794598#time166794598",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "100 Fly",
+      "course": "SCM",
+      "time": "1:09.18",
+      "meet_name": "The 29th Goodwill Swimming Championship",
+      "race_date": "2025-08-17",
+      "source_url": "https://www.swimcloud.com/results/353810/event/107/?id=157968653#time157968653",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "100 Fly",
+      "course": "LCM",
+      "time": "1:12.42",
+      "meet_name": "ASAJ Christmas Open",
+      "race_date": "2025-12-20",
+      "source_url": "https://www.swimcloud.com/results/368807/event/22/?id=166794567#time166794567",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "200 Fly",
+      "course": "LCM",
+      "time": "2:53.59",
+      "meet_name": "ASAJ Distance Development",
+      "race_date": "2025-10-11",
+      "source_url": "https://www.swimcloud.com/results/357537/event/4/?id=159515545#time159515545",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "200 IM",
+      "course": "SCM",
+      "time": "2:35.03",
+      "meet_name": "The 29th Goodwill Swimming Championship",
+      "race_date": "2025-08-16",
+      "source_url": "https://www.swimcloud.com/results/353810/event/43/?id=157968715#time157968715",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "200 IM",
+      "course": "LCM",
+      "time": "2:41.72",
+      "meet_name": "ASAJ Christmas Open",
+      "race_date": "2025-12-22",
+      "source_url": "https://www.swimcloud.com/results/368807/event/82/?id=166794636#time166794636",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "400 IM",
+      "course": "LCM",
+      "time": "5:58.95",
+      "meet_name": "ASAJ Christmas Open",
+      "race_date": "2025-12-21",
+      "source_url": "https://www.swimcloud.com/results/368807/event/66/?id=166794490#time166794490",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "50 Free",
+      "course": "SCM",
+      "time": "26.84",
+      "meet_name": "Goodwill Swimming Championship",
+      "race_date": "2026-08-15",
+      "source_url": "https://www.swimcloud.com/results/395722/event/55/?id=184888836#time184888836",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "50 Free",
+      "course": "LCM",
+      "time": "27.60",
+      "meet_name": "ASAJ BB Distance Challenge",
+      "race_date": "2026-05-09",
+      "source_url": "https://www.swimcloud.com/results/386222/event/35/?id=177150548#time177150548",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "100 Free",
+      "course": "SCM",
+      "time": "59.08",
+      "meet_name": "Goodwill Swimming Championship",
+      "race_date": "2026-08-14",
+      "source_url": "https://www.swimcloud.com/results/395722/event/8/?id=184888751#time184888751",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "100 Free",
+      "course": "LCM",
+      "time": "1:01.20",
+      "meet_name": "2026 Tornadoes Invitational Swim Meet",
+      "race_date": "2026-05-22",
+      "source_url": "https://www.swimcloud.com/results/387490/event/4/?id=178207798#time178207798",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "200 Free",
+      "course": "SCM",
+      "time": "2:10.95",
+      "meet_name": "Goodwill Swimming Championship",
+      "race_date": "2026-08-16",
+      "source_url": "https://www.swimcloud.com/results/395722/event/91/?id=184888880#time184888880",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "200 Free",
+      "course": "LCM",
+      "time": "2:18.64",
+      "meet_name": "Swimaz Aquatics Meet",
+      "race_date": "2026-06-20",
+      "source_url": "https://www.swimcloud.com/results/388874/event/56/?id=180129842#time180129842",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "50 Breast",
+      "course": "SCM",
+      "time": "34.28",
+      "meet_name": "Goodwill Swimming Championship",
+      "race_date": "2026-08-14",
+      "source_url": "https://www.swimcloud.com/results/395722/event/18/?id=184888772#time184888772",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "50 Breast",
+      "course": "LCM",
+      "time": "35.32",
+      "meet_name": "2026 Tornadoes Invitational Swim Meet",
+      "race_date": "2026-05-22",
+      "source_url": "https://www.swimcloud.com/results/387490/event/18/?id=178207829#time178207829",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "100 Breast",
+      "course": "SCM",
+      "time": "1:16.84",
+      "meet_name": "Goodwill Swimming Championship",
+      "race_date": "2026-08-15",
+      "source_url": "https://www.swimcloud.com/results/395722/event/63/?id=184889430#time184889430",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "100 Breast",
+      "course": "LCM",
+      "time": "1:19.20",
+      "meet_name": "2026 Tornadoes Invitational Swim Meet",
+      "race_date": "2026-05-23",
+      "source_url": "https://www.swimcloud.com/results/387490/event/53/?id=178207877#time178207877",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "200 Breast",
+      "course": "LCM",
+      "time": "2:53.01",
+      "meet_name": "2026 Tornadoes Invitational Swim Meet",
+      "race_date": "2026-05-24",
+      "source_url": "https://www.swimcloud.com/results/387490/event/93/?id=178208222#time178208222",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "50 Fly",
+      "course": "SCM",
+      "time": "28.21",
+      "meet_name": "Goodwill Swimming Championship",
+      "race_date": "2026-08-15",
+      "source_url": "https://www.swimcloud.com/results/395722/event/73/?id=184888858#time184888858",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "50 Fly",
+      "course": "LCM",
+      "time": "29.22",
+      "meet_name": "2026 Tornadoes Invitational Swim Meet",
+      "race_date": "2026-05-23",
+      "source_url": "https://www.swimcloud.com/results/387490/event/67/?id=178207952#time178207952",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "100 Fly",
+      "course": "SCM",
+      "time": "1:03.79",
+      "meet_name": "Goodwill Swimming Championship",
+      "race_date": "2026-08-16",
+      "source_url": "https://www.swimcloud.com/results/395722/event/109/?id=184888920#time184888920",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "100 Fly",
+      "course": "LCM",
+      "time": "1:07.35",
+      "meet_name": "2026 Tornadoes Invitational Swim Meet",
+      "race_date": "2026-05-23",
+      "source_url": "https://www.swimcloud.com/results/387490/event/31/?id=178207972#time178207972",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "200 Fly",
+      "course": "LCM",
+      "time": "2:53.03",
+      "meet_name": "Walter Rogers Age Group National Champs",
+      "race_date": "2026-02-20",
+      "source_url": "https://www.swimcloud.com/results/380528/event/96/?id=172110752#time172110752",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "200 IM",
+      "course": "SCM",
+      "time": "2:28.71",
+      "meet_name": "Goodwill Swimming Championship",
+      "race_date": "2026-08-15",
+      "source_url": "https://www.swimcloud.com/results/395722/event/45/?id=184888814#time184888814",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "200 IM",
+      "course": "LCM",
+      "time": "2:36.66",
+      "meet_name": "ASAJ BB Distance Challenge",
+      "race_date": "2026-05-08",
+      "source_url": "https://www.swimcloud.com/results/386222/event/8/?id=177150692#time177150692",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
+    },
+    {
+      "event": "400 IM",
+      "course": "LCM",
+      "time": "5:54.93",
+      "meet_name": "Karl Dalhouse Memorial",
+      "race_date": "2026-02-01",
+      "source_url": "https://www.swimcloud.com/results/380532/event/54/?id=172322207#time172322207",
+      "source_type": "SwimCloud user-supplied",
+      "verification_status": "Supplementary, not ASAJ-verified",
+      "round": "Unspecified",
+      "swimmer": "Aidan Seaton"
     }
   ],
   "goodwill": {
@@ -1585,92 +2222,92 @@
       },
       {
         "event": "50 Breast",
-        "personal_best": "36.15",
-        "pb_source": "https://www.asaj.com.jm/",
-        "pb_evidence_pdf": "asaj-pdfs/2026 WRAGC - results.pdf",
-        "pb_evidence_page": "14",
-        "snapshot_rank": null,
+        "personal_best": "35.32",
+        "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
+        "pb_evidence_pdf": null,
+        "pb_evidence_page": null,
+        "snapshot_rank": 7,
         "snapshot_top_two": false,
         "snapshot_date": "2026-09-29",
         "selection_priority": "Not determinable from post-competition September snapshot",
         "standards": {
           "A": {
             "time": "34.73",
-            "gap": "+1.42s",
+            "gap": "+0.59s",
             "met": false
           },
           "B": {
             "time": "35.80",
-            "gap": "+0.35s",
-            "met": false
+            "gap": "−0.48s",
+            "met": true
           }
         }
       },
       {
         "event": "50 Fly",
-        "personal_best": "29.97",
-        "pb_source": "https://www.asaj.com.jm/",
-        "pb_evidence_pdf": "asaj-pdfs/2026 WRAGC - results.pdf",
-        "pb_evidence_page": "8",
-        "snapshot_rank": null,
+        "personal_best": "29.22",
+        "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
+        "pb_evidence_pdf": null,
+        "pb_evidence_page": null,
+        "snapshot_rank": 6,
         "snapshot_top_two": false,
         "snapshot_date": "2026-09-29",
         "selection_priority": "Not determinable from post-competition September snapshot",
         "standards": {
           "A": {
             "time": "28.21",
-            "gap": "+1.76s",
+            "gap": "+1.01s",
             "met": false
           },
           "B": {
             "time": "29.42",
-            "gap": "+0.55s",
-            "met": false
+            "gap": "−0.20s",
+            "met": true
           }
         }
       },
       {
         "event": "100 Breast",
-        "personal_best": "1:19.83",
-        "pb_source": "https://www.asaj.com.jm/",
-        "pb_evidence_pdf": "asaj-pdfs/2026 Neville Alexander results.pdf",
-        "pb_evidence_page": "14",
-        "snapshot_rank": null,
+        "personal_best": "1:19.20",
+        "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
+        "pb_evidence_pdf": null,
+        "pb_evidence_page": null,
+        "snapshot_rank": 5,
         "snapshot_top_two": false,
         "snapshot_date": "2026-09-29",
         "selection_priority": "Not determinable from post-competition September snapshot",
         "standards": {
           "A": {
             "time": "1:17.09",
-            "gap": "+2.74s",
+            "gap": "+2.11s",
             "met": false
           },
           "B": {
             "time": "1:20.46",
-            "gap": "−0.63s",
+            "gap": "−1.26s",
             "met": true
           }
         }
       },
       {
         "event": "200 Free",
-        "personal_best": "2:21.77",
-        "pb_source": "https://www.asaj.com.jm/",
-        "pb_evidence_pdf": "asaj-pdfs/2026 Neville Alexander results.pdf",
-        "pb_evidence_page": "3",
-        "snapshot_rank": null,
+        "personal_best": "2:18.64",
+        "pb_source": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@download/file",
+        "pb_evidence_pdf": null,
+        "pb_evidence_page": null,
+        "snapshot_rank": 9,
         "snapshot_top_two": false,
         "snapshot_date": "2026-09-29",
         "selection_priority": "Not determinable from post-competition September snapshot",
         "standards": {
           "A": {
             "time": "2:12.18",
-            "gap": "+9.59s",
+            "gap": "+6.46s",
             "met": false
           },
           "B": {
             "time": "2:18.24",
-            "gap": "+3.53s",
+            "gap": "+0.40s",
             "met": false
           }
         }
@@ -1769,6 +2406,6 @@
       "status": "verified_listing"
     }
   },
-  "built_at": "2026-11-02T04:53:14+00:00",
+  "built_at": "2026-11-02T15:08:00+00:00",
   "warning": "Only rows explicitly verified against ASAJ are published; empty fields mean not yet verified."
 }

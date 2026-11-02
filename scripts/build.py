@@ -167,6 +167,12 @@ for event,limits in goodwill['standards'].items():
     for t in limits.values(): seconds(t)
 goodwill['ranking_snapshot']={'date':'2026-09-29','source_pdf':'reference/asaj/General Rankings 29-09-2026.pdf','status':'Historical comparison only: September 2026 is after the 2026 Goodwill qualifying window; cannot establish 2026 selection ranking or eligibility.','selection_confirmed':False}
 goodwill['events']=[{'event':r['event'],'personal_best':r['personal_best'],'pb_source':r['pb_source'],'pb_evidence_pdf':r['pb_evidence_pdf'],'pb_evidence_page':r['pb_evidence_page'],'snapshot_rank':r['rank'],'snapshot_top_two':r['rank'] is not None and r['rank']<=2,'snapshot_date':'2026-09-29','selection_priority':'Not determinable from post-competition September snapshot','standards':{k:{'time':t,'gap':fmt(seconds(r['personal_best'])-seconds(t)) if r['personal_best'] else None,'met':seconds(r['personal_best'])<=seconds(t) if r['personal_best'] else None} for k,t in goodwill['standards'][r['event']].items()}} for r in results if r['event'] in goodwill['standards']]
-output={'athlete':json.loads((DATA/'athlete.json').read_text()),'events':results,'race_history_2026':history,'goodwill':goodwill,'carifta_criteria':CARIFTA_CRITERIA,'meets':meets,'sources':sources,'built_at':datetime.now().astimezone().isoformat(timespec='seconds'),'warning':'Only rows explicitly verified against ASAJ are published; empty fields mean not yet verified.'}
+with (DATA/'swimcloud_supplemental.csv').open(newline='') as f:
+    swimcloud_supplemental=list(csv.DictReader(f))
+for sr in swimcloud_supplemental:
+    if urlparse(sr['source_url']).hostname!='www.swimcloud.com' or sr['swimmer']!='Aidan Seaton' or sr['course'] not in ('SCM','LCM'):
+        raise ValueError('Invalid supplemental result')
+    seconds(sr['time']);date.fromisoformat(sr['race_date'])
+output={'athlete':json.loads((DATA/'athlete.json').read_text()),'events':results,'race_history_2026':history,'swimcloud_supplemental':swimcloud_supplemental,'goodwill':goodwill,'carifta_criteria':CARIFTA_CRITERIA,'meets':meets,'sources':sources,'built_at':datetime.now().astimezone().isoformat(timespec='seconds'),'warning':'Only rows explicitly verified against ASAJ are published; empty fields mean not yet verified.'}
 (DOCS/'data.json').write_text(json.dumps(output,indent=2,ensure_ascii=False))
 print('Built',len(results),'events;',len(perf),'verified personal bests;',len(standards),'standards;',len(ranks),'rankings')
