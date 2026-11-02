@@ -1,6 +1,8 @@
 name: Prepare official ASAJ publication review
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '35 12 * * 1'
 permissions:
   contents: write
   pull-requests: write
@@ -15,26 +17,22 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install -r requirements-ingest.txt
-      - name: Extract official PDFs into review candidates
+      - name: Extract official source PDFs
         run: python scripts/prepare_official_review.py
-      - name: Validate candidates using the website builder
+      - name: Stage only the three approved data files
+        run: cp review/asaj/publish_candidate/*.csv data/
+      - name: Strictly validate against official source PDFs
         run: |
-          cp data/performances.csv /tmp/performances-original.csv
-          cp data/rankings.csv /tmp/rankings-original.csv
-          cp data/standards.csv /tmp/standards-original.csv
-          cp review/asaj/publish_candidate/*.csv data/
+          python scripts/validate_publication.py
           python scripts/build.py
-          cp /tmp/performances-original.csv data/performances.csv
-          cp /tmp/rankings-original.csv data/rankings.csv
-          cp /tmp/standards-original.csv data/standards.csv
+          python -m unittest discover -s tests -v
           git checkout -- docs/data.json
       - uses: actions/upload-artifact@v4
         with:
-          name: official-asaj-publication-candidates
+          name: asaj-validated-publication
           path: review/asaj/publish_candidate/*.csv
-      - name: Stage publication files for a human-reviewed pull request
-        run: cp review/asaj/publish_candidate/*.csv data/
-      - name: Open publication review pull request
+      - name: Create verified-data-only pull request
+        id: pr
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -45,9 +43,16 @@ jobs:
             data/performances.csv
             data/rankings.csv
             data/standards.csv
-          commit-message: 'Stage ASAJ official rankings and CARIFTA 2027 standards for review'
-          title: 'Review ASAJ official rankings and CARIFTA 2027 qualification data'
+          commit-message: 'Publish PDF-validated ASAJ rankings and CARIFTA standards'
+          title: 'Automated ASAJ validated data publication'
           body: |
-            Review every row against the bundled official ASAJ PDFs before merging.
-            This PR stages official ASAJ top times, not independently established lifetime personal bests.
-            Podium gaps and age-12 comparisons remain pending until validated.
+            Generated solely from the bundled official ASAJ rankings and CARIFTA PDFs.
+            Strict validation passed before PR creation. Only three published CSVs are changed.
+            This does not auto-publish uncertain 2026 meet evidence, podium gaps or Boys 12 comparisons.
+      - name: Enable automatic merge for validated data only
+        if: ${{ steps.pr.outputs.pull-request-number != '' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.pr.outputs.pull-request-number }}
+        run: |
+          gh pr merge "$PR_NUMBER" --auto --squash
