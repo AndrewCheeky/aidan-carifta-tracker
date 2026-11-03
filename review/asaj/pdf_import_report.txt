@@ -1,8 +1,10 @@
-Published race rows: 47
+Published race rows: 54
 
 Held mentions/files:
 ('2026 ASAJ BB Distance Challenge results.pdf', 8, 'Excluded DQ', '---  Seaton, Aidan          13 TOR           DQ')
 ('2026 ASAJ BB Distance Challenge results.pdf', 8, 'Unattributed or relay name mention', 'Lawson, Kai W13           Seaton, Aidan M13')
+('2026 Dean Martin results.pdf', 3, 'Unrecognized athlete row', 'Seaton, Aidan M13           Hall, Christian M13')
+('2026 Dean Martin results.pdf', 13, 'Unattributed or relay name mention', 'Seaton, Aidan 13            Rochlani, Arush 14')
 ('2026 Neville Alexander results.pdf', 2, 'Unattributed or relay name mention', '11  Seaton, Aidan          13 TOR             29.53')
 ('2026 Neville Alexander results.pdf', 6, 'Excluded DQ', '---  Seaton, Aidan          13 TOR           DQ')
 ('2026 Neville Alexander results.pdf', 7, 'Unattributed or relay name mention', 'Seaton, Aidan M13          Spence, Emanuelle W13')
