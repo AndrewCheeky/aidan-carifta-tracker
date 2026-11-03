@@ -468,6 +468,26 @@ function renderAcquiredClassifications(d){
  const body=rows.map(r=>`<tr><td>${esc(r.event)}</td><td>${esc(r.course)}</td><td>${esc(r.time)}</td><td>${esc(r.date||'Unavailable')}${r.exact?'':' (approx.)'}</td><td><strong>${esc(r.level)}</strong></td><td>${esc(r.carifta)}</td><td>${esc(r.origin)}</td></tr>`).join('');
  return `<section class="panel"><h2>Acquired time classifications · all recorded events</h2><p>Fastest documented time per event and course, its recorded date, USA Swimming Boys 13–14 motivational classification, and CARIFTA A/B status where an eligible ASAJ LCM race date or wholly eligible meet range supports it. USA levels are not CARIFTA qualifying standards.</p><div style="overflow-x:auto"><table><thead><tr><th>Event</th><th>Course</th><th>PB</th><th>Date attained</th><th>USA level</th><th>CARIFTA Time Standard</th><th>Evidence</th></tr></thead><tbody>${body||'<tr><td colspan="7">No documented results available</td></tr>'}</tbody></table></div><p class="muted">ASAJ meet ranges are accepted only when the entire meet falls within the qualifying period; overlapping or undocumented ranges are excluded. SwimCloud-supplied results are not CARIFTA qualifying evidence. CARIFTA status uses the fastest eligible qualifying-period swim, even when the overall PB is older. A meet-range date is not proof of an exact race date. Classifications reflect the currently loaded Boys 13–14 standards.</p></section>`;
 }
+// Use the identical imported ASAJ best-per-swimmer ranking pool as Jamaica Rankings.
+// The 12-year-old comparison is hypothetical, not an official CARIFTA age-group rank.
+function strategyCalculatedField(d,event){
+ const older=[...(calculatedJamaicaRankings(d,[13,14]).get(event)?.values()||[])];
+ const younger=[...(calculatedJamaicaRankings(d,[12]).get(event)?.values()||[])];
+ const key=r=>String(r.swimmer||'').toLowerCase().replace(/[^a-z]/g,'');
+ const aidan=older.find(r=>key(r)==='aidanseaton');
+ if(!aidan)return null;
+ const competitors=new Map();
+ for(const r of [...older,...younger]){
+  const k=key(r);
+  if(!k||k==='aidanseaton')continue;
+  const prev=competitors.get(k);
+  if(!prev||r.seconds<prev.seconds)competitors.set(k,r);
+ }
+ const faster=[...competitors.values()].filter(r=>r.seconds<aidan.seconds-0.00001);
+ const olderFaster=older.filter(r=>key(r)!=='aidanseaton'&&r.seconds<aidan.seconds-0.00001).length;
+ const youngerFaster=younger.filter(r=>key(r)!=='aidanseaton'&&r.seconds<aidan.seconds-0.00001).length;
+ return {rank:1+olderFaster,olderFaster,youngerFaster,combinedFaster:faster.length,combinedRank:1+faster.length,fieldSize:competitors.size+1};
+}
 function renderChampionshipShortlist(d){
  const panel=meet=>{
   const rows=championshipOpportunities(d,meet);
@@ -476,7 +496,7 @@ function renderChampionshipShortlist(d){
    const direction=r.trend===null?'No recent trend':r.trend>0.005?'Faster':r.trend<-.005?'Slower':'Stable';
    const change=r.trend===null?'':` · ${Math.abs(r.trend).toFixed(2)}s`;
    const gap=r.gap<=0?`${Math.abs(r.gap).toFixed(2)}s faster than CARIFTA B standard`:`${r.gap.toFixed(2)}s slower than CARIFTA B standard`;
-   return `<article class="intel-card"><h3>${i+1}. <a href="#trends" class="strategy-event-link" data-event="${esc(r.event)}">${esc(r.event)}</a> <strong>${r.score.toFixed(0)}/100</strong></h3><p><strong>${trendTime(r.best)}</strong> best · ${r.bestDateRange?.approx?`eligible meet ${esc(r.bestDateRange.first)} to ${esc(r.bestDateRange.last)} (exact race day unknown)`:(r.ageDays===null?'Date unavailable':`${r.ageDays} days since eligible swim (${esc(r.bestDate)})`)}</p>${meet==='CARIFTA'?`<p><strong>CARIFTA:</strong> ${gap}</p><p><strong>USA Swimming:</strong> ${esc(r.classification||'Unavailable')}</p>`:`<p>${gap}</p>`}<p>Recent: ${direction}${change}</p><p>ASAJ Boys 13–14: ${r.field} swimmers · ${r.nearby} within ±5%</p><p>ASAJ Boys 12: ${r.boys12} within ±10%</p><p class="muted">Entry ${r.entryScore.toFixed(0)}/60 · Trend ${r.trendScore.toFixed(0)}/25 · Field ${r.fieldScore.toFixed(0)}/15</p></article>`;
+   return `<article class="intel-card"><h3>${i+1}. <a href="#trends" class="strategy-event-link" data-event="${esc(r.event)}">${esc(r.event)}</a> <strong>${r.score.toFixed(0)}/100</strong></h3><p><strong>${trendTime(r.best)}</strong> best · ${r.bestDateRange?.approx?`eligible meet ${esc(r.bestDateRange.first)} to ${esc(r.bestDateRange.last)} (exact race day unknown)`:(r.ageDays===null?'Date unavailable':`${r.ageDays} days since eligible swim (${esc(r.bestDate)})`)}</p>${meet==='CARIFTA'?`<p><strong>CARIFTA:</strong> ${gap}</p><p><strong>USA Swimming:</strong> ${esc(r.classification||'Unavailable')}</p>`:`<p>${gap}</p>`}<p>Recent: ${direction}${change}</p>${meet==='CARIFTA'?(()=>{const field=strategyCalculatedField(d,r.event);return field?`<p><strong>Calculated rank (Boys 13–14):</strong> ${field.rank} · ${field.olderFaster} faster</p><p><strong>Faster swimmers (Boys 13–14 + Boys 12):</strong> ${field.combinedFaster} · hypothetical combined position ${field.combinedRank} of ${field.fieldSize}</p>`:`<p><strong>Calculated rank:</strong> Unavailable · no comparable imported ranking evidence</p>`;})():''}<p>ASAJ Boys 13–14: ${r.field} swimmers · ${r.nearby} within ±5%</p><p>ASAJ Boys 12: ${r.boys12} within ±10%</p><p class="muted">Entry ${r.entryScore.toFixed(0)}/60 · Trend ${r.trendScore.toFixed(0)}/25 · Field ${r.fieldScore.toFixed(0)}/15</p></article>`;
   }).join('');
   return `<section class="panel"><h2>${meet} · Top five event priorities</h2><div class="intel-cards">${cards}</div></section>`;
  };
