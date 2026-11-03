@@ -64,7 +64,7 @@ const value=x=>x===null||x===undefined||x===''?'<span class="pending">Pending ve
 const card=(label,val)=>`<div class="card"><div class="label">${esc(label)}</div><div class="value">${val}</div></div>`;
 const table=(headers,rows)=>`<table><thead><tr>${headers.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table>`;
 // Independent rankings from the imported ASAJ meet results, not an official ASAJ ranking.
-function calculatedJamaicaRankings(d){
+function calculatedJamaicaRankings(d,ages=[13,14]){
  const secs=t=>{const parts=String(t||'').split(':').map(Number);return parts.length<=2&&parts.every(Number.isFinite)&&parts.every(n=>n>=0)?parts.reduce((a,b)=>a*60+b,0):null;};
  const byEvent=new Map();
  function add(event,swimmer,time,source,page,club){
@@ -76,12 +76,11 @@ function calculatedJamaicaRankings(d){
   if(!old||n<old.seconds)group.set(key,{swimmer,time,seconds:n,source,page,club});
  }
  for(const r of d.asaj_competitor_results||[]){
-  if(r.gender!=='Boys'||![13,14].includes(Number(r.age))||r.course!=='LCM'||String(r.verified).toLowerCase()!=='true'||!r.source_pdf)continue;
+  if(r.gender!=='Boys'||!ages.includes(Number(r.age))||r.course!=='LCM'||String(r.verified).toLowerCase()!=='true'||!r.source_pdf)continue;
   add(r.event,r.swimmer,r.time,r.source_pdf,r.source_page,r.club);
  }
- // Race history provides Aidan's independently documented performances even if the
- // competitor extractor did not include him in a mixed-age heat.
- for(const r of d.race_history_2026||[]){
+ // Only include Aidan's race history in his own 13–14 age bracket.
+ if(ages.includes(13))for(const r of d.race_history_2026||[]){
   if(r.course!=='LCM'||Number(r.age)!==13||!r.source_pdf)continue;
   add(r.event,'Aidan Seaton',r.time,r.source_pdf,r.source_page,r.club);
  }
@@ -89,16 +88,22 @@ function calculatedJamaicaRankings(d){
 }
 function renderCalculatedJamaicaRankings(d){
  const byEvent=calculatedJamaicaRankings(d);
+ const boys12=calculatedJamaicaRankings(d,[12]);
  const events=[...new Set([...(d.events||[]).map(e=>e.event),...byEvent.keys()])].sort();
  const entries=events.map(event=>{
   const swimmers=[...(byEvent.get(event)?.values()||[])].sort((a,b)=>a.seconds-b.seconds||a.swimmer.localeCompare(b.swimmer));
   const aidan=swimmers.find(r=>r.swimmer.toLowerCase().replace(/[^a-z]/g,'')==='aidanseaton');
   const rank=aidan?1+swimmers.filter(r=>r.seconds<aidan.seconds-0.00001).length:null;
-  return {event,swimmers,aidan,rank};
+  const younger=[...(boys12.get(event)?.values()||[])].sort((a,b)=>a.seconds-b.seconds||a.swimmer.localeCompare(b.swimmer));
+  // Hypothetical placement: Aidan is 13, so he is not part of the actual age-12 ranking.
+  const rank12=aidan&&younger.length?1+younger.filter(r=>r.seconds<aidan.seconds-0.00001).length:null;
+  return {event,swimmers,aidan,rank,younger,rank12};
  });
  const linkPDF=r=>r?.source?`<a href="${encodeURI(esc(r.source))}#page=${encodeURIComponent(r.page||1)}" target="_blank" rel="noopener">ASAJ PDF</a>`:'Unavailable';
- return `<section class="panel"><h2>Calculated Jamaica Rankings · Boys 13–14 LCM</h2><p><strong>Independent calculation, not official ASAJ rankings.</strong> Fastest documented ASAJ result per swimmer and event, using the imported 2026 meet PDFs; all imported meet dates are included. Ages are those recorded at each meet, so this is not a championship-age eligibility list. Missing meets, mixed/unattributed results and results not imported can change these positions. Ties share a rank.</p><div class="table-wrap">${table(['Event','Aidan best imported','Calculated rank','Swimmers with verified results','Leader','Leader time','Aidan evidence'],entries.map(e=>`<tr><td>${esc(e.event)}</td><td>${e.aidan?esc(e.aidan.time):'Not in imported results'}</td><td>${e.rank===null?'Not ranked':e.rank}</td><td>${e.swimmers.length}</td><td>${e.swimmers[0]?esc(e.swimmers[0].swimmer):'Unavailable'}</td><td>${e.swimmers[0]?esc(e.swimmers[0].time):'Unavailable'}</td><td>${linkPDF(e.aidan)}</td></tr>`))}</div></section>`;
+ const details=entries.map((e,i)=>`<details id="rank-field-${i}" class="panel" style="margin-top:1rem"><summary><strong>${esc(e.event)} · Boys 13–14 calculated field (${e.swimmers.length})</strong></summary><div class="table-wrap">${table(['Rank','Swimmer','Best LCM','Club','Evidence'],e.swimmers.map(r=>`<tr><td>${1+e.swimmers.filter(x=>x.seconds<r.seconds-0.00001).length}</td><td>${esc(r.swimmer)}</td><td>${esc(r.time)}</td><td>${esc(r.club||'')}</td><td>${linkPDF(r)}</td></tr>`))}</div></details>`).join('');
+ return `<section class="panel"><h2>Calculated Jamaica Rankings · Boys 13–14 LCM</h2><p><strong>Independent calculation, not official ASAJ rankings.</strong> Fastest documented ASAJ result per swimmer and event, using the imported 2026 meet PDFs; all imported meet dates are included. Ages are those recorded at each meet, so this is not a championship-age eligibility list. Missing meets, mixed/unattributed results and results not imported can change these positions. Ties share a rank.</p><p><strong>Against Boys 12:</strong> hypothetical placement of Aidan's best time among verified 12-year-old swimmers, not an official ranking or an age-eligible placing.</p><div class="table-wrap">${table(['Event','Aidan best imported','Calculated rank','Against Boys 12','Swimmers with verified results','Leader','Leader time','Aidan evidence'],entries.map((e,i)=>`<tr><td>${esc(e.event)}</td><td>${e.aidan?esc(e.aidan.time):'Not in imported results'}</td><td>${e.rank===null?'Not ranked':`<a href="#rank-field-${i}" class="rank-field-link" data-rank-target="rank-field-${i}" aria-label="View ranked competitors for ${esc(e.event)}">${e.rank}</a>`}</td><td>${e.rank12===null?'Unavailable':`${e.rank12} of ${e.younger.length+1}`}</td><td>${e.swimmers.length}</td><td>${e.swimmers[0]?esc(e.swimmers[0].swimmer):'Unavailable'}</td><td>${e.swimmers[0]?esc(e.swimmers[0].time):'Unavailable'}</td><td>${linkPDF(e.aidan)}</td></tr>`))}</div>${details}</section>`;
 }
+document.addEventListener('click',event=>{const link=event.target.closest('a.rank-field-link');if(!link)return;const target=document.getElementById(link.dataset.rankTarget);if(target)target.open=true;});
 function render(){if(!DATA)return; if(TAB==='jamaica'&&(SWIMMER_SELECTION.name!=='Aidan Seaton'||SWIMMER_SELECTION.gender!=='Boys'||SWIMMER_SELECTION.age!==13||SWIMMER_SELECTION.category!=='13–14')){document.querySelector('#content').innerHTML='<section class="panel"><h2>Jamaica Rankings · Aidan Seaton only</h2><p>This tab is disabled for other swimmer profiles until individual official ranking records can be verified. Select Aidan Seaton, Boys, age 13, category 13–14 to view the rankings.</p></section>';document.querySelector('#status').textContent='Jamaica Rankings unavailable for selected swimmer';return;} if(SWIMMER_SELECTION.name!=='Aidan Seaton'||SWIMMER_SELECTION.gender!=='Boys'||SWIMMER_SELECTION.age!==13||SWIMMER_SELECTION.category!=='13–14'){document.querySelector('#content').innerHTML=renderSelectedSwimmer(DATA);document.querySelector('#status').textContent='ASAJ imported results · Selection-specific standards not inferred';return;}let html='';const ev=DATA.events;
 if(TAB==='championship'){html=renderChampionshipShortlist(DATA);
 }else if(TAB==='intelligence'){html=renderIntelligence(DATA);
