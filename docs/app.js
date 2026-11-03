@@ -189,7 +189,25 @@ function drawTrendDetail(targetOverride){
  const dots=swims.map((r,i)=>`<circle cx="${xx(i)}" cy="${yy(vals[i])}" r="5" fill="${r.origin==='ASAJ verified'?'#e3a300':'#6e80ef'}"><title>${esc(r.meet_name)} · ${esc(r.origin)} · ${esc(r.time)} · ${esc(r.date)}</title></circle>`).join('');
  const change=swims.length>1?vals.at(-1)-vals[0]:null;
  const official=swims.filter(r=>r.origin==='ASAJ verified');
- const cards=`<div class="cards">${card('ASAJ swims',official.length)}${card('SwimCloud supplied',swims.length-official.length)}${card('Best shown (mixed sources)',trendTime(Math.min(...vals)))}${card('First to latest',change===null?'Insufficient history':`${change>0?'+':''}${change.toFixed(2)}s ${change<0?'faster':change>0?'slower':'unchanged'}`)}</div>`;
+  // Calculate comparison positions from documented ASAJ Boys 13–14 LCM results.
+  // One fastest swim per competitor per event, never mixing courses.
+  const competitors=new Map();
+  if(course==='LCM')for(const r of (DATA.asaj_competitor_results||[])){
+   if(r.event!==name||r.course!=='LCM'||r.gender!=='Boys'||![13,14].includes(Number(r.age))||String(r.verified).toLowerCase()!=='true')continue;
+   const who=String(r.swimmer||'').trim().toLowerCase();
+   if(!who||who==='aidan seaton'||who==='seaton, aidan')continue;
+   const t=trendSeconds(r.time);if(t===null)continue;
+   if(!competitors.has(who)||t<competitors.get(who))competitors.set(who,t);
+  }
+  const leaders=[...competitors.values()].sort((a,b)=>a-b).slice(0,2);
+  const bestShown=Math.min(...vals);
+  const rankGap=(t,place)=>{
+   if(t===undefined)return card(`${place} place (imported ASAJ)`, 'Unavailable');
+   const seconds=bestShown-t,pct=100*seconds/t;
+   const direction=seconds>.005?'behind':seconds<-.005?'ahead':'level';
+   return card(`${place} place (imported ASAJ)`,`${Math.abs(pct).toFixed(2)}% ${direction} · ${Math.abs(seconds).toFixed(2)}s ${direction}`);
+  };
+  const cards=`<div class="cards">${card('ASAJ swims',official.length)}${rankGap(leaders[0],'First')}${rankGap(leaders[1],'Second')}${card('Best shown (mixed sources)',trendTime(bestShown))}${card('First to latest',change===null?'Insufficient history':`${change>0?'+':''}${change.toFixed(2)}s ${change<0?'faster':change>0?'slower':'unchanged'}`)}</div>`;
  target.innerHTML=cards+`<div class="trend-chart"><svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(name)} ${esc(course)} race times and personal-best progression" preserveAspectRatio="xMidYMid meet">${grid}<path d="${line(bests)}" fill="none" stroke="#24a47c" stroke-width="3" stroke-dasharray="7 5"/><path d="${line(vals)}" fill="none" stroke="#e3a300" stroke-width="2" opacity=".65"/>${dots}<text x="${left}" y="${h-13}" fill="currentColor" font-size="12">Earliest recorded swim</text><text x="${w-right}" y="${h-13}" text-anchor="end" fill="currentColor" font-size="12">Latest recorded swim</text></svg></div><p><strong style="color:#e3a300">● ASAJ verified</strong> · <strong style="color:#6e80ef">● SwimCloud supplied, unverified</strong> · <strong style="color:#24a47c">- - Best recorded progression (mixed sources)</strong></p><div class="visual-scroll">${table(['Meet / date','Round','Time','Verification','Source'],swims.map(r=>`<tr><td>${esc(r.meet_name)}<small> · ${esc(r.meet_dates||r.date)}${r.precision==='meet_range'?' (approx.)':''}</small></td><td>${esc(r.round||'Unspecified')}</td><td>${esc(r.time)}</td><td>${esc(r.origin)}</td><td>${r.origin==='ASAJ verified'&&r.source_pdf?`<a href="${encodeURI(esc(r.source_pdf))}#page=${esc(r.source_page)}" target="_blank" rel="noopener">Official PDF p.${esc(r.source_page)}</a>`:r.source_url?link(r.source_url,'SwimCloud result'):'Not linked'}</td></tr>`))}</div>`;
 }
 // The main render replaces the tab content, so install controls after every render.
