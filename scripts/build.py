@@ -44,8 +44,15 @@ with (DATA/'asaj_competitor_results.csv').open(newline='') as f:
 for r in competitor_results:
     if r['verified']!='true' or r['gender'] not in ('Boys','Girls') or r['course']!='LCM' or not r['age'].isdigit():
         raise ValueError('Invalid competitor record')
-    if not r['source_pdf'].startswith('asaj-pdfs/') or not (DOCS/r['source_pdf']).is_file() or not r['source_page'].isdigit():
-        raise ValueError('Missing competitor PDF evidence')
+    source_pdf=r.get('source_pdf','')
+    evidence=DOCS/source_pdf
+    if not source_pdf.startswith('asaj-pdfs/') or Path(source_pdf).name != source_pdf[len('asaj-pdfs/'):] or not evidence.is_file() or not r.get('source_page','').isdigit() or int(r['source_page'])<1:
+        raise ValueError(
+            f"Missing competitor PDF evidence: swimmer={r.get('swimmer')!r}, "
+            f"meet={r.get('meet_name')!r}, PDF={source_pdf!r}, "
+            f"page={r.get('source_page')!r}, expected_file={str(evidence)!r}. "
+            'Confirm the corresponding PDF is committed under docs/asaj-pdfs/.'
+        )
     date.fromisoformat(r['meet_start']);date.fromisoformat(r['meet_end']);seconds(r['time'])
 
 def competitor_best(event,age):
