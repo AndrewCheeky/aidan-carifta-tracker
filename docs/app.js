@@ -320,8 +320,6 @@ function renderAcquiredClassifications(d){
      if(usaSeconds(standard.A?.time)!==null&&eligibleTime<=usaSeconds(standard.A.time))carifta='A';
      else if(usaSeconds(standard.B?.time)!==null&&eligibleTime<=usaSeconds(standard.B.time))carifta='B';
      else carifta='Below B';
-     const evidence=cariftaDateEvidence(qualifying[0],start,end);
-     carifta+=' (eligible swim '+qualifying[0].time+', '+(evidence?.approx?evidence.first+' to '+evidence.last+' (meet range)':qualifying[0].date)+')';
     }
    }
    rows.push({event:m.name,course,time:pb.time,date:pb.date,exact,origin:pb.origin,level,carifta});
@@ -329,7 +327,7 @@ function renderAcquiredClassifications(d){
  }
  rows.sort((a,b)=>a.course.localeCompare(b.course)||a.event.localeCompare(b.event));
  const body=rows.map(r=>`<tr><td>${esc(r.event)}</td><td>${esc(r.course)}</td><td>${esc(r.time)}</td><td>${esc(r.date||'Unavailable')}${r.exact?'':' (approx.)'}</td><td><strong>${esc(r.level)}</strong></td><td>${esc(r.carifta)}</td><td>${esc(r.origin)}</td></tr>`).join('');
- return `<section class="panel"><h2>Acquired time classifications · all recorded events</h2><p>Fastest documented time per event and course, its recorded date, USA Swimming Boys 13–14 motivational classification, and CARIFTA A/B status where an eligible ASAJ LCM race date or wholly eligible meet range supports it. USA levels are not CARIFTA qualifying standards.</p><div style="overflow-x:auto"><table><thead><tr><th>Event</th><th>Course</th><th>PB</th><th>Date attained</th><th>USA level</th><th>CARIFTA</th><th>Evidence</th></tr></thead><tbody>${body||'<tr><td colspan="7">No documented results available</td></tr>'}</tbody></table></div><p class="muted">ASAJ meet ranges are accepted only when the entire meet falls within the qualifying period; overlapping or undocumented ranges are excluded. SwimCloud-supplied results are not CARIFTA qualifying evidence. CARIFTA status uses the fastest eligible qualifying-period swim, even when the overall PB is older. A meet-range date is not proof of an exact race date. Classifications reflect the currently loaded Boys 13–14 standards.</p></section>`;
+ return `<section class="panel"><h2>Acquired time classifications · all recorded events</h2><p>Fastest documented time per event and course, its recorded date, USA Swimming Boys 13–14 motivational classification, and CARIFTA A/B status where an eligible ASAJ LCM race date or wholly eligible meet range supports it. USA levels are not CARIFTA qualifying standards.</p><div style="overflow-x:auto"><table><thead><tr><th>Event</th><th>Course</th><th>PB</th><th>Date attained</th><th>USA level</th><th>CARIFTA Time Standard</th><th>Evidence</th></tr></thead><tbody>${body||'<tr><td colspan="7">No documented results available</td></tr>'}</tbody></table></div><p class="muted">ASAJ meet ranges are accepted only when the entire meet falls within the qualifying period; overlapping or undocumented ranges are excluded. SwimCloud-supplied results are not CARIFTA qualifying evidence. CARIFTA status uses the fastest eligible qualifying-period swim, even when the overall PB is older. A meet-range date is not proof of an exact race date. Classifications reflect the currently loaded Boys 13–14 standards.</p></section>`;
 }
 function renderChampionshipShortlist(d){
  const panel=meet=>{
