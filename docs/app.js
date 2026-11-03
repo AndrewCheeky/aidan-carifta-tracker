@@ -224,6 +224,38 @@ function drawTrendDetail(targetOverride){
 // The main render replaces the tab content, so install controls after every render.
 const originalRender=render;render=function(){originalRender();if(TAB==='trends'){document.querySelectorAll('.trend-event-link').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();TREND_SELECTION.event=el.dataset.event;TREND_SELECTION.course=el.dataset.course||TREND_SELECTION.course;drawTrendDetail();document.getElementById('trend-detail')?.scrollIntoView({behavior:'smooth',block:'start'});}));document.querySelectorAll('.trend-course-link').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();TREND_SELECTION.course=el.dataset.course;drawTrendDetail();}));drawTrendDetail();}};
 
+// Coaching heuristic only: independent of official qualification and rankings.
+// All gap comparisons use the same imported ASAJ Boys 13–14 LCM ranking dataset.
+function swimOpportunityRows(d,metrics){
+ const rankings=calculatedJamaicaRankings(d);
+ const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+ return metrics.filter(m=>m.course==='LCM').map(m=>{
+  const ranked=[...(rankings.get(m.name)?.values()||[])].sort((a,b)=>a.seconds-b.seconds);
+  const aidan=ranked.find(r=>r.swimmer.toLowerCase().replace(/[^a-z]/g,'')==='aidanseaton');
+  const second=ranked[1];
+  if(!aidan||!second||ranked.length<2)return {...m,opportunity:null,reason:'Insufficient verified competitor results'};
+  const gapPct=100*(aidan.seconds-second.seconds)/second.seconds;
+  // 0% gap gets 40 points; a 10% deficit or larger gets zero. Leading also gets 40.
+  const gapScore=40*(1-clamp(gapPct,0,10)/10);
+  // Recent improvement is a percentage of the first of the last three documented times.
+  const recent=m.swims.slice(-3).map(r=>trendSeconds(r.time)).filter(Number.isFinite);
+  const trendPct=recent.length>=2?100*(recent[0]-recent.at(-1))/recent[0]:null;
+  // Positive improvement >= 3% earns full credit, declining >= 3% earns zero.
+  const trendScore=trendPct===null?null:35*clamp((trendPct+3)/6,0,1);
+  // Event-specific potential is based on historical relative improvement, not raw seconds
+  // or a fixed sprint/distance advantage. It is a descriptive heuristic, not a forecast.
+  const historyPct=m.swims.length>=2?100*(m.first-m.best)/m.first:null;
+  const potentialScore=historyPct===null?null:25*clamp(historyPct/6,0,1);
+  if(trendScore===null||potentialScore===null)return {...m,opportunity:null,reason:'Insufficient dated race history',gapPct,second};
+  return {...m,opportunity:gapScore+trendScore+potentialScore,gapPct,second,gapScore,trendScore,potentialScore,trendPct,historyPct};
+ }).sort((a,b)=>(b.opportunity??-1)-(a.opportunity??-1));
+}
+function renderSwimOpportunity(d,metrics){
+ const results=swimOpportunityRows(d,metrics);
+ const rows=results.map(r=>`<tr><td>${esc(r.name)}</td><td>${r.opportunity===null?'Unavailable':`<strong>${r.opportunity.toFixed(0)}/100</strong>`}</td><td>${r.gapPct===undefined?'Unavailable':`${Math.abs(r.gapPct).toFixed(2)}% ${r.gapPct>0?'behind':r.gapPct<0?'ahead':'level'}`}</td><td>${r.trendPct===undefined?'Unavailable':`${r.trendPct>=0?'+':''}${r.trendPct.toFixed(2)}%`}</td><td>${r.historyPct===undefined?'Unavailable':`${r.historyPct.toFixed(2)}%`}</td><td>${r.reason||'Coaching estimate'}</td></tr>`);
+ return `<section class="panel"><h2>Opportunity Score · LCM</h2><p>A coaching priority indicator, not a national ranking or prediction. Higher scores indicate a smaller verified gap to second place, stronger recent improvement and more demonstrated event-specific progress.</p><div class="visual-scroll">${table(['Event','Opportunity score','Gap to calculated 2nd','Recent trend','Historical PB improvement','Evidence'],rows)}</div><p class="muted">Weights: competitive gap 40%, recent improvement 35%, historical event progress 25%. Percentage changes normalize distances and strokes; no fixed advantage is given to sprint or distance events. Recent and historical trends may include supplementary SwimCloud results. A score is withheld when verified competitor evidence or adequate race history is missing. Scores are planning heuristics, not validated probabilities.</p></section>`;
+}
+
 // All-event small multiples. Faster swim times are better; first/latest are chronological.
 function renderAllEventProgress(d){
  const metrics=['LCM','SCM'].flatMap(course=>intelligenceMetrics(d,course));
@@ -276,7 +308,7 @@ function renderAllEventProgress(d){
   const recent=m.recentChange===null?'Insufficient history':m.recentChange>.005?`Faster by ${m.recentChange.toFixed(2)}s`:m.recentChange<-.005?`Slower by ${Math.abs(m.recentChange).toFixed(2)}s`:'Unchanged';
   return `<article class="panel" id="swim-${esc(m.course)}-${esc(m.name).replace(/[^a-zA-Z0-9]/g,'-')}"><h3><a href="#trends" class="progress-event-link" data-event="${esc(m.name)}" data-course="${m.course}" aria-label="View detailed race history for ${esc(m.name)} ${m.course}">${esc(m.name)} · ${m.course}</a></h3><p class="swim-classification-line"><strong>Current USA classification: ${esc(classLabel)}</strong><span>First attained: ${classificationDate}</span></p><div class="swim-inline-detail" hidden></div><div class="intel-stats"><div><small>Personal best (recorded)</small><strong>${trendTime(m.best)}</strong><small>${bestDate(m)}</small>${pbSourceLink(m)}</div><div><small>Latest vs PB</small><strong>${pbGap(m)}</strong><small>${pbAge(m)}</small></div><div><small>First → latest</small><strong>${trendTime(m.first)} → ${trendTime(m.latest)}</strong></div><div><small>Recent trend</small><strong>${recent}</strong></div></div><div class="intel-chart">${intelligenceLine(m)}</div><p>${m.swims.length} documented result(s) · ${m.pct===null?'Insufficient history':`${m.pct.toFixed(1)}% first-to-latest improvement`} · ${status}</p><p class="muted">PB includes documented ASAJ and supplementary SwimCloud results; source and date precision remain as recorded.</p></article>`;
  }).join('');
- return `<div class="panel"><h2>Swim Intelligence · all-event progress</h2><p>Separate LCM and SCM race histories. Performance Intelligence summarizes historical strengths and recent patterns; a slower race is not a diagnosis.</p>${summary}<p><strong>Chart key:</strong> Green segments = faster; red = slower; amber = unchanged. Yellow dots = ASAJ verified; blue = SwimCloud supplied (unverified). SCM and LCM are never combined.</p></div>${rows||'<div class="panel">No recorded races.</div>'}<div class="notice">Dates marked approximate are ASAJ meet-start dates. Supplementary swims are not qualification evidence. PB is the fastest documented result, not necessarily the latest result.</div>`;
+ return `<div class="panel"><h2>Swim Intelligence · all-event progress</h2><p>Separate LCM and SCM race histories. Performance Intelligence summarizes historical strengths and recent patterns; a slower race is not a diagnosis.</p>${summary}${renderSwimOpportunity(d,metrics)}<p><strong>Chart key:</strong> Green segments = faster; red = slower; amber = unchanged. Yellow dots = ASAJ verified; blue = SwimCloud supplied (unverified). SCM and LCM are never combined.</p></div>${rows||'<div class="panel">No recorded races.</div>'}<div class="notice">Dates marked approximate are ASAJ meet-start dates. Supplementary swims are not qualification evidence. PB is the fastest documented result, not necessarily the latest result.</div>`;
 }
 
 // Intelligence uses only documented race results and the September 2026 Jamaica ranking snapshot.
