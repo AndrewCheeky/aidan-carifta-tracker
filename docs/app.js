@@ -229,31 +229,64 @@ const originalRender=render;render=function(){originalRender();if(TAB==='trends'
 function swimOpportunityRows(d,metrics){
  const rankings=calculatedJamaicaRankings(d);
  const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+ // Distinct ASAJ competitors only. Multiple swims by one swimmer count once.
+ // Pace uses the earliest and latest documented meet for each rival, and only
+ // when both are on different dates. Meet-start dates are approximations.
+ const histories=new Map();
+ for(const r of d.asaj_competitor_results||[]){
+  if(r.gender!=='Boys'||![13,14].includes(Number(r.age))||r.course!=='LCM'||String(r.verified).toLowerCase()!=='true'||!r.source_pdf)continue;
+  const who=String(r.swimmer||'').toLowerCase().replace(/[^a-z]/g,'');
+  const seconds=trendSeconds(r.time),date=String(r.meet_start||'');
+  if(!who||who==='aidanseaton'||seconds===null||!/^\d{4}-\d{2}-\d{2}$/.test(date))continue;
+  const key=r.event+'|'+who;
+  if(!histories.has(key))histories.set(key,new Map());
+  const byDate=histories.get(key),old=byDate.get(date);
+  if(old===undefined||seconds<old)byDate.set(date,seconds);
+ }
  return metrics.filter(m=>m.course==='LCM').map(m=>{
   const ranked=[...(rankings.get(m.name)?.values()||[])].sort((a,b)=>a.seconds-b.seconds);
   const aidan=ranked.find(r=>r.swimmer.toLowerCase().replace(/[^a-z]/g,'')==='aidanseaton');
   const second=ranked[1];
   if(!aidan||!second||ranked.length<2)return {...m,opportunity:null,reason:'Insufficient verified competitor results'};
   const gapPct=100*(aidan.seconds-second.seconds)/second.seconds;
-  // 0% gap gets 40 points; a 10% deficit or larger gets zero. Leading also gets 40.
-  const gapScore=40*(1-clamp(gapPct,0,10)/10);
-  // Recent improvement is a percentage of the first of the last three documented times.
+  // A smaller gap is better; a lead earns full points.
+  const gapScore=30*(1-clamp(gapPct,0,10)/10);
   const recent=m.swims.slice(-3).map(r=>trendSeconds(r.time)).filter(Number.isFinite);
   const trendPct=recent.length>=2?100*(recent[0]-recent.at(-1))/recent[0]:null;
-  // Positive improvement >= 3% earns full credit, declining >= 3% earns zero.
-  const trendScore=trendPct===null?null:35*clamp((trendPct+3)/6,0,1);
-  // Event-specific potential is based on historical relative improvement, not raw seconds
-  // or a fixed sprint/distance advantage. It is a descriptive heuristic, not a forecast.
+  const trendScore=trendPct===null?null:25*clamp((trendPct+3)/6,0,1);
   const historyPct=m.swims.length>=2?100*(m.first-m.best)/m.first:null;
-  const potentialScore=historyPct===null?null:25*clamp(historyPct/6,0,1);
-  if(trendScore===null||potentialScore===null)return {...m,opportunity:null,reason:'Insufficient dated race history',gapPct,second};
-  return {...m,opportunity:gapScore+trendScore+potentialScore,gapPct,second,gapScore,trendScore,potentialScore,trendPct,historyPct};
+  const potentialScore=historyPct===null?null:15*clamp(historyPct/6,0,1);
+  // Density is the number of documented rivals within 10% of Aidan's time.
+  // This measures relevant competition, rather than all entrants in the event.
+  const rivals=ranked.filter(r=>r.swimmer.toLowerCase().replace(/[^a-z]/g,'')!=='aidanseaton');
+  const closeRivals=rivals.filter(r=>r.seconds<=aidan.seconds*1.10).length;
+  // Smooth diminishing penalty; 0 close rivals = 15, 20+ = 0.
+  const densityScore=15*(1-clamp(Math.log1p(closeRivals)/Math.log1p(20),0,1));
+  const paceSamples=[];
+  for(const r of rivals){
+   const key=m.name+'|'+r.swimmer.toLowerCase().replace(/[^a-z]/g,'');
+   const byDate=histories.get(key);
+   if(!byDate||byDate.size<2)continue;
+   const dates=[...byDate.keys()].sort(),first=byDate.get(dates[0]),last=byDate.get(dates.at(-1));
+   const days=(Date.parse(dates.at(-1))-Date.parse(dates[0]))/86400000;
+   if(days<14||first<=0)continue;
+   // Normalized percentage improvement per 90 days, capped to avoid
+   // over-weighting a single rapid change from a short observation window.
+   paceSamples.push(clamp(100*(first-last)/first*90/days,-5,5));
+  }
+  // Require at least two independently tracked competitors for pace evidence.
+  // Otherwise use a neutral 7.5/15 rather than assuming slow rivals.
+  const pacePct=paceSamples.length>=2?paceSamples.reduce((x,y)=>x+y,0)/paceSamples.length:null;
+  const paceScore=pacePct===null?7.5:15*(1-clamp((pacePct+2)/4,0,1));
+  if(trendScore===null||potentialScore===null)return {...m,opportunity:null,reason:'Insufficient dated race history',gapPct,second,closeRivals,pacePct};
+  const opportunity=gapScore+trendScore+potentialScore+densityScore+paceScore;
+  return {...m,opportunity,gapPct,second,gapScore,trendScore,potentialScore,densityScore,paceScore,trendPct,historyPct,closeRivals,pacePct,paceSampleCount:paceSamples.length,competitorCount:rivals.length,reason:pacePct===null?'Rival pace unavailable; neutral weighting':'Coaching estimate'};
  }).sort((a,b)=>(b.opportunity??-1)-(a.opportunity??-1));
 }
 function renderSwimOpportunity(d,metrics){
  const results=swimOpportunityRows(d,metrics);
- const rows=results.map(r=>`<tr><td>${esc(r.name)}</td><td>${r.opportunity===null?'Unavailable':`<strong>${r.opportunity.toFixed(0)}/100</strong>`}</td><td>${r.gapPct===undefined?'Unavailable':`${Math.abs(r.gapPct).toFixed(2)}% ${r.gapPct>0?'behind':r.gapPct<0?'ahead':'level'}`}</td><td>${r.trendPct===undefined?'Unavailable':`${r.trendPct>=0?'+':''}${r.trendPct.toFixed(2)}%`}</td><td>${r.historyPct===undefined?'Unavailable':`${r.historyPct.toFixed(2)}%`}</td><td>${r.reason||'Coaching estimate'}</td></tr>`);
- return `<section class="panel"><h2>Opportunity Score · LCM</h2><p>A coaching priority indicator, not a national ranking or prediction. Higher scores indicate a smaller verified gap to second place, stronger recent improvement and more demonstrated event-specific progress.</p><div class="visual-scroll">${table(['Event','Opportunity score','Gap to calculated 2nd','Recent trend','Historical PB improvement','Evidence'],rows)}</div><p class="muted">Weights: competitive gap 40%, recent improvement 35%, historical event progress 25%. Percentage changes normalize distances and strokes; no fixed advantage is given to sprint or distance events. Recent and historical trends may include supplementary SwimCloud results. A score is withheld when verified competitor evidence or adequate race history is missing. Scores are planning heuristics, not validated probabilities.</p></section>`;
+ const rows=results.map(r=>`<tr><td>${esc(r.name)}</td><td>${r.opportunity===null?'Unavailable':`<strong>${r.opportunity.toFixed(0)}/100</strong>`}</td><td>${r.gapPct===undefined?'Unavailable':`${Math.abs(r.gapPct).toFixed(2)}% ${r.gapPct>0?'behind':r.gapPct<0?'ahead':'level'}`}</td><td>${r.trendPct===undefined?'Unavailable':`${r.trendPct>=0?'+':''}${r.trendPct.toFixed(2)}%`}</td><td>${r.historyPct===undefined?'Unavailable':`${r.historyPct.toFixed(2)}%`}</td><td>${r.closeRivals===undefined?'Unavailable':`${r.closeRivals} within 10% (${r.competitorCount} documented rivals)`}</td><td>${r.pacePct===undefined||r.pacePct===null?'Insufficient history':`${r.pacePct>=0?'+':''}${r.pacePct.toFixed(2)}% per 90 days (${r.paceSampleCount} rivals)`}</td><td>${esc(r.reason||'Coaching estimate')}</td></tr>`);
+ return `<section class="panel"><h2>Opportunity Score · LCM</h2><p>A coaching priority indicator, not a national ranking or prediction. Higher scores favour a smaller gap to second place, stronger personal improvement, fewer nearby competitors and slower-improving rivals.</p><div class="visual-scroll">${table(['Event','Opportunity score','Gap to calculated 2nd','Recent trend','Historical PB improvement','Nearby competition','Rival improvement pace','Evidence'],rows)}</div><p class="muted">Weights: competitive gap 30%, recent improvement 25%, historical event progress 15%, nearby competitor density 15%, rival improvement pace 15%. Density counts distinct imported ASAJ Boys 13–14 LCM swimmers within 10% of Aidan's best verified time, not total entries. Rival pace compares earliest and latest documented meets (at least 14 days apart) and requires two rivals with repeat results; otherwise a neutral score is used. Meet dates may be approximate. Imported meets are incomplete, so a low competitor count does not prove a weak field. Recent and historical Aidan trends may include supplementary SwimCloud results. Scores are coaching heuristics, not validated probabilities.</p></section>`;
 }
 
 // All-event small multiples. Faster swim times are better; first/latest are chronological.
