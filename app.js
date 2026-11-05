@@ -166,9 +166,73 @@ function verifiedAchievements(){
  }
  return out.sort((a,b)=>(b.date||'').localeCompare(a.date||'')||a.event.localeCompare(b.event));
 }
+// Achievement rules (all require exact dated, PDF/page-linked ASAJ LCM evidence):
+// Hero: greatest positive margin under the qualifying B time, otherwise largest
+// improvement between consecutive verified PBs. No ranking or time is estimated.
+// Journey: every exact-dated race in 2026 for the hero event, with sources.
+// Next up: unmet B standard or second-place qualifying benchmark, ordered by
+// the smallest strictly positive time difference, never inventing a target.
+// Download: local PNG contains only Aidan S., verified event/time, badge and source.
+const hundredths=n=>Number.isFinite(n)?(Math.round(n*100)/100).toFixed(2):null;
+function achievementHero(all){
+ const candidates=[];
+ for(const e of DATA.events){
+  const q=eligible(e),b=standard(e),qt=secs(q?.time),bt=secs(b?.time);
+  if(q?.source_pdf&&q?.source_page&&q?.date&&qt!==null&&bt!==null&&qt<=bt){
+   candidates.push({type:'Standard met',event:e.event,time:q.time,date:q.date,metric:bt-qt,metricText:`${hundredths(bt-qt)}s inside B standard`,source_pdf:q.source_pdf,source_page:q.source_page,standard_url:b.source_url,rank:qi(e)?.rank});
+  }
+ }
+ for(const x of all.filter(x=>x.type==='Personal best'&&x.improvement>0))candidates.push({...x,type:'Season-best drop',metric:x.improvement,metricText:`${hundredths(x.improvement)}s improvement`,rank:qi(DATA.events.find(e=>e.event===x.event))?.rank});
+ return candidates.sort((x,y)=>y.metric-x.metric||x.event.localeCompare(y.event))[0]||null;
+}
+function achievementJourney(event){
+ const e=DATA.events.find(x=>x.event===event);if(!e)return '';
+ const rows=datedSwims(e).filter(r=>r.date_precision==='exact'&&r.source_page&&r.race_date);
+ if(!rows.length)return '<p>No exact-dated ASAJ journey available.</p>';
+ const values=rows.map(r=>secs(r.time)),min=Math.min(...values),max=Math.max(...values),spread=Math.max(max-min,0.01);
+ // Reuses the same 300×110 polyline geometry as Swim Intelligence's sparkline.
+ const xy=rows.map((r,i)=>[20+(rows.length===1?0:i*260/(rows.length-1)),10+(secs(r.time)-min)/spread*90]);
+ return `<div class="achievement-journey"><h3>2026 race journey · ${esc(event)}</h3><svg class="swim-history-chart" viewBox="0 0 300 110" role="img" aria-label="Dated verified 2026 ASAJ LCM results, faster times higher"><polyline points="${xy.map(p=>p.join(',')).join(' ')}" fill="none" stroke="#087e88" stroke-width="3"/>${xy.map(([x,y])=>`<circle cx="${x}" cy="${y}" r="4" fill="#087e88"/>`).join('')}</svg><div class="achievement-dates">${rows.map(r=>`<span><strong>${dateText(r.race_date)}</strong> · ${esc(r.time)} · ${pdf(r.source_pdf,'ASAJ PDF',r.source_page)}</span>`).join('')}</div></div>`;
+}
+function achievementNextUp(){
+ const locked=[];
+ for(const e of DATA.events){
+  const q=eligible(e),qt=secs(q?.time),bt=secs(standard(e)?.time),runner=qi(e)?.second,rt=secs(runner?.time);
+  if(!q?.source_pdf||!q?.source_page||qt===null)continue;
+  if(bt!==null&&qt>bt)locked.push({event:e.event,label:'CARIFTA B',seconds:qt-bt,source:standard(e)?.source_url});
+  if(rt!==null&&qt>rt)locked.push({event:e.event,label:'Calculated top two',seconds:qt-rt,source_pdf:runner.source_pdf,source_page:runner.source_page});
+ }
+ return locked.sort((x,y)=>x.seconds-y.seconds||x.event.localeCompare(y.event)).slice(0,3);
+}
+const ACHIEVEMENT_ICONS={'Personal best':'🏊','Standard met':'🏅','CARIFTA B standard met':'🏅','Calculated top-two qualifying position':'🏆','Season-best drop':'📉'};
 function achievementPanel(){
- const all=verifiedAchievements(),badges=[['New PBs',all.filter(x=>x.type==='Personal best').length],['B standards',all.filter(x=>x.type==='CARIFTA B standard met').length],['Top-two events',all.filter(x=>x.type==='Calculated top-two qualifying position').length]];
- return `<section class="panel achievement-panel"><h2>Achievements · verified milestones</h2><p class="subtle">Celebrating documented progress. All milestones link to their ASAJ source; calculated rankings are not official selection.</p><div class="achievement-badges">${badges.map(([name,n])=>`<div class="achievement-badge"><span aria-hidden="true">🏅</span><strong>${n}</strong><span>${esc(name)}</span></div>`).join('')}</div><details><summary>Milestone timeline · ${all.length} documented achievements</summary>${all.length?all.slice(0,30).map((x,i)=>`<div class="achievement-entry"><div><strong>${esc(x.type)}</strong> · ${esc(x.event)} · ${esc(x.time)}${x.improvement?` · ${x.improvement.toFixed(2)}s faster than ${esc(x.prior)}`:''}<small>${x.date?dateText(x.date):'Exact race date not established'} · ${pdf(x.source_pdf,'ASAJ PDF',x.source_page)}${x.standard_url?' · '+a(x.standard_url,'CARIFTA standard'):''}</small></div><button type="button" data-achievement="${i}" aria-label="Copy ${esc(x.event)} achievement">Copy</button></div>`).join(''):'<p>No documented milestones available.</p>'}</details><p class="subtle">Copy shares only a verified event, time and source. No personal notes are stored or published.</p></section>`;
+ const all=verifiedAchievements(),hero=achievementHero(all),next=achievementNextUp();
+ const counts=[['Personal best','New PB',all.filter(x=>x.type==='Personal best').length],['CARIFTA B standard met','Standard met',all.filter(x=>x.type==='CARIFTA B standard met').length],['Calculated top-two qualifying position','Top-two',all.filter(x=>x.type==='Calculated top-two qualifying position').length],['Season-best drop','Season-best drop',all.filter(x=>x.type==='Personal best'&&x.improvement>0).length]];
+ return `<section class="panel achievement-panel"><div class="achievement-heading"><h2>Achievements · Aidan's milestones</h2><details class="achievement-info"><summary aria-label="How achievements are verified">ⓘ</summary><p>Every milestone uses exact-dated ASAJ LCM results linked to its source. Calculated rankings are not official selection. See How to read this tracker.</p></details></div><p>Every second earned deserves celebrating!</p>
+ ${hero?`<div class="achievement-hero"><span class="achievement-icon" aria-hidden="true">${ACHIEVEMENT_ICONS[hero.type]}</span><div><strong>${esc(hero.type)} · biggest verified milestone</strong><h3>${esc(hero.event)} · ${esc(hero.time)}</h3><p>${esc(hero.metricText)}${hero.rank?` · Calculated qualifying rank #${hero.rank}`:''}</p><p>${dateText(hero.date)} · ${pdf(hero.source_pdf,'ASAJ result',hero.source_page)}${hero.standard_url?' · '+a(hero.standard_url,'B standard'):''}</p><button type="button" id="download-achievement">Download card (PNG)</button></div></div>`:'<p>No eligible milestone with exact-dated ASAJ evidence.</p>'}
+ <div class="achievement-badges">${counts.map(([type,label,n])=>`<div class="achievement-badge ${type==='Personal best'?'pb':type==='CARIFTA B standard met'?'standard':type==='Calculated top-two qualifying position'?'top-two':'drop'}"><span aria-hidden="true">${ACHIEVEMENT_ICONS[type]}</span><strong>${n}</strong><span>${esc(label)}</span></div>`).join('')}</div>
+ ${hero?achievementJourney(hero.event):''}
+ <div class="achievement-next"><h3>Next up · milestones to unlock</h3>${next.length?next.map(x=>`<div class="achievement-locked">🔒 <strong>${esc(x.event)} · ${esc(x.label)}</strong> · ${hundredths(x.seconds)}s to go · ${x.source?a(x.source,'Standard source'):pdf(x.source_pdf,'ASAJ rival source',x.source_page)}</div>`).join(''):'<p>No sourced, unmet milestones currently available.</p>'}</div>
+ <details><summary>Milestone timeline · ${all.length} documented achievements</summary>${all.length?all.slice(0,30).map((x,i)=>`<div class="achievement-entry"><div><strong>${ACHIEVEMENT_ICONS[x.type]||'🏅'} ${esc(x.type)}</strong> · ${esc(x.event)} · ${esc(x.time)}${x.improvement?` · ${hundredths(x.improvement)}s faster than ${esc(x.prior)}`:''}<small>${x.date?dateText(x.date):'Exact race date not established'} · ${pdf(x.source_pdf,'ASAJ PDF',x.source_page)}${x.standard_url?' · '+a(x.standard_url,'CARIFTA standard'):''}</small></div><button type="button" data-achievement="${i}" aria-label="Copy ${esc(x.event)} achievement">Copy</button></div>`).join(''):'<p>No documented milestones available.</p>'}</details></section>`;
+}
+function downloadAchievementCard(){
+ const hero=achievementHero(verifiedAchievements());if(!hero||!hero.source_pdf||!hero.source_page)return;
+ const canvas=document.createElement('canvas');canvas.width=960;canvas.height=540;const ctx=canvas.getContext('2d');if(!ctx)return;
+ ctx.fillStyle='#f4fbfc';ctx.fillRect(0,0,960,540);ctx.fillStyle='#0b526c';ctx.font='bold 38px system-ui';ctx.fillText('Aidan S. · Verified achievement',50,80);
+ ctx.font='bold 30px system-ui';ctx.fillText(hero.type,50,150);ctx.font='bold 52px system-ui';ctx.fillText(hero.event,50,230);
+ ctx.fillStyle='#087e88';ctx.font='bold 72px system-ui';ctx.fillText(hero.time,50,330);
+ ctx.fillStyle='#16354b';ctx.font='28px system-ui';ctx.fillText(hero.metricText,50,390);
+ ctx.font='20px system-ui';ctx.fillText(`ASAJ: ${hero.source_pdf} · page ${hero.source_page}`,50,460);
+ const link=document.createElement('a');link.download='aidan-s-verified-achievement.png';link.href=canvas.toDataURL('image/png');link.click();
+}
+function animateAchievementCount(){
+ if(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
+ // Count only already-verified badge totals; never animate or alter race times.
+ document.querySelectorAll('.achievement-badge strong').forEach(el=>{
+  const final=Number(el.textContent);if(!Number.isInteger(final)||final<=0)return;
+  const start=performance.now();
+  function frame(now){const ratio=Math.min(1,(now-start)/550);el.textContent=String(ratio===1?final:Math.floor(final*ratio));if(ratio<1)requestAnimationFrame(frame)}requestAnimationFrame(frame);
+ });
 }
 function renderToday(){
  const m=nextMeet(),fs=focus(),b=byPriority().slice().sort((x,y)=>x.bGap-y.bGap)[0],t=byPriority().slice().sort((x,y)=>x.sGap-y.sGap)[0];
@@ -228,10 +292,10 @@ function celebrateNewVerifiedAchievements(){
   const added=ids.filter(x=>!old.has(x));
   if(!added.length)return;
   const notice=document.createElement('div');notice.className='achievement-celebration';notice.setAttribute('role','status');notice.textContent=`🏅 ${added.length} newly documented achievement${added.length===1?'':'s'}! View Today → Achievements.`;
-  document.body.appendChild(notice);notice.addEventListener('animationend',()=>notice.remove(),{once:true});
+  document.body.appendChild(notice);notice.addEventListener('animationend',()=>notice.remove(),{once:true});const burst=document.createElement('div');burst.className='achievement-confetti';burst.setAttribute('aria-hidden','true');burst.textContent='🎉 ✨ 🎊 ✨ 🎉';document.body.appendChild(burst);burst.addEventListener('animationend',()=>burst.remove(),{once:true});
  }catch(_){/* Local storage can be disabled; achievements remain visible. */}
 }
-function render(){if(!DATA)return;const pages={today:renderToday,events:renderEvents,rivals:renderRivals,evidence:renderEvidence,swim:renderSwim,admin:renderAdmin};$('content').innerHTML=(pages[TAB]||renderToday)();$('status').textContent=TAB==='rivals'&&!COMPETITORS?'Loading verified rival history…':`Viewing ${TAB.charAt(0).toUpperCase()+TAB.slice(1)}`;document.querySelectorAll('[data-achievement]').forEach(b=>b.addEventListener('click',()=>{const x=verifiedAchievements()[Number(b.dataset.achievement)];if(!x)return;const message=`Aidan Seaton · ${x.type} · ${x.event} · ${x.time}${x.date?' · '+x.date:''} · ASAJ evidence: ${x.source_pdf}${x.source_page?' page '+x.source_page:''}`;navigator.clipboard?.writeText(message).then(()=>{b.textContent='Copied'}).catch(()=>{b.textContent='Copy unavailable'})}));document.querySelectorAll('[data-event-filter]').forEach(b=>b.addEventListener('click',()=>{EVENT_FILTER=b.dataset.eventFilter;render()}));if(TAB==='rivals')$('rival-age-group')?.addEventListener('change',e=>{window.RIVAL_GROUP=Number(e.target.value);render()});if(TAB==='rivals'&&!COMPETITORS)fetch('competitors.json').then(r=>{if(!r.ok)throw Error('Competitor data unavailable');return r.json()}).then(x=>{COMPETITORS=x;render()}).catch(e=>{$('status').textContent=e.message})}
+function render(){if(!DATA)return;const pages={today:renderToday,events:renderEvents,rivals:renderRivals,evidence:renderEvidence,swim:renderSwim,admin:renderAdmin};$('content').innerHTML=(pages[TAB]||renderToday)();$('status').textContent=TAB==='rivals'&&!COMPETITORS?'Loading verified rival history…':`Viewing ${TAB.charAt(0).toUpperCase()+TAB.slice(1)}`;if(TAB==='today'){document.getElementById('download-achievement')?.addEventListener('click',downloadAchievementCard);animateAchievementCount()}document.querySelectorAll('[data-achievement]').forEach(b=>b.addEventListener('click',()=>{const x=verifiedAchievements()[Number(b.dataset.achievement)];if(!x)return;const message=`Aidan Seaton · ${x.type} · ${x.event} · ${x.time}${x.date?' · '+x.date:''} · ASAJ evidence: ${x.source_pdf}${x.source_page?' page '+x.source_page:''}`;navigator.clipboard?.writeText(message).then(()=>{b.textContent='Copied'}).catch(()=>{b.textContent='Copy unavailable'})}));document.querySelectorAll('[data-event-filter]').forEach(b=>b.addEventListener('click',()=>{EVENT_FILTER=b.dataset.eventFilter;render()}));if(TAB==='rivals')$('rival-age-group')?.addEventListener('change',e=>{window.RIVAL_GROUP=Number(e.target.value);render()});if(TAB==='rivals'&&!COMPETITORS)fetch('competitors.json').then(r=>{if(!r.ok)throw Error('Competitor data unavailable');return r.json()}).then(x=>{COMPETITORS=x;render()}).catch(e=>{$('status').textContent=e.message})}
 function setTab(tab){if(!['today','events','rivals','swim','evidence','admin'].includes(tab)||tab==='admin'&&!new URLSearchParams(location.search).has('admin'))tab='today';TAB=tab;history.replaceState(null,'',location.pathname+location.search+'#'+tab);document.querySelectorAll('nav button[data-tab]').forEach(b=>{const active=b.dataset.tab===tab;b.classList.toggle('active',active);b.setAttribute('aria-selected',String(active))});$('dashboard-nav').classList.remove('open');$('menu-toggle').setAttribute('aria-expanded','false');render();window.scrollTo({top:0,behavior:'instant'})}
 function wireNav(){const menu=$('dashboard-nav'),toggle=$('menu-toggle');toggle.addEventListener('click',()=>{const open=menu.classList.toggle('open');toggle.setAttribute('aria-expanded',String(open))});menu.addEventListener('click',e=>{const b=e.target.closest('button[data-tab]');if(b)setTab(b.dataset.tab)});document.addEventListener('click',e=>{if(!menu.contains(e.target)&&!toggle.contains(e.target)){menu.classList.remove('open');toggle.setAttribute('aria-expanded','false')}});document.addEventListener('keydown',e=>{if(e.key==='Escape'){menu.classList.remove('open');toggle.setAttribute('aria-expanded','false');toggle.focus()}});if(new URLSearchParams(location.search).has('admin'))menu.querySelector('[data-tab="admin"]').hidden=false}
 async function start(){wireNav();try{const [data,meta]=await Promise.all([fetch('data.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Data unavailable');return r.json()}),fetch('ranking_snapshots.json').then(r=>r.ok?r.json():[])]);DATA=data;SNAPSHOTS=meta;celebrateNewVerifiedAchievements();const requested=location.hash.slice(1);if(['events','rivals','swim','evidence'].includes(requested)||requested==='admin'&&new URLSearchParams(location.search).has('admin'))setTab(requested);else render()}catch(e){$('status').textContent='Unable to load verified data: '+e.message}}

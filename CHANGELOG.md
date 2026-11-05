@@ -1,3 +1,9 @@
+## Achievements update (5 November 2026)
+- Added Today achievements: verified PB milestones, qualifying CARIFTA B milestones, calculated top-two milestones, and a source-linked timeline.
+- Added copyable milestone summaries without user-entered text.
+- Added a brief one-time notice for newly imported achievements after the first visit; respects reduced-motion settings.
+- Updated existing Today diagram test to account for the new achievements panel inserted before it.
+
 ## 2026-11-05 · Classification summary
 - Added separate USA Swimming motivational-level and CARIFTA eligible-standard totals to Today → Secured. Counts are derived from verified LCM results and linked to their evidence.
 - CARIFTA A/B totals use eligible-period swims, not all-date PBs; USA counts reflect highest achieved level per event.
@@ -39,3 +45,9 @@
 - Add Rivals five-discipline comparison selector for historical Boys 13–14, Boys 12 and combined Boys 12–14 ASAJ LCM cohorts. Unique swimmers' best evidenced times per event drive ranking-percentile scores; no missing data is estimated.
 - Restore Swim Intelligence as a navigation page with separate ASAJ and supplemental race-history views by event and course, charted from documented times with source links.
 - Preserve the five-discipline profile on Today.
+
+## Achievement celebration redesign (5 November 2026)
+- Added source-linked verified milestone hero, four distinct achievement badge categories, ASAJ LCM journey sparkline and locked next milestones.
+- Added local PNG export showing only Aidan S., sourced event/time and badge, and one-time confetti for newly imported achievements.
+- Reduced-motion preference disables celebration motion; decorative count-up never changes race times.
+- Added four automated tests documenting the evidence, hero, journey, milestone and privacy rules.
