@@ -28,3 +28,8 @@
 .classification-totals{padding:.55rem 0 .8rem;border-bottom:1px solid #c5dce5;margin-bottom:.75rem}
 .classification-totals p{margin:.3rem 0;line-height:1.5}
 .classification-totals details{margin-top:.5rem}
+
+/* Evidence-linked achievements, compact for poolside phones. */
+.achievement-badges{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}.achievement-badge{display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;padding:12px 5px;border-radius:12px;background:#eaf7f7;color:#153f4e;font-size:13px}.achievement-badge strong{font-size:22px}.achievement-entry{display:flex;justify-content:space-between;gap:10px;align-items:center;border-top:1px solid #d4e6eb;padding:12px 0}.achievement-entry small{display:block;margin-top:4px;color:#466271;line-height:1.5}.achievement-entry button{min-height:44px;min-width:58px;flex-shrink:0}.achievement-panel details summary{cursor:pointer;min-height:44px;padding:12px 0}@media(max-width:650px){.achievement-badge{font-size:12px}.achievement-entry{align-items:flex-start}.achievement-entry button{font-size:14px}}
+
+.achievement-celebration{position:fixed;bottom:16px;left:16px;right:16px;max-width:420px;margin:auto;padding:16px;background:#087e88;color:#fff;border-radius:12px;box-shadow:0 5px 22px #173f4e55;z-index:1000;pointer-events:none;animation:achievement-appear 4s ease forwards}@keyframes achievement-appear{0%{opacity:0;transform:translateY(12px)}10%,85%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(8px)}}@media(prefers-reduced-motion:reduce){.achievement-celebration{animation:none}}
