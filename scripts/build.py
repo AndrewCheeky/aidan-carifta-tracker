@@ -200,7 +200,7 @@ for e in EVENTS:
       'provisional_top_two':snapshot_top2,
       'provisional_selection_priority':provisional_priority
     }
-    results.append({'carifta':carifta,'event':e,'personal_best':a['time'] if a else None,'pb_source':a['source_url'] if a else None,'pb_evidence_pdf':a.get('source_pdf') if a else None,'pb_evidence_page':a.get('source_page') if a else None,'standards':{k:{'time':v['time'],'difference':fmt(asec-seconds(v['time'])) if asec is not None else None,'met':asec<=seconds(v['time']) if asec is not None else None,'source_url':v['source_url']} for k,v in std.items()},'rank':int(own['rank']) if own else None,'podium_gap':fmt(asec-seconds(third['time'])) if asec is not None and third else None,'second_place':{'swimmer':second_by_event[e]['swimmer'],'time':second_by_event[e]['time'],'ranking_date':second_by_event[e]['ranking_date'],'source_url':second_by_event[e]['source_url']} if e in second_by_event else None,'third_place':{'swimmer':third['swimmer'],'time':third['time'],'ranking_date':third['ranking_date'],'source_url':third['source_url']} if third else None,'boys12':boys12,'boys13':boys13})
+    results.append({'carifta':carifta,'event':e,'personal_best':a['time'] if a else None,'pb_source':a['source_url'] if a else None,'pb_evidence_pdf':a.get('source_pdf') if a else None,'pb_evidence_page':a.get('source_page') if a else None,'standards':{k:{'time':v['time'],'difference':fmt(asec-seconds(v['time'])) if asec is not None else None,'met':asec<=seconds(v['time']) if asec is not None else None,'source_url':v['source_url']} for k,v in std.items()},'rank':int(own['rank']) if own else None,'snapshot_time':own['time'] if own else None,'podium_gap':fmt(asec-seconds(third['time'])) if asec is not None and third else None,'second_place':{'swimmer':second_by_event[e]['swimmer'],'time':second_by_event[e]['time'],'ranking_date':second_by_event[e]['ranking_date'],'source_url':second_by_event[e]['source_url']} if e in second_by_event else None,'third_place':{'swimmer':third['swimmer'],'time':third['time'],'ranking_date':third['ranking_date'],'source_url':third['source_url']} if third else None,'boys12':boys12,'boys13':boys13})
 history.sort(key=lambda r:(r['race_date'],r['event'],seconds(r['time'])))
 meets=json.loads((DATA/'meets.json').read_text()); sources=json.loads((DATA/'official_sources.json').read_text())
 for meet in meets:
@@ -222,5 +222,14 @@ for sr in swimcloud_supplemental:
         raise ValueError(f"Invalid supplemental result at {sr.get('race_date','?')} {sr.get('event','?')} {sr.get('course','?')}: check swimmer, course and source_url")
     seconds(sr['time']);date.fromisoformat(sr['race_date'])
 output={'athlete':json.loads((DATA/'athlete.json').read_text()),'events':results,'race_history_2026':history,'asaj_competitor_results':competitor_results,'swimcloud_supplemental':swimcloud_supplemental,'usa_motivational':list(csv.DictReader((DATA/'usa_motivational_boys_13_14_lcm.csv').open())),'goodwill':goodwill,'carifta_criteria':CARIFTA_CRITERIA,'meets':meets,'sources':sources,'built_at':datetime.now().astimezone().isoformat(timespec='seconds'),'warning':'Only rows explicitly verified against ASAJ are published; empty fields mean not yet verified.'}
-(DOCS/'data.json').write_text(json.dumps(output,indent=2,ensure_ascii=False))
+# Competitor records are lazy-loaded only when Rivals opens.
+(DOCS/'competitors.json').write_text(json.dumps(output.pop('asaj_competitor_results'),separators=(',',':'),ensure_ascii=False))
+(DOCS/'data.json').write_text(json.dumps(output,separators=(',',':'),ensure_ascii=False))
+# Root UI is authoritative; deploy copies are generated consistently.
+for filename in ('index.html','style.css','app.js'):
+    (DOCS/filename).write_bytes((ROOT/filename).read_bytes())
+(DOCS/'coach_notes.json').write_bytes((DATA/'coach_notes.json').read_bytes())
+# Optional multiple dated snapshot files; one snapshot must never imply a trend.
+snapshots=sorted(DATA.glob('rankings_????-??-??.csv'))
+(DOCS/'ranking_snapshots.json').write_text(json.dumps([{'date':f.stem[9:],'file':f.name} for f in snapshots]))
 print('Built',len(results),'events;',len(perf),'verified personal bests;',len(standards),'standards;',len(ranks),'rankings')
