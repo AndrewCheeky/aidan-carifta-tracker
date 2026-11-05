@@ -7,7 +7,8 @@ class TrendSources(unittest.TestCase):
    self.assertIn(x,s)
  def test_new_navigation_and_evidence(self):
   html=(Path(__file__).resolve().parents[1]/"docs/index.html").read_text()
-  for tab in ('today','events','rivals','meets','evidence'):
+  for tab in ('today','events','rivals','swim','evidence'):
    self.assertIn(f'data-tab="{tab}"',html)
+  self.assertNotIn('data-tab="meets"',html)
   self.assertIn('data-tab="admin" hidden',html)
 if __name__=="__main__": unittest.main()

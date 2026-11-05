@@ -222,6 +222,52 @@ for sr in swimcloud_supplemental:
         raise ValueError(f"Invalid supplemental result at {sr.get('race_date','?')} {sr.get('event','?')} {sr.get('course','?')}: check swimmer, course and source_url")
     seconds(sr['time']);date.fromisoformat(sr['race_date'])
 output={'athlete':json.loads((DATA/'athlete.json').read_text()),'events':results,'race_history_2026':history,'asaj_competitor_results':competitor_results,'swimcloud_supplemental':swimcloud_supplemental,'usa_motivational':list(csv.DictReader((DATA/'usa_motivational_boys_13_14_lcm.csv').open())),'goodwill':goodwill,'carifta_criteria':CARIFTA_CRITERIA,'meets':meets,'sources':sources,'built_at':datetime.now().astimezone().isoformat(timespec='seconds'),'warning':'Only rows explicitly verified against ASAJ are published; empty fields mean not yet verified.'}
+# Date reconciliation is intentionally read-only. Different dates for the same PDF
+# are reported and withheld from qualifying-period comparisons until verified.
+from collections import defaultdict
+pdf_history=defaultdict(list)
+pdf_competitors=defaultdict(list)
+for row in history: pdf_history[row['source_pdf']].append(row)
+for row in competitor_results: pdf_competitors[row['source_pdf']].append(row)
+date_conflicts=[]
+for pdf_path in sorted(set(pdf_history)&set(pdf_competitors)):
+    a_dates=sorted({r['race_date'] for r in pdf_history[pdf_path]})
+    b_dates=sorted({(r['meet_start'],r['meet_end']) for r in pdf_competitors[pdf_path]})
+    if any((a!=start or a!=end) for a in a_dates for start,end in b_dates):
+        date_conflicts.append({'meet':pdf_history[pdf_path][0]['meet_name'],
+            'history_dates':a_dates,'competitor_ranges':[{'start':x,'end':y} for x,y in b_dates],
+            'source_pdf':pdf_path,'history_precision':sorted({r['date_precision'] for r in pdf_history[pdf_path]})})
+# Optional canonical dates are accepted only when explicitly confirmed against PDFs.
+canonical=json.loads((DATA/'meet_date_canonical.json').read_text())
+if canonical.get('status')!='awaiting_pdf_verification' and canonical.get('status')!='confirmed':raise ValueError('Invalid canonical-date status')
+for key,value in canonical.get('confirmed_meets',{}).items():
+    if not any(r['source_pdf']==key for r in date_conflicts):raise ValueError('Unknown canonical meet PDF: '+key)
+    if not value.get('verified_pdf') or not value.get('start') or not value.get('end'):raise ValueError('Canonical dates require PDF confirmation')
+    date.fromisoformat(value['start']);date.fromisoformat(value['end'])
+# The same canonical fields are emitted for both data sources when confirmed.
+# Original source dates remain untouched for provenance.
+for row in history+competitor_results:
+    verified_dates=canonical.get('confirmed_meets',{}).get(row['source_pdf'])
+    row['canonical_meet_start']=verified_dates['start'] if verified_dates else None
+    row['canonical_meet_end']=verified_dates['end'] if verified_dates else None
+# Do not apply a proposed date automatically; source CSV reconciliation requires review.
+conflicting_pdfs={r['source_pdf'] for r in date_conflicts}
+# A conflicting date can still establish *period membership* when every
+# documented candidate date is on the same side of the cutoff.
+conflict_eligibility={r['source_pdf']:all(d>=CARIFTA_START.isoformat() for d in r['history_dates']) and all(v['start']>=CARIFTA_START.isoformat() and v['end']>=CARIFTA_START.isoformat() for v in r['competitor_ranges']) for r in date_conflicts}
+
+report=['# ASAJ meet-date conflicts (unresolved)','',
+        'These are source metadata conflicts, not corrected race dates. No dates were guessed. '
+        'Confirm the canonical date or full meet range against each linked PDF before reconciling.', '',
+        '| Meet | Race history date | Competitor start–end | Race-history precision | PDF |',
+        '|---|---|---|---|---|']
+for row in date_conflicts:
+    pdf_link='../docs/'+row['source_pdf']
+    report.append('| '+row['meet']+' | '+', '.join(row['history_dates'])+' | '+', '.join(x['start']+' to '+x['end'] for x in row['competitor_ranges'])+' | '+', '.join(row['history_precision'])+' | [ASAJ PDF]('+pdf_link.replace(' ','%20')+') |')
+(ROOT/'DATE_CONFLICT_REPORT.md').write_text('\n'.join(report)+'\n')
+# Canonical dates are deliberately null until the owner confirms them.
+(DOCS/'date_conflicts.json').write_text(json.dumps(date_conflicts,ensure_ascii=False,separators=(',',':')))
+
 # Derived competition intelligence. Only source-verified LCM races, never estimated times.
 # Age is the documented age at each race; these are imported-result comparisons,
 # not an official live age-group ranking or proof of current eligibility.
@@ -238,16 +284,17 @@ for event in EVENTS:
         races=sorted(races,key=lambda r:(r['meet_start'],seconds(r['time'])))
         best=min(races,key=lambda r:seconds(r['time']))
         dated=defaultdict(list)
-        for race in races: dated[race['meet_start']].append(race)
+        for race in races:
+            if race['source_pdf'] not in conflicting_pdfs: dated[race['meet_start']].append(race)
         dates=sorted(dated)
-        earliest=min(dated[dates[0]],key=lambda r:seconds(r['time']))
-        latest=min(dated[dates[-1]],key=lambda r:seconds(r['time']))
+        earliest=min(dated[dates[0]],key=lambda r:seconds(r['time'])) if dates else best
+        latest=min(dated[dates[-1]],key=lambda r:seconds(r['time'])) if dates else best
         change=round(seconds(latest['time'])-seconds(earliest['time']),2) if len(dates)>=2 else None
-        swimmers.append({'name':best['swimmer'],'time':best['time'],'date':best['meet_start'],
+        swimmers.append({'name':best['swimmer'],'time':best['time'],'date':None if best['source_pdf'] in conflicting_pdfs else best['meet_start'],
             'source_pdf':best['source_pdf'],'source_page':best['source_page'],
             'result_count':len(races),'dated_meets':len(dates),'change_seconds':change,
-            'first_result':{'time':earliest['time'],'date':earliest['meet_start'],'source_pdf':earliest['source_pdf'],'source_page':earliest['source_page']},
-            'last_result':{'time':latest['time'],'date':latest['meet_start'],'source_pdf':latest['source_pdf'],'source_page':latest['source_page']}})
+            'first_result':{'time':earliest['time'],'date':None if earliest['source_pdf'] in conflicting_pdfs else earliest['meet_start'],'source_pdf':earliest['source_pdf'],'source_page':earliest['source_page']},
+            'last_result':{'time':latest['time'],'date':None if latest['source_pdf'] in conflicting_pdfs else latest['meet_start'],'source_pdf':latest['source_pdf'],'source_page':latest['source_page']}})
     swimmers.sort(key=lambda r:(seconds(r['time']),r['name']))
     aidan=next((r for r in swimmers if ''.join(c for c in r['name'].casefold() if c.isalpha())=='seaton aidan'.replace(' ','')),None)
     # The PB may originate in the separate ASAJ performance file. Use it only
@@ -260,19 +307,55 @@ for event in EVENTS:
             aidan={'name':'Seaton, Aidan','time':pb,'date':None,'source_pdf':event_row['pb_evidence_pdf'],'source_page':event_row['pb_evidence_page'],'result_count':None,'dated_meets':None,'change_seconds':None}
             swimmers=[r for r in swimmers if ''.join(c for c in r['name'].casefold() if c.isalpha())!='seatonaidan']+[aidan]
             swimmers.sort(key=lambda r:(seconds(r['time']),r['name']))
+    if aidan and not aidan.get('date'):
+        matching=[r for r in history if r['event']==event and r['time']==aidan['time'] and r['date_precision']=='exact' and r['source_pdf']==aidan['source_pdf'] and str(r['source_page'])==str(aidan['source_page'])]
+        if matching:aidan['date']=matching[0]['race_date']
     rank=next((i+1 for i,r in enumerate(swimmers) if r is aidan),None)
     intelligence[event]={'swimmers':swimmers,'aidan':aidan,'rank':rank,'count':len(swimmers),
         'leader':swimmers[0] if swimmers else None,
         'second':swimmers[1] if len(swimmers)>1 else None,
         'last_imported_date':max((r['meet_end'] for rs in by_event[event].values() for r in rs),default=None)}
 output['calculated_intelligence']=intelligence
+# Qualifying-period rankings use only fully evidenced dated results. A meet
+# range crossing the cutoff, an undated result, or a conflicting PDF is excluded.
+# Every competitor's best eligible LCM result is counted once per event.
+qualifying_intelligence={}
+excluded_count=0
+for event in EVENTS:
+    by_swimmer=defaultdict(list)
+    for row in competitor_results:
+        if row['event']!=event or row['gender']!='Boys' or row['age'] not in ('13','14') or row['course']!='LCM':continue
+        if row['source_pdf'] in conflicting_pdfs and not conflict_eligibility[row['source_pdf']]:
+            excluded_count+=1;continue
+        if not row.get('meet_start') or not row.get('meet_end') or row['meet_start']<CARIFTA_START.isoformat() or row['meet_end']<CARIFTA_START.isoformat() or row['meet_start']!=row['meet_end']:
+            excluded_count+=1;continue
+        by_swimmer[''.join(c for c in row['swimmer'].casefold() if c.isalpha())].append(row)
+    for row in history:
+        if row['event']!=event:continue
+        if (row['source_pdf'] in conflicting_pdfs and not conflict_eligibility[row['source_pdf']]) or row['race_date']<CARIFTA_START.isoformat() or (row['date_precision']=='meet_range' and row['meet_dates'].split(' to ')[0]<CARIFTA_START.isoformat()):
+            excluded_count+=1;continue
+        by_swimmer['seatonaidan'].append({'swimmer':'Seaton, Aidan','time':row['time'],'meet_start':row['race_date'],'source_pdf':row['source_pdf'],'source_page':row['source_page']})
+    swimmers=[]
+    for key,rows in by_swimmer.items():
+        best=min(rows,key=lambda r:seconds(r['time']))
+        swimmers.append({'name':best['swimmer'],'time':best['time'],'date':None if best['source_pdf'] in conflicting_pdfs else best['meet_start'],'source_pdf':best['source_pdf'],'source_page':best['source_page']})
+    swimmers.sort(key=lambda r:(seconds(r['time']),r['name']))
+    own=next((r for r in swimmers if ''.join(c for c in r['name'].casefold() if c.isalpha())=='seatonaidan'),None)
+    runner=swimmers[1] if len(swimmers)>1 else None
+    rank=next((i+1 for i,r in enumerate(swimmers) if r is own),None)
+    qualifying_intelligence[event]={'aidan':own,'rank':rank,'count':len(swimmers),'leader':swimmers[0] if swimmers else None,'second':runner,
+        'lead_over_second_seconds':round(seconds(runner['time'])-seconds(own['time']),2) if own and runner and rank==1 else None}
+output['qualifying_intelligence']=qualifying_intelligence
+output['qualifying_excluded_records']=excluded_count
+output['date_conflicts']=date_conflicts
+
 # Competitor records are lazy-loaded only when Rivals opens.
 (DOCS/'competitors.json').write_text(json.dumps(output.pop('asaj_competitor_results'),separators=(',',':'),ensure_ascii=False))
 (DOCS/'data.json').write_text(json.dumps(output,separators=(',',':'),ensure_ascii=False))
 # Root UI is authoritative; deploy copies are generated consistently.
 for filename in ('index.html','style.css','app.js'):
     (DOCS/filename).write_bytes((ROOT/filename).read_bytes())
-(DOCS/'coach_notes.json').write_bytes((DATA/'coach_notes.json').read_bytes())
+
 # Optional multiple dated snapshot files; one snapshot must never imply a trend.
 snapshots=sorted(DATA.glob('rankings_????-??-??.csv'))
 snapshot_output=[]
