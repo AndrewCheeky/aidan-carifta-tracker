@@ -69,3 +69,20 @@ html,body{background:#f6fafc;color:#142b3c}
 nav button.active:hover,nav button.active:focus-visible{background:#064766;color:#fff}
 nav button[hidden],[hidden]{display:none!important}
 @media(max-width:650px){a{overflow-wrap:anywhere}button,select,input{font-size:16px}table{font-size:14px}}
+
+/* Competitive gap bands, inclusive 6% threshold. */
+.visual-bar-fill.ahead{background:#087b50}
+.visual-bar-fill.under-six{background:#d97706}
+.visual-bar-fill.six-plus{background:#c72d3c}
+.visual-bar-fill:not(.ahead):not(.under-six):not(.six-plus){background:transparent}
+/* Header-aligned collapsible menu. */
+header{position:relative;display:flex;align-items:flex-start;gap:16px}
+.header-title{flex:1;min-width:0}
+.dashboard-menu-toggle{display:flex;align-items:center;gap:8px;flex:0 0 auto;background:#075d81;color:white;border:1px solid #075d81;border-radius:10px;min-height:48px;padding:10px 14px;font-size:15px;line-height:1}
+.dashboard-menu-toggle:hover,.dashboard-menu-toggle:focus-visible{background:#064766;color:#fff}
+.menu-icon{font-size:24px;line-height:1}
+.dashboard-menu{display:none;position:absolute;z-index:100;top:auto;left:max(12px,calc((100vw - 1180px)/2 + 22px));width:min(310px,calc(100vw - 24px));margin:8px 0;padding:10px;background:#fff;border:1px solid #9bbdce;border-radius:14px;box-shadow:0 12px 30px rgba(12,35,57,.2);flex-direction:column;gap:5px}
+.dashboard-menu.menu-open{display:flex}
+.dashboard-menu button{display:block;width:100%;text-align:left;flex:none;min-height:44px}
+.dashboard-menu button[hidden]{display:none!important}
+@media(max-width:650px){header{gap:10px;padding:16px}.dashboard-menu-toggle{padding:10px;min-width:48px}.menu-label{display:none}.dashboard-menu{left:12px}}
