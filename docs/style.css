@@ -23,3 +23,8 @@
 @media(max-width:650px){.rival-event-chart{padding:10px}.rival-chart-head{font-size:13px}}
 
 .filter-chips{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.filter-chips button[aria-pressed="true"]{background:#087e88;color:white}.event-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}.event-summary span{padding:8px;background:#f2f9fb;border-radius:9px;font-size:14px}.event-card details{border-top:1px solid #cbdfe6;margin-top:12px}.event-card details p{overflow-wrap:anywhere}@media(max-width:650px){.event-summary{grid-template-columns:1fr}.filter-chips button{font-size:14px;padding:8px 10px}.event-card .metric-grid strong{font-size:18px}}
+
+/* Compact, source-linked classification summary on Today. */
+.classification-totals{padding:.55rem 0 .8rem;border-bottom:1px solid #c5dce5;margin-bottom:.75rem}
+.classification-totals p{margin:.3rem 0;line-height:1.5}
+.classification-totals details{margin-top:.5rem}

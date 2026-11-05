@@ -1,3 +1,7 @@
+## 2026-11-05 · Classification summary
+- Added separate USA Swimming motivational-level and CARIFTA eligible-standard totals to Today → Secured. Counts are derived from verified LCM results and linked to their evidence.
+- CARIFTA A/B totals use eligible-period swims, not all-date PBs; USA counts reflect highest achieved level per event.
+
 ## Round 2 · 2026-11-05
 - Removed Meet Plan, editable coach notes, print sheet and public legacy analytics.
 - Added qualifying-period calculated ranking and separate eligible vs overall PB.

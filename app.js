@@ -116,13 +116,38 @@ function swimIntelligence(){
 function eventAnalytics(){const ranked=DATA.events.map(e=>{const i=calculated(e),b=standardGap(e),s=snapshotGap(e);return {e,i,b,s,score:Number.isFinite(b)&&Number.isFinite(s)?b+s:null}});return `<section class="panel"><h2>Competition intelligence · Events</h2><p>Event opportunities use the combined seconds to B and to calculated second place. Smaller totals indicate a closer pair of benchmarks, not guaranteed selection.</p><div class="analytics-grid">${ranked.filter(x=>x.score!==null).sort((a,b)=>a.score-b.score).map(x=>`<div class="analytics-item"><strong>${esc(x.e.event)}</strong><span>Calculated #${x.i?.rank??'—'} of ${x.i?.count??'—'}</span><span>B: ${gapText(x.b)} · Top 2: ${gapText(x.s)}</span><span>Combined: ${x.score.toFixed(2)}s · ${competitorSource(x.i?.aidan,'ASAJ PB')} · ${competitorSource(x.i?.second,'2nd place')} · ${a(standard(x.e)?.source_url,'B standard')}</span></div>`).join('')||'<p>No fully evidenced comparisons.</p>'}</div></section>`;}
 function rankingHistory(){if(SNAPSHOTS.length<2)return `<p>Needs a second dated, verified ranking snapshot to show a trend. The 29 September 2026 official ranking remains historical.</p>`;const sorted=[...SNAPSHOTS].sort((a,b)=>a.date.localeCompare(b.date));const last=sorted.at(-1),prev=sorted.at(-2);return `<p>Comparing verified ranking snapshots: ${esc(prev.date)} and ${esc(last.date)}. A positive change in the gap means it widened.</p><div class="table-wrap"><table><thead><tr><th>Event</th><th>Earlier gap to 2nd</th><th>Later gap to 2nd</th><th>Movement</th></tr></thead><tbody>${DATA.events.map(e=>{const a=prev.events?.[e.event],b=last.events?.[e.event];if(!a||!b||a.gap_to_second===null||b.gap_to_second===null)return '';const change=b.gap_to_second-a.gap_to_second;return `<tr><td>${esc(e.event)}</td><td>${a.gap_to_second.toFixed(2)}s · ${a.source?pdf(a.source,'Evidence',a.page):'—'}</td><td>${b.gap_to_second.toFixed(2)}s · ${b.source?pdf(b.source,'Evidence',b.page):'—'}</td><td>${Math.abs(change)<.005?'Unchanged':change<0?'Closing':'Widening'} (${Math.abs(change).toFixed(2)}s)</td></tr>`}).join('')||'<tr><td colspan="4">No matching verified gaps in both snapshots</td></tr>'}</tbody></table></div>`;}
 
+// Classification totals are calculated from sourced LCM results and loaded standards.
+// USA counts use each event's highest achieved motivational level; CARIFTA counts
+// use only qualifying-period eligible ASAJ results, with A taking precedence over B.
+function classificationTotals(){
+ const usaLevels=['AAAA','AAA','AA','A','BB','B'];
+ const usa=Object.fromEntries(usaLevels.map(level=>[level,[]]));
+ const carifta={A:[],B:[]};
+ for(const e of DATA.events){
+  const pb=calculated(e)?.aidan;
+  const usaStandard=(DATA.usa_motivational||[]).find(r=>r.event===e.event&&r.course==='LCM'&&r.age_group==='13-14'&&r.gender==='Boys');
+  const pbSeconds=secs(pb?.time);
+  if(pb?.source_pdf&&pb?.source_page&&pbSeconds!==null&&usaStandard){
+   const level=usaLevels.find(l=>secs(usaStandard[l])!==null&&pbSeconds<=secs(usaStandard[l]));
+   if(level)usa[level].push(e);
+  }
+  const eligibleBest=eligible(e), eligibleSeconds=secs(eligibleBest?.time);
+  if(eligibleBest?.source_pdf&&eligibleBest?.source_page&&eligibleSeconds!==null){
+   if(secs(e.standards?.A?.time)!==null&&eligibleSeconds<=secs(e.standards.A.time))carifta.A.push(e);
+   else if(secs(e.standards?.B?.time)!==null&&eligibleSeconds<=secs(e.standards.B.time))carifta.B.push(e);
+  }
+ }
+ const usaText=usaLevels.filter(l=>usa[l].length).map(l=>`${l} ${usa[l].length}`).join(' · ')||'None recorded';
+ const cariftaText=['A','B'].filter(l=>carifta[l].length).map(l=>`${l} ${carifta[l].length}`).join(' · ')||'None recorded';
+ return `<div class="classification-totals"><p><strong>USA Swimming levels met:</strong> ${esc(usaText)}</p><p><strong>CARIFTA standards met (eligible LCM):</strong> ${esc(cariftaText)}</p><details><summary>Classification evidence</summary>${usaLevels.filter(l=>usa[l].length).map(l=>`<p><strong>USA ${l}:</strong> ${usa[l].map(e=>`${esc(e.event)} · ${competitorSource(calculated(e)?.aidan,'ASAJ PB')}`).join(' · ')}</p>`).join('')}${['A','B'].filter(l=>carifta[l].length).map(l=>`<p><strong>CARIFTA ${l}:</strong> ${carifta[l].map(e=>`${esc(e.event)} · ${competitorSource(eligible(e),'Eligible ASAJ result')} · ${a(e.standards?.[l]?.source_url,'Standard')}`).join(' · ')}</p>`).join('')}</details></div>`;
+}
 function renderToday(){
  const m=nextMeet(),fs=focus(),b=byPriority().slice().sort((x,y)=>x.bGap-y.bGap)[0],t=byPriority().slice().sort((x,y)=>x.sGap-y.sGap)[0];
  const improvements=DATA.events.filter(e=>!secured(e)).map(e=>({e,im:improvement(e)})).filter(x=>x.im&&x.im.delta>0).sort((a,b)=>b.im.delta-a.im.delta);
  const securedEvents=DATA.events.filter(secured),fresh=DATA.events.filter(needsFresh);
  const targets=[...new Map([...fs,...fresh].map(e=>[e.event,e])).values()].slice(0,5);
  return `<section class="panel"><h2>Today · Swim readiness</h2>${m?`<h3>Next: ${esc(m.name)}</h3><p><strong>${meetCountdown(m)} days until ${dateText(m.start)}</strong> · ${dateText(m.start)} to ${dateText(m.end)} · ${a(m.url,'ASAJ calendar')}</p>`:'<p>No upcoming meet in the published calendar.</p>'}</section>
- <section class="panel"><h2>Secured · calculated qualifying position</h2>${securedEvents.map(e=>`<div class="list-row"><strong>${esc(e.event)}</strong> · B standard met · ${gapToSecondText(e)} · ${competitorSource(eligible(e),'ASAJ qualifying result')}</div>`).join('')||'<p>None currently supported by the imported qualifying results.</p>'}<p class="subtle">Calculated from imported qualifying-period evidence, not official selection. Limited field sizes may affect rankings.</p></section>
+ <section class="panel"><h2>Secured · calculated qualifying position</h2>${classificationTotals()}${securedEvents.map(e=>`<div class="list-row"><strong>${esc(e.event)}</strong> · B standard met · ${gapToSecondText(e)} · ${competitorSource(eligible(e),'ASAJ qualifying result')}</div>`).join('')||'<p>None currently supported by the imported qualifying results.</p>'}<p class="subtle">Calculated from imported qualifying-period evidence, not official selection. Limited field sizes may affect rankings.</p></section>
  <section class="grid" aria-label="Three highlights"><div class="mini-card"><small>Closest to B time</small><strong>${esc(b?.event||'—')}</strong><p>${b?gapText(b.bGap):'No eligible comparison'}</p>${b?a(standard(b)?.source_url,'B standard'):''}</div><div class="mini-card"><small>Closest to top 2</small><strong>${esc(t?.event||'—')}</strong><p>${t?gapToSecondText(t):'No eligible comparison'}</p>${t?competitorSource(qi(t)?.second,'ASAJ second-place source'):''}</div><div class="mini-card"><small>Biggest recent improvement</small><strong>${esc(improvements[0]?.e.event||'—')}</strong><p>${improvements[0]?`${improvements[0].im.delta.toFixed(2)}s faster`:'Not enough dated history'}</p>${improvements[0]?pdf(improvements[0].im.first.source_pdf,'ASAJ baseline',improvements[0].im.first.source_page):''}</div></section>
  <section class="panel"><h2>Needs a fresh swim</h2>${fresh.map(e=>`<div class="list-row">${esc(e.event)} · No qualifying-period result · ${a(standard(e)?.source_url,'B standard')}</div>`).join('')||'<p>All tracked events have qualifying-period results.</p>'}</section>
  <section class="panel"><h2>Focus this month</h2><p class="subtle">Smallest combined eligible seconds to B and to calculated second; secured events excluded.</p>${fs.map(e=>`<div class="list-row"><strong>${esc(e.event)}</strong> · B ${gapText(e.bGap)} · Second ${gapToSecondText(e)} · ${competitorSource(qi(e)?.second,'ASAJ second')}</div>`).join('')||'<p>Not enough verified qualifying comparisons.</p>'}</section>
