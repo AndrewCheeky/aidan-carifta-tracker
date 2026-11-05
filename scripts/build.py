@@ -222,6 +222,50 @@ for sr in swimcloud_supplemental:
         raise ValueError(f"Invalid supplemental result at {sr.get('race_date','?')} {sr.get('event','?')} {sr.get('course','?')}: check swimmer, course and source_url")
     seconds(sr['time']);date.fromisoformat(sr['race_date'])
 output={'athlete':json.loads((DATA/'athlete.json').read_text()),'events':results,'race_history_2026':history,'asaj_competitor_results':competitor_results,'swimcloud_supplemental':swimcloud_supplemental,'usa_motivational':list(csv.DictReader((DATA/'usa_motivational_boys_13_14_lcm.csv').open())),'goodwill':goodwill,'carifta_criteria':CARIFTA_CRITERIA,'meets':meets,'sources':sources,'built_at':datetime.now().astimezone().isoformat(timespec='seconds'),'warning':'Only rows explicitly verified against ASAJ are published; empty fields mean not yet verified.'}
+# Derived competition intelligence. Only source-verified LCM races, never estimated times.
+# Age is the documented age at each race; these are imported-result comparisons,
+# not an official live age-group ranking or proof of current eligibility.
+from collections import defaultdict
+by_event=defaultdict(lambda:defaultdict(list))
+for row in competitor_results:
+    if row['gender']=='Boys' and row['course']=='LCM' and row['age'] in ('13','14'):
+        key=''.join(ch for ch in row['swimmer'].casefold() if ch.isalpha())
+        by_event[row['event']][key].append(row)
+intelligence={}
+for event in EVENTS:
+    swimmers=[]
+    for key, races in by_event[event].items():
+        races=sorted(races,key=lambda r:(r['meet_start'],seconds(r['time'])))
+        best=min(races,key=lambda r:seconds(r['time']))
+        dated=defaultdict(list)
+        for race in races: dated[race['meet_start']].append(race)
+        dates=sorted(dated)
+        earliest=min(dated[dates[0]],key=lambda r:seconds(r['time']))
+        latest=min(dated[dates[-1]],key=lambda r:seconds(r['time']))
+        change=round(seconds(latest['time'])-seconds(earliest['time']),2) if len(dates)>=2 else None
+        swimmers.append({'name':best['swimmer'],'time':best['time'],'date':best['meet_start'],
+            'source_pdf':best['source_pdf'],'source_page':best['source_page'],
+            'result_count':len(races),'dated_meets':len(dates),'change_seconds':change,
+            'first_result':{'time':earliest['time'],'date':earliest['meet_start'],'source_pdf':earliest['source_pdf'],'source_page':earliest['source_page']},
+            'last_result':{'time':latest['time'],'date':latest['meet_start'],'source_pdf':latest['source_pdf'],'source_page':latest['source_page']}})
+    swimmers.sort(key=lambda r:(seconds(r['time']),r['name']))
+    aidan=next((r for r in swimmers if ''.join(c for c in r['name'].casefold() if c.isalpha())=='seaton aidan'.replace(' ','')),None)
+    # The PB may originate in the separate ASAJ performance file. Use it only
+    # when that row has an explicit source PDF and page; otherwise do not silently
+    # replace a fully evidenced imported swim with an unsourced figure.
+    event_row=next((r for r in results if r['event']==event),None)
+    if event_row and event_row.get('pb_evidence_pdf') and event_row.get('pb_evidence_page'):
+        pb=event_row['personal_best']
+        if pb and (aidan is None or seconds(pb)<seconds(aidan['time'])):
+            aidan={'name':'Seaton, Aidan','time':pb,'date':None,'source_pdf':event_row['pb_evidence_pdf'],'source_page':event_row['pb_evidence_page'],'result_count':None,'dated_meets':None,'change_seconds':None}
+            swimmers=[r for r in swimmers if ''.join(c for c in r['name'].casefold() if c.isalpha())!='seatonaidan']+[aidan]
+            swimmers.sort(key=lambda r:(seconds(r['time']),r['name']))
+    rank=next((i+1 for i,r in enumerate(swimmers) if r is aidan),None)
+    intelligence[event]={'swimmers':swimmers,'aidan':aidan,'rank':rank,'count':len(swimmers),
+        'leader':swimmers[0] if swimmers else None,
+        'second':swimmers[1] if len(swimmers)>1 else None,
+        'last_imported_date':max((r['meet_end'] for rs in by_event[event].values() for r in rs),default=None)}
+output['calculated_intelligence']=intelligence
 # Competitor records are lazy-loaded only when Rivals opens.
 (DOCS/'competitors.json').write_text(json.dumps(output.pop('asaj_competitor_results'),separators=(',',':'),ensure_ascii=False))
 (DOCS/'data.json').write_text(json.dumps(output,separators=(',',':'),ensure_ascii=False))
