@@ -5,7 +5,7 @@ class FinalIntegration(unittest.TestCase):
  def test_five_discipline_diagram_is_on_today(self):
   js=(ROOT/'app.js').read_text()
   self.assertIn('function strengthDiagram()',js)
-  self.assertIn('</section>${strengthDiagram()}`',js)
+  self.assertIn('</section>${achievementPanel()}${strengthDiagram()}`',js)
   self.assertIn('function disciplineScores()',js)
   self.assertIn('function eventAnalytics()',js)
   self.assertIn('function renderEvents()',js)
