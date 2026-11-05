@@ -1,3 +1,8 @@
+## Events to Swim Intelligence navigation
+- Event headings now open the corresponding Swim Intelligence event, expanding LCM history and scrolling to it.
+- Removed the duplicate 2026 race journey from Today Achievements; source-backed race history remains in Swim Intelligence.
+- No verified race data or standards changed.
+
 ## Achievements update (5 November 2026)
 - Added Today achievements: verified PB milestones, qualifying CARIFTA B milestones, calculated top-two milestones, and a source-linked timeline.
 - Added copyable milestone summaries without user-entered text.
