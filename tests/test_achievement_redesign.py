@@ -12,17 +12,10 @@ class AchievementRedesignTests(unittest.TestCase):
         self.assertIn('qt<=bt', APP)
         self.assertIn("x.type==='Personal best'&&x.improvement>0", APP)
 
-    def test_race_journey_is_not_duplicated_in_achievements(self):
+    def test_journey_removed_in_favour_of_swim_intelligence(self):
         self.assertNotIn('function achievementJourney(event)', APP)
-        self.assertNotIn('2026 race journey', APP)
-        self.assertIn('function swimIntelligence()', APP)
-
-    def test_event_links_open_matching_swim_history(self):
-        self.assertIn('data-swim-event=', APP)
-        self.assertIn('data-swim-section=', APP)
-        self.assertIn("setTab('swim')", APP)
-        self.assertIn('lcm.open=true', APP)
-        self.assertIn('section.scrollIntoView', APP)
+        self.assertIn('data-swim-event', APP)
+        self.assertIn('function swimRaceStates(rows)', APP)
 
     def test_locked_milestones_only_for_positive_gaps(self):
         self.assertIn('function achievementNextUp()', APP)

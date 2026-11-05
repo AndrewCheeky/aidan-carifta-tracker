@@ -8,6 +8,7 @@ DATA=ROOT/'data'; DOCS=ROOT/'docs'; DOCS.mkdir(exist_ok=True)
 EVENTS=json.loads((DATA/'athlete.json').read_text())['events']
 OFFICIAL_HOSTS={'asaj.com.jm','www.asaj.com.jm','liveresults.asaj.com.jm'}
 from urllib.parse import urlparse
+from rivals_view import make_view
 
 def seconds(s):
     s=s.strip()
@@ -251,18 +252,21 @@ for row in history+competitor_results:
     row['canonical_meet_start']=verified_dates['start'] if verified_dates else None
     row['canonical_meet_end']=verified_dates['end'] if verified_dates else None
 # Do not apply a proposed date automatically; source CSV reconciliation requires review.
-conflicting_pdfs={r['source_pdf'] for r in date_conflicts}
+conflicting_pdfs={r['source_pdf'] for r in date_conflicts if r['source_pdf'] not in canonical.get('confirmed_meets',{})}
 # A conflicting date can still establish *period membership* when every
 # documented candidate date is on the same side of the cutoff.
 conflict_eligibility={r['source_pdf']:all(d>=CARIFTA_START.isoformat() for d in r['history_dates']) and all(v['start']>=CARIFTA_START.isoformat() and v['end']>=CARIFTA_START.isoformat() for v in r['competitor_ranges']) for r in date_conflicts}
 
-report=['# ASAJ meet-date conflicts (unresolved)','',
+report=['# ASAJ meet-date conflicts (resolved and unresolved)','',
         'These are source metadata conflicts, not corrected race dates. No dates were guessed. '
         'Confirm the canonical date or full meet range against each linked PDF before reconciling.', '',
         '| Meet | Race history date | Competitor start–end | Race-history precision | PDF |',
         '|---|---|---|---|---|']
 for row in date_conflicts:
     pdf_link='../docs/'+row['source_pdf']
+    if row['source_pdf'] in canonical.get('confirmed_meets',{}):
+        report.append('**Resolved:** '+row['meet']+' · canonical 2026-06-20 (single-day event), confirmed from the [ASAJ PDF](../docs/'+row['source_pdf'].replace(' ','%20')+'). The PDF header also carries a later report-generation timestamp. Source CSV dates retained for audit.')
+        continue
     report.append('| '+row['meet']+' | '+', '.join(row['history_dates'])+' | '+', '.join(x['start']+' to '+x['end'] for x in row['competitor_ranges'])+' | '+', '.join(row['history_precision'])+' | [ASAJ PDF]('+pdf_link.replace(' ','%20')+') |')
 (ROOT/'DATE_CONFLICT_REPORT.md').write_text('\n'.join(report)+'\n')
 # Canonical dates are deliberately null until the owner confirms them.
@@ -320,11 +324,14 @@ output['calculated_intelligence']=intelligence
 # range crossing the cutoff, an undated result, or a conflicting PDF is excluded.
 # Every competitor's best eligible LCM result is counted once per event.
 qualifying_intelligence={}
+qualifying_ladders={}
 excluded_count=0
 for event in EVENTS:
     by_swimmer=defaultdict(list)
     for row in competitor_results:
         if row['event']!=event or row['gender']!='Boys' or row['age'] not in ('13','14') or row['course']!='LCM':continue
+        if row.get('canonical_meet_start') and row['canonical_meet_start']<CARIFTA_START.isoformat():
+            excluded_count+=1;continue
         if row['source_pdf'] in conflicting_pdfs and not conflict_eligibility[row['source_pdf']]:
             excluded_count+=1;continue
         if not row.get('meet_start') or not row.get('meet_end') or row['meet_start']<CARIFTA_START.isoformat() or row['meet_end']<CARIFTA_START.isoformat() or row['meet_start']!=row['meet_end']:
@@ -343,9 +350,11 @@ for event in EVENTS:
     own=next((r for r in swimmers if ''.join(c for c in r['name'].casefold() if c.isalpha())=='seatonaidan'),None)
     runner=swimmers[1] if len(swimmers)>1 else None
     rank=next((i+1 for i,r in enumerate(swimmers) if r is own),None)
+    qualifying_ladders[event]=[{'name':r['name'],'time':r['time'],'source_pdf':r['source_pdf'],'source_page':r['source_page'],'is_aidan':r is own} for r in swimmers]
     qualifying_intelligence[event]={'aidan':own,'rank':rank,'count':len(swimmers),'leader':swimmers[0] if swimmers else None,'second':runner,
         'lead_over_second_seconds':round(seconds(runner['time'])-seconds(own['time']),2) if own and runner and rank==1 else None}
 output['qualifying_intelligence']=qualifying_intelligence
+output['rivals_view']=make_view(EVENTS,qualifying_ladders,intelligence,[{**c,'resolved':c['source_pdf'] in canonical.get('confirmed_meets',{})} for c in date_conflicts])
 output['qualifying_excluded_records']=excluded_count
 output['date_conflicts']=date_conflicts
 

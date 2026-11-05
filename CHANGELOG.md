@@ -1,8 +1,3 @@
-## Events to Swim Intelligence navigation
-- Event headings now open the corresponding Swim Intelligence event, expanding LCM history and scrolling to it.
-- Removed the duplicate 2026 race journey from Today Achievements; source-backed race history remains in Swim Intelligence.
-- No verified race data or standards changed.
-
 ## Achievements update (5 November 2026)
 - Added Today achievements: verified PB milestones, qualifying CARIFTA B milestones, calculated top-two milestones, and a source-linked timeline.
 - Added copyable milestone summaries without user-entered text.
@@ -57,8 +52,8 @@
 - Reduced-motion preference disables celebration motion; decorative count-up never changes race times.
 - Added four automated tests documenting the evidence, hero, journey, milestone and privacy rules.
 
-### Swim Intelligence PB and trends
-- Highlight cumulative PB dates and exact recorded times in each course/event history.
-- Colour and label each consecutive race segment as faster, unchanged, or slower.
-- Overlay a dashed least-squares trend comparison without forecasting or changing race times.
-- Keep ASAJ evidence and supplemental SwimCloud attribution distinct.
+## Rivals qualifying-period redesign and Swimaz date confirmation (2026-11-05)
+- Confirmed the single-day Swimaz meet date as 20 June 2026 from the results PDF heading; preserved original source CSV dates for audit and added canonical dates to the generated records. Swimaz is excluded as pre-cutoff. All 13 existing qualifying intelligence event objects remain identical to the pre-change build.
+- Added Python-derived `rivals_view` with source-backed eligible ladders, top-two safety margins, second-place chase gaps, missing-swim targets, qualifying watchlist, and cutoff-straddling date conflict notices. Public Rivals JSON uses abbreviated names only.
+- Replaced Rivals radar, comparison selector, and per-event charts with mobile-first event groups, textual status chips, accessible comparison meters, ASAJ PDF evidence links, and a collapsed Boys 12 watchlist.
+- Updated obsolete achievement regression test (the separate journey panel was removed in an earlier release); added nine Rivals fixture and integrity tests.

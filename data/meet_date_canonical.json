@@ -1,1 +1,10 @@
-{"status":"awaiting_pdf_verification","confirmed_meets":{}}
+{
+  "status": "confirmed",
+  "confirmed_meets": {
+    "asaj-pdfs/2026 Swimaz results.pdf": {
+      "start": "2026-06-20",
+      "end": "2026-06-20",
+      "verified_pdf": true
+    }
+  }
+}
