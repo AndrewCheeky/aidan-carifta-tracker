@@ -48,3 +48,11 @@ h2,h3{color:#f3f9f9}th{color:var(--t-teal-light)}th,td{border-bottom-color:#3549
 .swim-classification-line{display:flex;align-items:center;flex-wrap:wrap;gap:8px 18px;margin:6px 0 12px;font-size:.9rem}
 .swim-classification-line strong{color:#53d8cb;font-weight:800}
 .swim-classification-line span{color:var(--text,#e5eff0);opacity:.9}
+
+/* Gold-baseline dashboard layout adjustments */
+.classification-totals{display:block;font-size:.78em;font-weight:normal;line-height:1.6;margin-top:7px}
+.classification-totals>span{display:block}
+.overview-event-link{color:#075d8b;text-decoration:underline;text-underline-offset:2px;font-weight:700}
+.overview-event-link:focus-visible{outline:3px solid #f2bb29;outline-offset:2px}
+.visual-bar-row{grid-template-columns:90px minmax(70px,1fr) 115px}
+@media(max-width:530px){.visual-bar-row{grid-template-columns:75px minmax(60px,1fr) 100px}}
