@@ -275,5 +275,27 @@ for filename in ('index.html','style.css','app.js'):
 (DOCS/'coach_notes.json').write_bytes((DATA/'coach_notes.json').read_bytes())
 # Optional multiple dated snapshot files; one snapshot must never imply a trend.
 snapshots=sorted(DATA.glob('rankings_????-??-??.csv'))
-(DOCS/'ranking_snapshots.json').write_text(json.dumps([{'date':f.stem[9:],'file':f.name} for f in snapshots]))
+snapshot_output=[]
+for file in snapshots:
+    snapshot_date=file.stem[9:]
+    date.fromisoformat(snapshot_date)
+    with file.open(newline='') as stream: rows=list(csv.DictReader(stream))
+    grouped=defaultdict(dict)
+    for row in rows:
+        if row.get('verified','').lower()!='true' or row.get('course')!='LCM': continue
+        if row.get('event') not in EVENTS: continue
+        # Accept only explicit ASAJ evidence; never infer 2nd place from a single row.
+        src=row.get('source_pdf') or row.get('source_url')
+        if not src or not row.get('source_page'): continue
+        try: value=seconds(row['time']);rank=int(row['rank'])
+        except (ValueError,KeyError): continue
+        if rank not in (1,2) and 'aidan' not in row.get('swimmer','').lower(): continue
+        grouped[row['event']][rank if rank in (1,2) else 'aidan']={'seconds':value,'source':src,'page':row['source_page']}
+        if 'aidan' in row.get('swimmer','').lower():grouped[row['event']]['aidan']={'seconds':value,'source':src,'page':row['source_page']}
+    events={}
+    for event,records in grouped.items():
+        if 'aidan' in records and 2 in records:
+            events[event]={'gap_to_second':round(max(0,records['aidan']['seconds']-records[2]['seconds']),2),'source':records['aidan']['source'],'page':records['aidan']['page'],'second_source':records[2]['source'],'second_page':records[2]['page']}
+    snapshot_output.append({'date':snapshot_date,'events':events})
+(DOCS/'ranking_snapshots.json').write_text(json.dumps(snapshot_output,separators=(',',':')))
 print('Built',len(results),'events;',len(perf),'verified personal bests;',len(standards),'standards;',len(ranks),'rankings')
