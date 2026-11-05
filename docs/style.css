@@ -90,3 +90,10 @@ header{position:relative;display:flex;align-items:flex-start;gap:16px}
 /* Align menu control vertically with the Aidan Seaton title, not the eyebrow. */
 .dashboard-menu-toggle{margin-top:32px;align-self:flex-start}
 @media(max-width:650px){.dashboard-menu-toggle{margin-top:29px}}
+/* Consolidated calculated rankings: mobile-friendly and sunlight-readable. */
+.table-wrap{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}
+.table-wrap table{min-width:980px}
+.table-wrap th,.table-wrap td{white-space:nowrap;vertical-align:middle}
+.classification-totals{display:block;margin:12px 0 16px;color:#17324d;font-size:0.95rem;line-height:1.7}
+.classification-totals>span{display:block}
+.rank-field-link{font-weight:700;text-decoration:underline;text-underline-offset:3px}
