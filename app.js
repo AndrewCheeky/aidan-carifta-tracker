@@ -1,4 +1,4 @@
-let DATA=null, TAB='carifta';
+let DATA=null, TAB='visual';
 let TREND_SELECTION={event:null,course:'LCM'};
 
 // Multi-swimmer controls use imported ASAJ results; never reuse Aidan's individual rankings or standards for another swimmer.
@@ -63,7 +63,55 @@ const link=(url,label='ASAJ source')=>url?`<a href="${esc(url)}" target="_blank"
 const value=x=>x===null||x===undefined||x===''?'<span class="pending">Pending verification</span>':esc(x);
 const card=(label,val)=>`<div class="card"><div class="label">${esc(label)}</div><div class="value">${val}</div></div>`;
 const table=(headers,rows)=>`<table><thead><tr>${headers.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table>`;
-function render(){if(!DATA)return; if(TAB==='jamaica'&&(SWIMMER_SELECTION.name!=='Aidan Seaton'||SWIMMER_SELECTION.gender!=='Boys'||SWIMMER_SELECTION.age!==13||SWIMMER_SELECTION.category!=='13–14')){document.querySelector('#content').innerHTML='<section class="panel"><h2>Jamaica Rankings · Aidan Seaton only</h2><p>This tab is disabled for other swimmer profiles until individual official ranking records can be verified. Select Aidan Seaton, Boys, age 13, category 13–14 to view the rankings.</p></section>';document.querySelector('#status').textContent='Jamaica Rankings unavailable for selected swimmer';return;} if(SWIMMER_SELECTION.name!=='Aidan Seaton'||SWIMMER_SELECTION.gender!=='Boys'||SWIMMER_SELECTION.age!==13||SWIMMER_SELECTION.category!=='13–14'){document.querySelector('#content').innerHTML=renderSelectedSwimmer(DATA);document.querySelector('#status').textContent='ASAJ imported results · Selection-specific standards not inferred';return;}let html='';const ev=DATA.events;
+// Independent rankings from the imported ASAJ meet results, not an official ASAJ ranking.
+function calculatedJamaicaRankings(d,ages=[13,14]){
+ const secs=t=>{const parts=String(t||'').split(':').map(Number);return parts.length<=2&&parts.every(Number.isFinite)&&parts.every(n=>n>=0)?parts.reduce((a,b)=>a*60+b,0):null;};
+ const byEvent=new Map();
+ function add(event,swimmer,time,source,page,club){
+  const n=secs(time);if(n===null||!event||!swimmer)return;
+  const normalized=swimmer.toLowerCase().replace(/[^a-z]/g,'');
+  const key=normalized==='aidanseaton'?'aidanseaton':normalized;
+  if(!byEvent.has(event))byEvent.set(event,new Map());
+  const group=byEvent.get(event),old=group.get(key);
+  if(!old||n<old.seconds)group.set(key,{swimmer,time,seconds:n,source,page,club});
+ }
+ for(const r of d.asaj_competitor_results||[]){
+  if(r.gender!=='Boys'||!ages.includes(Number(r.age))||r.course!=='LCM'||String(r.verified).toLowerCase()!=='true'||!r.source_pdf)continue;
+  add(r.event,r.swimmer,r.time,r.source_pdf,r.source_page,r.club);
+ }
+ // Only include Aidan's race history in his own 13–14 age bracket.
+ if(ages.includes(13))for(const r of d.race_history_2026||[]){
+  if(r.course!=='LCM'||Number(r.age)!==13||!r.source_pdf)continue;
+  add(r.event,'Aidan Seaton',r.time,r.source_pdf,r.source_page,r.club);
+ }
+ return byEvent;
+}
+function renderCalculatedJamaicaRankings(d){
+ const byEvent=calculatedJamaicaRankings(d);
+ const boys12=calculatedJamaicaRankings(d,[12]);
+ const events=[...new Set([...(d.events||[]).map(e=>e.event),...byEvent.keys()])].sort();
+ const entries=events.map(event=>{
+  const swimmers=[...(byEvent.get(event)?.values()||[])].sort((a,b)=>a.seconds-b.seconds||a.swimmer.localeCompare(b.swimmer));
+  const aidan=swimmers.find(r=>r.swimmer.toLowerCase().replace(/[^a-z]/g,'')==='aidanseaton');
+  const rank=aidan?1+swimmers.filter(r=>r.seconds<aidan.seconds-0.00001).length:null;
+  const younger=[...(boys12.get(event)?.values()||[])].sort((a,b)=>a.seconds-b.seconds||a.swimmer.localeCompare(b.swimmer));
+  // Hypothetical placement: Aidan is 13, so he is not part of the actual age-12 ranking.
+  const rank12=aidan&&younger.length?1+younger.filter(r=>r.seconds<aidan.seconds-0.00001).length:null;
+  return {event,swimmers,aidan,rank,younger,rank12};
+ });
+ const linkPDF=r=>r?.source?`<a href="${encodeURI(esc(r.source))}#page=${encodeURIComponent(r.page||1)}" target="_blank" rel="noopener">ASAJ PDF</a>`:'Unavailable';
+ const details=entries.map((e,i)=>`<details id="rank-field-${i}" class="panel" style="margin-top:1rem"><summary><strong>${esc(e.event)} · Boys 13–14 calculated field (${e.swimmers.length})</strong></summary><div class="table-wrap">${table(['Rank','Swimmer','Best LCM','Club','Evidence'],e.swimmers.map(r=>`<tr><td>${1+e.swimmers.filter(x=>x.seconds<r.seconds-0.00001).length}</td><td>${esc(r.swimmer)}</td><td>${esc(r.time)}</td><td>${esc(r.club||'')}</td><td>${linkPDF(r)}</td></tr>`))}</div></details>`).join('');
+ return `<section class="panel"><h2>Calculated Jamaica Rankings · Boys 13–14 LCM</h2><p><strong>Independent calculation, not official ASAJ rankings.</strong> Fastest documented ASAJ result per swimmer and event, using the imported 2026 meet PDFs; all imported meet dates are included. Ages are those recorded at each meet, so this is not a championship-age eligibility list. Missing meets, mixed/unattributed results and results not imported can change these positions. Ties share a rank.</p><p><strong>Against Boys 12:</strong> hypothetical placement of Aidan's best time among verified 12-year-old swimmers, not an official ranking or an age-eligible placing.</p><div class="table-wrap">${table(['Event','Aidan best imported','Calculated rank','Against Boys 12','Swimmers with verified results','Leader','Leader time','Aidan evidence'],entries.map((e,i)=>`<tr><td>${esc(e.event)}</td><td>${e.aidan?esc(e.aidan.time):'Not in imported results'}</td><td>${e.rank===null?'Not ranked':`<a href="#rank-field-${i}" class="rank-field-link" data-rank-target="rank-field-${i}" aria-label="View ranked competitors for ${esc(e.event)}">${e.rank}</a>`}</td><td>${e.rank12===null?'Unavailable':`${e.rank12} of ${e.younger.length+1}`}</td><td>${e.swimmers.length}</td><td>${e.swimmers[0]?esc(e.swimmers[0].swimmer):'Unavailable'}</td><td>${e.swimmers[0]?esc(e.swimmers[0].time):'Unavailable'}</td><td>${linkPDF(e.aidan)}</td></tr>`))}</div>${details}</section>`;
+}
+document.addEventListener('click',event=>{const link=event.target.closest('a.rank-field-link');if(!link)return;const target=document.getElementById(link.dataset.rankTarget);if(target)target.open=true;});
+function renderCompetition(d){
+ const profile=renderSelectedSwimmer(d);
+ const younger=(d.events||[]).flatMap(e=>(e.boys12||[]).map(b=>({event:e.event,...b})));
+ const unique=new Set(younger.map(x=>String(x.name||'').toLowerCase()));
+ const emerging=`<section class="panel"><h2>Boys 12 · Emerging competition</h2><div class="table-wrap">${table(['Event','Swimmer','Official time','Difference'],younger.length?younger.map(b=>`<tr><td>${overviewEventLink(b.event)}</td><td>${esc(b.name)}</td><td>${esc(b.time)}</td><td>${esc(b.difference)}</td></tr>`):['<tr><td colspan="4">No verified Boys 12 results within ±10% in the available ASAJ top ten.</td></tr>'])}</div><p>${younger.length} event comparisons · ${unique.size} unique swimmers; only available official top-ten entries.</p></section>`;
+ return `<div class="competition-view"><h2>Competition · ASAJ results and emerging swimmers</h2>${profile}${emerging}</div>`;
+}
+function render(){if(!DATA)return;document.getElementById('swimmer-controls').hidden=TAB!=='competition';if(TAB==='competition'){document.querySelector('#content').innerHTML=renderCompetition(DATA);document.querySelector('#status').textContent='Competition · ASAJ results and emerging swimmers';return;} if(TAB==='jamaica'&&(SWIMMER_SELECTION.name!=='Aidan Seaton'||SWIMMER_SELECTION.gender!=='Boys'||SWIMMER_SELECTION.age!==13||SWIMMER_SELECTION.category!=='13–14')){document.querySelector('#content').innerHTML='<section class="panel"><h2>Jamaica Rankings · Aidan Seaton only</h2><p>This tab is disabled for other swimmer profiles until individual official ranking records can be verified. Select Aidan Seaton, Boys, age 13, category 13–14 to view the rankings.</p></section>';document.querySelector('#status').textContent='Jamaica Rankings unavailable for selected swimmer';return;} if(SWIMMER_SELECTION.name!=='Aidan Seaton'||SWIMMER_SELECTION.gender!=='Boys'||SWIMMER_SELECTION.age!==13||SWIMMER_SELECTION.category!=='13–14'){document.querySelector('#content').innerHTML=renderSelectedSwimmer(DATA);document.querySelector('#status').textContent='ASAJ imported results · Selection-specific standards not inferred';return;}let html='';const ev=DATA.events;
 if(TAB==='championship'){html=renderChampionshipShortlist(DATA);
 }else if(TAB==='intelligence'){html=renderIntelligence(DATA);
 }else if(TAB==='progress'){html=renderAllEventProgress(DATA);
@@ -73,18 +121,31 @@ const sec=t=>{if(!t)return null;const a=String(t).replace(/^\+/,'').split(':').m
 const gap=e=>e.second_place&&e.personal_best?sec(e.personal_best)-sec(e.second_place.time):null;
 const pctGap=e=>gap(e)===null?null:100*gap(e)/sec(e.second_place.time);
 const fmtGap=n=>n===null?'Not verified':(n<0?Math.abs(n).toFixed(2)+'s ahead':n.toFixed(2)+'s behind');
-const known=ev.filter(e=>pctGap(e)!==null).sort((a,b)=>Math.abs(pctGap(a))-Math.abs(pctGap(b)));
-const closest=known.find(e=>pctGap(e)>=0)||known[0];
+// Use exactly the same imported, verified LCM dataset as Jamaica Rankings.
+const calculated=calculatedJamaicaRankings(DATA);
+const current=ev.map(e=>{
+ const swimmers=[...(calculated.get(e.event)?.values()||[])].sort((a,b)=>a.seconds-b.seconds||a.swimmer.localeCompare(b.swimmer));
+ const aidan=swimmers.find(r=>r.swimmer.toLowerCase().replace(/[^a-z]/g,'')==='aidanseaton');
+ // Second place is the second DISTINCT swimmer, not the historical September snapshot.
+ const second=swimmers[1];
+ const diff=aidan&&second?aidan.seconds-second.seconds:null;
+ const percent=diff!==null&&second.seconds>0?100*diff/second.seconds:null;
+ return {event:e.event,swimmers,aidan,second,diff,percent};
+});
+const known=current.filter(e=>e.percent!==null).sort((a,b)=>Math.abs(a.percent)-Math.abs(b.percent));
+const closest=known[0]||null;
 const ranked=ev.filter(e=>Number.isFinite(e.rank));const bestRank=ranked.length?Math.min(...ranked.map(e=>e.rank)):null;
-const maxGap=Math.max(1,...known.map(e=>Math.abs(pctGap(e))));
-const row=e=>`<tr><td>${esc(e.event)}</td><td>${value(e.rank)}</td><td>${value(e.personal_best)}</td><td>${e.second_place?esc(e.second_place.swimmer):'Pending'}</td><td>${e.second_place?esc(e.second_place.time):'Pending'}</td><td class="${gap(e)!==null&&gap(e)<0?'good':''}">${pctGap(e)===null?'Unavailable':`${Math.abs(pctGap(e)).toFixed(2)}% ${gap(e)<0?'ahead':'behind'} (${fmtGap(gap(e))})`}</td></tr>`;
-const bars=ev.map(e=>`<div class="visual-bar-row"><span>${esc(e.event)}</span><div class="visual-bar-track"><div class="visual-bar-fill ${gap(e)<0?'ahead':''}" style="width:${pctGap(e)===null?0:Math.max(2,100*Math.abs(pctGap(e))/maxGap).toFixed(1)}%"></div></div><strong>${pctGap(e)===null?'No verified 2nd-place benchmark':`${Math.abs(pctGap(e)).toFixed(2)}% ${gap(e)<0?'ahead':'behind'} · ${fmtGap(gap(e))}`}</strong></div>`).join('');
+const maxGap=Math.max(1,...known.map(e=>Math.abs(e.percent)));
+const row=e=>`<tr><td>${overviewEventLink(e.event)}</td><td>${value(e.rank)}</td><td>${value(e.personal_best)}</td><td>${e.second_place?esc(e.second_place.swimmer):'Pending'}</td><td>${e.second_place?esc(e.second_place.time):'Pending'}</td><td class="${gap(e)!==null&&gap(e)<0?'good':''}">${pctGap(e)===null?'Unavailable':`${Math.abs(pctGap(e)).toFixed(2)}% ${gap(e)<0?'ahead':'behind'} (${fmtGap(gap(e))})`}</td></tr>`;
+const bars=current.map(e=>`<div class="visual-bar-row"><span>${overviewEventLink(e.event)}</span><div class="visual-bar-track"><div class="visual-bar-fill ${e.diff!==null&&e.diff<0?'ahead':''}" style="width:${e.percent===null?0:Math.max(2,100*Math.abs(e.percent)/maxGap).toFixed(1)}%"></div></div><strong>${e.percent===null?'Comparison unavailable':`${Math.abs(e.percent).toFixed(2)}% ${e.diff<0?'ahead':'behind'} · ${Math.abs(e.diff).toFixed(2)}s ${e.diff<0?'ahead':e.diff>0?'behind':'equal'}`}</strong></div>`).join('');
 const younger=ev.flatMap(e=>e.boys12.map(b=>({event:e.event,...b})));const unique=new Set(younger.map(x=>x.name));
-html=`<div class="visual-head"><div><div class="visual-eyebrow">🇯🇲 TORNADOES SWIM CLUB · BOYS 13–14</div><h2>Aidan Seaton <span>Performance Snapshot</span></h2><p>Official ASAJ rankings: 29 September 2026 · Live verified best-time comparisons</p></div><div class="visual-title">CARIFTA 2027<br><span>At a glance</span></div></div>
-<div class="visual-metrics"><div><small>Best September national rank</small><strong>${bestRank===null?'Pending':bestRank+'th'}</strong><span>${esc(ranked.find(e=>e.rank===bestRank)?.event||'')}</span></div><div><small>Closest to September 2nd</small><strong>${closest?Math.abs(gap(closest)).toFixed(2)+'s':'Pending'}</strong><span>${closest?esc(closest.event)+(gap(closest)<0?' · ahead':' · behind'):''}</span></div><div><small>Tracked events</small><strong>${ev.length}</strong><span>Verified meet or ranking events</span></div><div><small>Emerging Boys 12</small><strong>${unique.size}</strong><span>Within ±10% of verified times</span></div></div>
-<div class="visual-columns"><section class="visual-panel"><h3>All documented events · September ranking comparison</h3><div class="visual-scroll">${table(['Event','Sep rank','Aidan best LCM','2nd-place swimmer','2nd-place time','Gap'],ev.map(row))}</div><p class="visual-foot">Includes every verified individual event in the uploaded 2026 meet history, plus events documented in the September rankings. Missing ranks and podium benchmarks are not estimated.</p></section><section class="visual-panel"><h3>Gap to 2nd place · % of benchmark</h3><div class="visual-bars">${bars||'No verified second-place benchmarks yet'}</div><p class="visual-foot">All documented events are listed. Red = behind September benchmark; green = faster; no bar = benchmark unavailable. This is not a current national ranking.</p></section></div>
-<div class="visual-bottom"><section class="visual-panel"><h3>Boys 12 · Emerging competition</h3><div class="visual-scroll">${table(['Event','Swimmer','Official time','Difference'],younger.length?younger.slice(0,20).map(b=>`<tr><td>${esc(b.event)}</td><td>${esc(b.name)}</td><td>${esc(b.time)}</td><td>${esc(b.difference)}</td></tr>`):['<tr><td colspan="4">No verified Boys 12 results within ±10% in the available ASAJ top ten.</td></tr>'])}</div><p class="visual-foot">${younger.length} event comparisons · ${unique.size} unique swimmers; only available official top-ten entries.</p></section><section class="visual-panel"><h3>Key takeaways</h3><p>${closest?`Closest second-place comparison: <strong>${esc(closest.event)}</strong>, ${fmtGap(gap(closest))}.`:'Second-place comparison pending.'}</p><p>${unique.size} unique younger swimmers within the ±10% comparison window.</p><p>CARIFTA selection also requires eligible qualifying-period times and current selection rankings.</p></section><section class="visual-panel"><h3>Next steps</h3><ol><li>Focus on the smallest verified percentage gaps.</li><li>Upload new official ASAJ meet results.</li><li>Update rankings as new official snapshots are released.</li></ol></section></div>
-<div class="visual-disclaimer">Independent visual overview · Not an ASAJ selection or ranking publication · No estimated times · Snapshot and latest performance dates may differ.</div>`;
+html=`<div class="visual-head"><div><div class="visual-eyebrow">🇯🇲 TORNADOES SWIM CLUB · BOYS 13–14</div><h2>Aidan Seaton <span>Performance Snapshot</span></h2><p>Official ASAJ rankings: 29 September 2026 · Calculated comparisons from imported verified results</p></div><div class="visual-title">CARIFTA 2027<br><span>At a glance</span></div></div>
+${renderAcquiredClassifications(DATA)}
+<div class="visual-metrics"><div><small>Best September national rank</small><strong>${bestRank===null?'Pending':bestRank+'th'}</strong><span>${esc(ranked.find(e=>e.rank===bestRank)?.event||'')}</span></div><div><small>Closest to calculated 2nd</small><strong>${closest?Math.abs(closest.diff).toFixed(2)+'s':'Pending'}</strong><span>${closest?esc(closest.event)+(closest.diff<0?' · ahead':' · behind'):''}</span></div><div><small>Tracked events</small><strong>${ev.length}</strong><span>Verified meet or ranking events</span></div><div><small>Emerging Boys 12</small><strong>${unique.size}</strong><span>Within ±10% of verified times</span></div></div>
+${renderCompetitiveStrength(DATA)}
+<div class="visual-columns"><section class="visual-panel"><h3>All documented events · September ranking comparison</h3><div class="visual-scroll">${table(['Event','Sep rank','Aidan best LCM','2nd-place swimmer','2nd-place time','Gap'],ev.map(row))}</div><p class="visual-foot">Includes every verified individual event in the uploaded 2026 meet history, plus events documented in the September rankings. Missing ranks and podium benchmarks are not estimated.</p></section><section class="visual-panel"><h3>Gap to calculated 2nd place · % of benchmark</h3><div class="visual-bars">${bars||'No verified second-place benchmarks yet'}</div><p class="visual-foot">All documented events are listed. Red = behind calculated second place; green = ahead; no bar = insufficient verified competitor data. Calculated from imported ASAJ Boys 13–14 LCM results, not an official national ranking.</p></section></div>
+<div class="visual-bottom"><section class="visual-panel"><h3>Key takeaways</h3><p>${closest?`Closest calculated second-place comparison: <strong>${overviewEventLink(closest.event)}</strong>, ${Math.abs(closest.diff).toFixed(2)}s ${closest.diff<0?'ahead':closest.diff>0?'behind':'equal'}.`:'Calculated second-place comparison unavailable.'}</p><p>${unique.size} unique younger swimmers within the ±10% comparison window.</p><p>CARIFTA selection also requires eligible qualifying-period times and current selection rankings.</p></section><section class="visual-panel"><h3>Next steps</h3><ol><li>Focus on the smallest verified percentage gaps.</li><li>Upload new official ASAJ meet results.</li><li>Update rankings as new official snapshots are released.</li></ol></section></div>
+<div class="visual-disclaimer">Independent visual overview · Not an ASAJ selection or ranking publication · No estimated times · Calculated comparisons depend on the available imported ASAJ meet results; missing competitor results can change positions.</div>`;
 }else if(TAB==='carifta'){
 const c=DATA.carifta_criteria||{}, qualified=ev.filter(e=>e.carifta?.A_met||e.carifta?.B_met).length;
 html=`<div class="cards">${card('Date-verified qualifying events',qualified)}${card('Selection priority','Provisional Sep snapshot')}${card('Final team selection','Not confirmed')}</div><div class="notice"><strong>CARIFTA 2027 selection criteria:</strong> Only official LCM swims from ${esc(c.qualifying_period_start||'2026-07-01')} through the final local qualifying meet are eligible. Its closing date is not yet verified. Earlier 2026 results remain in Race History but cannot qualify for CARIFTA 2027. A/B standard alone does not guarantee selection. September 29 rankings are shown as a provisional comparison, not a current 1st/2nd-place selection rank. A September snapshot does not establish whether a swim occurred after July 1.</div><div class="panel"><h2>CARIFTA 2027 | Qualification and selection</h2>${table(['Event','Eligible LCM best (from Jul 2026)','A standard / gap','B standard / gap','Time qualification','Sep 2026 rank','Provisional priority','Selection priority','Evidence'],ev.map(e=>{const q=e.carifta||{}, A=e.standards.A, B=e.standards.B;return `<tr><td>${esc(e.event)}</td><td>${value(q.eligible_best)}</td><td>${A?esc(A.time)+' / '+value(q.A_gap):'Pending'}</td><td>${B?esc(B.time)+' / '+value(q.B_gap):'Pending'}</td><td>${value(q.standard_status)}</td><td>${value(q.provisional_snapshot_rank)}</td><td>${value(q.provisional_selection_priority)}</td><td>${value(q.selection_priority)}</td><td>${q.eligible_source_pdf?`<a href="${encodeURI(esc(q.eligible_source_pdf))}#page=${esc(q.eligible_source_page)}" target="_blank" rel="noopener">Official meet PDF</a>`:'No eligible dated result verified'}</td></tr>`}))}</div><div class="panel"><h2>ASAJ selection rules and limitations</h2><p><strong>Priority 1:</strong> A-standard swimmers ranked 1st or 2nd in a qualifying event, followed by B-standard swimmers in the 11–12 age group, then B-standard swimmers aged 13 and over ranked 1st or 2nd.</p><p><strong>Limits:</strong> Eight swimmers per gender and age group, 36 swimmers overall. Eligible A-standard swimmers ranked 1st/2nd are prioritized before B-standard swimmers, regardless of how many B times another swimmer has. Within the same selection tier, tie-breakers count qualifying events ranked 1st/2nd, then AQUA points. Relay additions have separate conditions.</p><p><strong>Pending verification:</strong> Current ASAJ qualifying-period rankings, final qualifying-meet date, all-team candidate results, eligibility, AQUA points and ASAJ Council ratification. These are required before any credible team-selection projection.</p><p><a href="${esc(c.source_pdf||'carifta-documents/2026 Carifta Criteria.pdf')}" target="_blank" rel="noopener">Official CARIFTA selection criteria (PDF)</a></p></div>`;
@@ -93,7 +154,11 @@ const g=DATA.goodwill||{}, ge=g.events||[];
 const aCount=ge.filter(e=>e.standards.A.met===true).length, bCount=ge.filter(e=>e.standards.B.met===true).length;
 html=`<div class="cards">${card('Goodwill 2026 A standards',aCount)}${card('Goodwill 2026 B standards',bCount)}${card('Selection status','Not confirmed')}</div><div class="notice">Official 2026 Boys 13–14 standards, not 2027 standards. This is a historical 2026 comparison, not a forecast or confirmation of team selection. September 29 rankings were published after Goodwill 2026 and cannot retrospectively establish qualifying-period selection rank. ASAJ considers eligible SCM and LCM times, but this tracker currently compares verified LCM times only. Times must fall in the qualifying window, beginning 1 December 2025 and ending at the final local qualifying meet; the exact closing date was not provided. A or B standard alone does not secure selection.</div><div class="panel"><h2>Goodwill 2026 | Boys 13–14</h2>${table(['Event','Verified LCM best','A standard','Gap to A','B standard','Gap to B','Sep 2026 rank','Selection projection','Evidence'],ge.map(e=>`<tr><td>${esc(e.event)}</td><td>${value(e.personal_best)}</td><td>${esc(e.standards.A.time)}</td><td>${value(e.standards.A.gap)}</td><td>${esc(e.standards.B.time)}</td><td>${value(e.standards.B.gap)}</td><td>${value(e.snapshot_rank)}</td><td>${value(e.selection_priority)}</td><td>${e.pb_evidence_pdf?`<a href="${encodeURI(esc(e.pb_evidence_pdf))}#page=${esc(e.pb_evidence_page)}" target="_blank" rel="noopener">Meet PDF</a>`:link(e.pb_source,'ASAJ ranking')}</td></tr>`))}</div><div class="panel"><h2>ASAJ Goodwill 2026 selection criteria</h2><p><strong>Priority 1:</strong> Swimmers must achieve A (considered first) or B standard and rank 1st or 2nd in at least one individual event. Maximum four swimmers per age group, subject to tiebreakers. <strong>Priority 2:</strong> If only two or three swimmers qualify, relay selection may fill places; the additional swimmer must achieve at least one B standard. Rankings use ASAJ Hy-Tek records. Eligibility, registration, passport and availability requirements apply, and the ASAJ Council ratifies final selection.</p><p><a href="goodwill-documents/2026%20Goodwill%20Qualifying%20Times.pdf" target="_blank">2026 qualifying times</a> · <a href="goodwill-documents/Goodwill%202026%20Criteria%2011%20%26%20Over.pdf" target="_blank">2026 selection criteria</a></p><p><strong>Important:</strong> The official documents supplied cover 2026, not Goodwill 2027. Do not treat these as future standards.</p></div>`;
 }else if(TAB==='jamaica'){
-html=`<div class="cards">${card('Ranked events',ev.filter(e=>e.rank!==null).length)}${card('Second-place gaps verified',ev.filter(e=>e.second_place&&e.personal_best).length)}${card('Boys 12 in range',ev.reduce((n,e)=>n+e.boys12.length,0))}</div><div class="panel"><h2>Jamaica National Rankings</h2><p>Second-place benchmarks and listed ranks are from the official ASAJ Boys 13–14 long-course rankings dated 29 September 2026. Gaps use Aidan’s fastest verified time, including later meet results. A negative gap (−) means Aidan is faster than the September second-place benchmark; it does not imply an updated official rank.</p>${table(['Event','Fastest verified LCM time','ASAJ rank (Sep 2026)','2nd-place swimmer','2nd-place time','Gap to 2nd (%)','Boys 12 within ±10%','Boys 13 within ±5%'],ev.map(e=>`<tr><td>${esc(e.event)}</td><td>${value(e.personal_best)}</td><td>${value(e.rank)}</td><td>${e.second_place?esc(e.second_place.swimmer):value(null)}</td><td>${e.second_place?esc(e.second_place.time):value(null)}</td><td>${pctGap(e)===null?'Unavailable':`${Math.abs(pctGap(e)).toFixed(2)}% ${gap(e)<0?'ahead':'behind'} (${fmtGap(gap(e))})`}</td><td>${e.boys12.length?e.boys12.length:'No age-12 swimmer within ±10% in available ASAJ top ten'}</td><td>${(e.boys13||[]).length?(e.boys13||[]).length:'No Boys 13 competitor within ±5% in extracted gender-specific ASAJ results'}</td></tr>`))}</div><div class="panel"><h2>Boys 13 | Same-age competitors within ±5%</h2><p>Extracted official ASAJ individual results for Boys 13 within ±5% of Aidan’s fastest verified LCM time; Aidan is excluded. Best time per swimmer across supplied meets. Mixed-sex events are held where gender cannot be verified. Meet ranges are not exact race dates.</p>${table(['Event','Swimmer','Club','Official time','Difference','Source'],ev.flatMap(e=>(e.boys13||[]).map(b=>`<tr><td>${esc(e.event)}</td><td>${esc(b.name)}</td><td>${esc(b.club)}</td><td>${esc(b.time)}</td><td>${esc(b.difference)}</td><td>${b.source_pdf?`<a href="${encodeURI(esc(b.source_pdf))}#page=${esc(b.source_page)}" target="_blank" rel="noopener">Meet PDF</a>`:link(b.source_url)}</td></tr>`)).length?ev.flatMap(e=>(e.boys13||[]).map(b=>`<tr><td>${esc(e.event)}</td><td>${esc(b.name)}</td><td>${esc(b.club)}</td><td>${esc(b.time)}</td><td>${esc(b.difference)}</td><td>${b.source_pdf?`<a href="${encodeURI(esc(b.source_pdf))}#page=${esc(b.source_page)}" target="_blank" rel="noopener">Meet PDF</a>`:link(b.source_url)}</td></tr>`)):[`<tr><td colspan="6">No verified Boys 13 competitor results within ±5% in the currently available ASAJ dataset.</td></tr>`])}</div><div class="panel"><h2>Boys 12 | Emerging competitors</h2><p>Eligible only within ±10% of Aidan's verified time. Differences are shown in seconds or minutes:seconds, never percentages.</p>${table(['Event','Swimmer','Club','Official time','Difference','Source'],ev.flatMap(e=>e.boys12.map(b=>`<tr><td>${esc(e.event)}</td><td>${esc(b.name)}</td><td>${esc(b.club)}</td><td>${esc(b.time)}</td><td>${esc(b.difference)}</td><td>${b.source_pdf?`<a href="${encodeURI(esc(b.source_pdf))}#page=${esc(b.source_page)}" target="_blank" rel="noopener">Meet PDF</a>`:link(b.source_url)}</td></tr>`)).length?ev.flatMap(e=>e.boys12.map(b=>`<tr><td>${esc(e.event)}</td><td>${esc(b.name)}</td><td>${esc(b.club)}</td><td>${esc(b.time)}</td><td>${esc(b.difference)}</td><td>${b.source_pdf?`<a href="${encodeURI(esc(b.source_pdf))}#page=${esc(b.source_page)}" target="_blank" rel="noopener">Meet PDF</a>`:link(b.source_url)}</td></tr>`)):[`<tr><td colspan="6">Pending verification of official Boys 12 rankings and Aidan's event times.</td></tr>`])}</div>`;
+ const secs=t=>{const a=String(t||'').split(':').map(Number);return a.length<=2&&a.every(Number.isFinite)?a.reduce((v,x)=>v*60+x,0):null;};
+ const gap=e=>e.second_place&&e.personal_best?secs(e.personal_best)-secs(e.second_place.time):null;
+ const pctGap=e=>gap(e)===null?null:100*gap(e)/secs(e.second_place.time);
+ const fmtGap=n=>n===null?'Not verified':(n<0?Math.abs(n).toFixed(2)+'s ahead':n.toFixed(2)+'s behind');
+ html=renderCalculatedJamaicaRankings(DATA)+`<div class="cards">${card('Official snapshot ranked events',ev.filter(e=>e.rank!==null).length)}${card('Second-place gaps verified',ev.filter(e=>e.second_place&&e.personal_best).length)}${card('Boys 12 in range',ev.reduce((n,e)=>n+(e.boys12||[]).length,0))}</div><div class="panel"><h2>Official ASAJ ranking snapshot · 29 September 2026</h2><p>The ASAJ snapshot below is historical. It is separate from the calculated ranking above and does not reflect later results. Gaps compare Aidan's documented best against the snapshot's second-place benchmark.</p>${table(['Event','Fastest verified LCM time','ASAJ rank (Sep 2026)','2nd-place swimmer','2nd-place time','Gap to 2nd (%)'],ev.map(e=>`<tr><td>${esc(e.event)}</td><td>${value(e.personal_best)}</td><td>${value(e.rank)}</td><td>${e.second_place?esc(e.second_place.swimmer):value(null)}</td><td>${e.second_place?esc(e.second_place.time):value(null)}</td><td>${pctGap(e)===null?'Unavailable':`${Math.abs(pctGap(e)).toFixed(2)}% ${gap(e)<0?'ahead':'behind'} (${fmtGap(gap(e))})`}</td></tr>`))}</div>`;
  }else if(TAB==='history'){
 const races=DATA.race_history_2026||[];
 html=`<div class="cards">${card('Verified 2026 swims',races.length)}${card('Meets represented',new Set(races.map(r=>r.meet_name)).size)}</div><div class="panel"><h2>Aidan's verified 2026 race history</h2><p>Only finished swims extracted from uploaded official ASAJ results PDFs appear here. For multi-day meets, the date shown is the meet range, not the exact race day. Seed times, entries and uncertain matches are excluded.</p>${table(['Date','Meet','Event','Round','Time','Club / team','Evidence'],races.length?races.map(r=>`<tr><td>${esc(r.meet_dates||r.race_date)}</td><td>${esc(r.meet_name)}</td><td>${esc(r.event)}</td><td>${esc(r.round)}</td><td>${esc(r.time)}</td><td>${esc(r.club)}</td><td>${r.source_pdf?`<a href="${encodeURI(esc(r.source_pdf))}#page=${esc(r.source_page)}" target="_blank" rel="noopener">Official PDF p.${esc(r.source_page)}</a>`:link(r.source_url)}</td></tr>`):['<tr><td colspan="7">Pending verification of individual 2026 meet results.</td></tr>'])}</div>`;
@@ -112,7 +177,7 @@ const today=new Date().toISOString().slice(0,10);html=`<div class="panel"><h2>AS
 }else{html=`<div class="panel"><h2>Official documents and verification status</h2>${table(['Dataset','Document','Publication','Status','Link'],Object.entries(DATA.sources).map(([k,s])=>`<tr><td>${esc(k)}</td><td>${esc(s.document)}</td><td>${value(s.published)}</td><td>${esc(s.status)}</td><td>${link(s.url)}</td></tr>`))}</div><div class="notice">All athlete times, rankings and standards require a source URL, source date, exact event and course match, and an explicit verification flag. No estimated or seed-only times are accepted as verified personal bests.</div>`}
 document.querySelector('#content').innerHTML=html;document.querySelector('#status').textContent=`Data generated: ${DATA.built_at} · Official-only validation enabled`;
 }
-document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');TAB=b.dataset.tab;render()}));
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');TAB=b.dataset.tab;if(TAB!=='competition'&&SWIMMER_SELECTION.name!=='Aidan Seaton'){SWIMMER_SELECTION={name:'Aidan Seaton',gender:'Boys',age:13,category:'13–14'};setupSwimmerControls();}render()}));
 fetch('data.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Data not found');return r.json()}).then(d=>{DATA=d;setupSwimmerControls();render()}).catch(e=>document.querySelector('#status').textContent='Unable to load verified data: '+e.message);
 
 // Race-by-race trends. Meet start dates are placement proxies where exact race days are unknown.
@@ -149,12 +214,163 @@ function drawTrendDetail(targetOverride){
  const dots=swims.map((r,i)=>`<circle cx="${xx(i)}" cy="${yy(vals[i])}" r="5" fill="${r.origin==='ASAJ verified'?'#e3a300':'#6e80ef'}"><title>${esc(r.meet_name)} · ${esc(r.origin)} · ${esc(r.time)} · ${esc(r.date)}</title></circle>`).join('');
  const change=swims.length>1?vals.at(-1)-vals[0]:null;
  const official=swims.filter(r=>r.origin==='ASAJ verified');
- const cards=`<div class="cards">${card('ASAJ swims',official.length)}${card('SwimCloud supplied',swims.length-official.length)}${card('Best shown (mixed sources)',trendTime(Math.min(...vals)))}${card('First to latest',change===null?'Insufficient history':`${change>0?'+':''}${change.toFixed(2)}s ${change<0?'faster':change>0?'slower':'unchanged'}`)}</div>`;
+  // Calculate comparison positions from documented ASAJ Boys 13–14 LCM results.
+  // One fastest swim per competitor per event, never mixing courses.
+  const competitors=new Map();
+  if(course==='LCM')for(const r of (DATA.asaj_competitor_results||[])){
+   if(r.event!==name||r.course!=='LCM'||r.gender!=='Boys'||![13,14].includes(Number(r.age))||String(r.verified).toLowerCase()!=='true')continue;
+   const who=String(r.swimmer||'').trim().toLowerCase();
+   if(!who||who==='aidan seaton'||who==='seaton, aidan')continue;
+   const t=trendSeconds(r.time);if(t===null)continue;
+   if(!competitors.has(who)||t<competitors.get(who))competitors.set(who,t);
+  }
+  const leaders=[...competitors.values()].sort((a,b)=>a-b).slice(0,2);
+  const bestShown=Math.min(...vals);
+  const rankGap=(t,place)=>{
+   if(t===undefined)return card(`${place} place (imported ASAJ)`, 'Unavailable');
+   const seconds=bestShown-t,pct=100*seconds/t;
+   const direction=seconds>.005?'behind':seconds<-.005?'ahead':'level';
+   return card(`${place} place (imported ASAJ)`,`${Math.abs(pct).toFixed(2)}% ${direction} · ${Math.abs(seconds).toFixed(2)}s ${direction}`);
+  };
+  const cards=`<div class="cards">${card('ASAJ swims',official.length)}${rankGap(leaders[0],'First')}${rankGap(leaders[1],'Second')}${card('Best shown (mixed sources)',trendTime(bestShown))}${card('First to latest',change===null?'Insufficient history':`${change>0?'+':''}${change.toFixed(2)}s ${change<0?'faster':change>0?'slower':'unchanged'}`)}</div>`;
  target.innerHTML=cards+`<div class="trend-chart"><svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(name)} ${esc(course)} race times and personal-best progression" preserveAspectRatio="xMidYMid meet">${grid}<path d="${line(bests)}" fill="none" stroke="#24a47c" stroke-width="3" stroke-dasharray="7 5"/><path d="${line(vals)}" fill="none" stroke="#e3a300" stroke-width="2" opacity=".65"/>${dots}<text x="${left}" y="${h-13}" fill="currentColor" font-size="12">Earliest recorded swim</text><text x="${w-right}" y="${h-13}" text-anchor="end" fill="currentColor" font-size="12">Latest recorded swim</text></svg></div><p><strong style="color:#e3a300">● ASAJ verified</strong> · <strong style="color:#6e80ef">● SwimCloud supplied, unverified</strong> · <strong style="color:#24a47c">- - Best recorded progression (mixed sources)</strong></p><div class="visual-scroll">${table(['Meet / date','Round','Time','Verification','Source'],swims.map(r=>`<tr><td>${esc(r.meet_name)}<small> · ${esc(r.meet_dates||r.date)}${r.precision==='meet_range'?' (approx.)':''}</small></td><td>${esc(r.round||'Unspecified')}</td><td>${esc(r.time)}</td><td>${esc(r.origin)}</td><td>${r.origin==='ASAJ verified'&&r.source_pdf?`<a href="${encodeURI(esc(r.source_pdf))}#page=${esc(r.source_page)}" target="_blank" rel="noopener">Official PDF p.${esc(r.source_page)}</a>`:r.source_url?link(r.source_url,'SwimCloud result'):'Not linked'}</td></tr>`))}</div>`;
 }
 // The main render replaces the tab content, so install controls after every render.
 const originalRender=render;render=function(){originalRender();if(TAB==='trends'){document.querySelectorAll('.trend-event-link').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();TREND_SELECTION.event=el.dataset.event;TREND_SELECTION.course=el.dataset.course||TREND_SELECTION.course;drawTrendDetail();document.getElementById('trend-detail')?.scrollIntoView({behavior:'smooth',block:'start'});}));document.querySelectorAll('.trend-course-link').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();TREND_SELECTION.course=el.dataset.course;drawTrendDetail();}));drawTrendDetail();}};
 
+// Coaching heuristic only: independent of official qualification and rankings.
+// All gap comparisons use the same imported ASAJ Boys 13–14 LCM ranking dataset.
+function swimOpportunityRows(d,metrics){
+ const rankings=calculatedJamaicaRankings(d);
+ const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+ // Distinct ASAJ competitors only. Multiple swims by one swimmer count once.
+ // Pace uses the earliest and latest documented meet for each rival, and only
+ // when both are on different dates. Meet-start dates are approximations.
+ const histories=new Map();
+ for(const r of d.asaj_competitor_results||[]){
+  if(r.gender!=='Boys'||![13,14].includes(Number(r.age))||r.course!=='LCM'||String(r.verified).toLowerCase()!=='true'||!r.source_pdf)continue;
+  const who=String(r.swimmer||'').toLowerCase().replace(/[^a-z]/g,'');
+  const seconds=trendSeconds(r.time),date=String(r.meet_start||'');
+  if(!who||who==='aidanseaton'||seconds===null||!/^\d{4}-\d{2}-\d{2}$/.test(date))continue;
+  const key=r.event+'|'+who;
+  if(!histories.has(key))histories.set(key,new Map());
+  const byDate=histories.get(key),old=byDate.get(date);
+  if(old===undefined||seconds<old)byDate.set(date,seconds);
+ }
+ return metrics.filter(m=>m.course==='LCM').map(m=>{
+  const ranked=[...(rankings.get(m.name)?.values()||[])].sort((a,b)=>a.seconds-b.seconds);
+  const aidan=ranked.find(r=>r.swimmer.toLowerCase().replace(/[^a-z]/g,'')==='aidanseaton');
+  const second=ranked[1];
+  if(!aidan||!second||ranked.length<2)return {...m,opportunity:null,reason:'Insufficient verified competitor results'};
+  const gapPct=100*(aidan.seconds-second.seconds)/second.seconds;
+  // A smaller gap is better; a lead earns full points.
+  const gapScore=30*(1-clamp(gapPct,0,10)/10);
+  const recent=m.swims.slice(-3).map(r=>trendSeconds(r.time)).filter(Number.isFinite);
+  const trendPct=recent.length>=2?100*(recent[0]-recent.at(-1))/recent[0]:null;
+  const trendScore=trendPct===null?null:25*clamp((trendPct+3)/6,0,1);
+  const historyPct=m.swims.length>=2?100*(m.first-m.best)/m.first:null;
+  const potentialScore=historyPct===null?null:15*clamp(historyPct/6,0,1);
+  // Density is the number of documented rivals within 10% of Aidan's time.
+  // This measures relevant competition, rather than all entrants in the event.
+  const rivals=ranked.filter(r=>r.swimmer.toLowerCase().replace(/[^a-z]/g,'')!=='aidanseaton');
+  const closeRivals=rivals.filter(r=>r.seconds<=aidan.seconds*1.10).length;
+  // Smooth diminishing penalty; 0 close rivals = 15, 20+ = 0.
+  const densityScore=15*(1-clamp(Math.log1p(closeRivals)/Math.log1p(20),0,1));
+  const paceSamples=[];
+  for(const r of rivals){
+   const key=m.name+'|'+r.swimmer.toLowerCase().replace(/[^a-z]/g,'');
+   const byDate=histories.get(key);
+   if(!byDate||byDate.size<2)continue;
+   const dates=[...byDate.keys()].sort(),first=byDate.get(dates[0]),last=byDate.get(dates.at(-1));
+   const days=(Date.parse(dates.at(-1))-Date.parse(dates[0]))/86400000;
+   if(days<14||first<=0)continue;
+   // Normalized percentage improvement per 90 days, capped to avoid
+   // over-weighting a single rapid change from a short observation window.
+   paceSamples.push(clamp(100*(first-last)/first*90/days,-5,5));
+  }
+  // Require at least two independently tracked competitors for pace evidence.
+  // Otherwise use a neutral 7.5/15 rather than assuming slow rivals.
+  const pacePct=paceSamples.length>=2?paceSamples.reduce((x,y)=>x+y,0)/paceSamples.length:null;
+  const paceScore=pacePct===null?7.5:15*(1-clamp((pacePct+2)/4,0,1));
+  if(trendScore===null||potentialScore===null)return {...m,opportunity:null,reason:'Insufficient dated race history',gapPct,second,closeRivals,pacePct};
+  const opportunity=gapScore+trendScore+potentialScore+densityScore+paceScore;
+  return {...m,opportunity,gapPct,second,gapScore,trendScore,potentialScore,densityScore,paceScore,trendPct,historyPct,closeRivals,pacePct,paceSampleCount:paceSamples.length,competitorCount:rivals.length,reason:pacePct===null?'Rival pace unavailable; neutral weighting':'Coaching estimate'};
+ }).sort((a,b)=>(b.opportunity??-1)-(a.opportunity??-1));
+}
+function renderSwimOpportunity(d,metrics){
+ const results=swimOpportunityRows(d,metrics);
+ const rows=results.map(r=>`<tr><td>${esc(r.name)}</td><td>${r.opportunity===null?'Unavailable':`<strong>${r.opportunity.toFixed(0)}/100</strong>`}</td><td>${r.gapPct===undefined?'Unavailable':`${Math.abs(r.gapPct).toFixed(2)}% ${r.gapPct>0?'behind':r.gapPct<0?'ahead':'level'}`}</td><td>${r.trendPct===undefined?'Unavailable':`${r.trendPct>=0?'+':''}${r.trendPct.toFixed(2)}%`}</td><td>${r.historyPct===undefined?'Unavailable':`${r.historyPct.toFixed(2)}%`}</td><td>${r.closeRivals===undefined?'Unavailable':`${r.closeRivals} within 10% (${r.competitorCount} documented rivals)`}</td><td>${r.pacePct===undefined||r.pacePct===null?'Insufficient history':`${r.pacePct>=0?'+':''}${r.pacePct.toFixed(2)}% per 90 days (${r.paceSampleCount} rivals)`}</td><td>${esc(r.reason||'Coaching estimate')}</td></tr>`);
+ return `<section class="panel"><h2>Opportunity Score · LCM</h2><p>A coaching priority indicator, not a national ranking or prediction. Higher scores favour a smaller gap to second place, stronger personal improvement, fewer nearby competitors and slower-improving rivals.</p><div class="visual-scroll">${table(['Event','Opportunity score','Gap to calculated 2nd','Recent trend','Historical PB improvement','Nearby competition','Rival improvement pace','Evidence'],rows)}</div><p class="muted">Weights: competitive gap 30%, recent improvement 25%, historical event progress 15%, nearby competitor density 15%, rival improvement pace 15%. Density counts distinct imported ASAJ Boys 13–14 LCM swimmers within 10% of Aidan's best verified time, not total entries. Rival pace compares earliest and latest documented meets (at least 14 days apart) and requires two rivals with repeat results; otherwise a neutral score is used. Meet dates may be approximate. Imported meets are incomplete, so a low competitor count does not prove a weak field. Recent and historical Aidan trends may include supplementary SwimCloud results. Scores are coaching heuristics, not validated probabilities.</p></section>`;
+}
+
+// Competitive Strength Profile: comparative, evidence-limited LCM radar.
+// Uses the same fastest-per-swimmer ASAJ ranking source as Jamaica Rankings.
+function renderCompetitiveStrength(d){
+ const disciplines=[['Free','Free'],['Back','Back'],['Breast','Breast'],['Fly','Fly'],['IM','IM']];
+ const groups=[['13–14',[13,14]],['Boys 12',[12]],['Combined',[12,13,14]]];
+ const escName=s=>String(s||'').toLowerCase().replace(/[^a-z]/g,'');
+ const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+ const byGroup=groups.map(([label,ages])=>{
+  const rankings=calculatedJamaicaRankings(d,ages);
+  // Aidan's benchmark is always his own ASAJ verified LCM result, independent of rival age.
+  const own=calculatedJamaicaRankings(d,[13,14]);
+  const perDiscipline=disciplines.map(([short,token])=>{
+   const events=[...own.keys()].filter(name=>name.split(' ').slice(1).join(' ')===token);
+   const eventRows=[];
+   for(const event of events){
+    const aidan=own.get(event)?.get('aidanseaton');
+    if(!aidan)continue;
+    const rivals=[...(rankings.get(event)?.entries()||[])].filter(([key])=>key!=='aidanseaton').map(([,r])=>r);
+    if(rivals.length<2)continue; // No meaningful comparison from an isolated rival.
+    const faster=rivals.filter(r=>r.seconds<aidan.seconds-.00001).length;
+    const percentile=100*(1-faster/rivals.length);
+    const leader=Math.min(...rivals.map(r=>r.seconds));
+    const gap=100*(aidan.seconds-leader)/leader;
+    const gapScore=100*(1-clamp(gap,0,10)/10);
+    const close=rivals.filter(r=>r.seconds<=aidan.seconds*1.10).length;
+    const densityScore=100*(1-clamp(Math.log1p(close)/Math.log1p(20),0,1));
+    // Rival pace is assessed only with repeated, dated ASAJ swims, not inferred from a PB.
+    const rivalIds=new Set(rivals.map(r=>escName(r.swimmer)));
+    const histories=new Map();
+    for(const r of d.asaj_competitor_results||[]){
+     if(r.event!==event||r.course!=='LCM'||r.gender!=='Boys'||!ages.includes(Number(r.age))||String(r.verified).toLowerCase()!=='true'||!r.source_pdf)continue;
+     const id=escName(r.swimmer),day=String(r.meet_start||'');
+     if(!rivalIds.has(id)||!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(day))continue;
+     const time=trendSeconds(r.time);if(time===null)continue;
+     if(!histories.has(id))histories.set(id,new Map());
+     const h=histories.get(id);h.set(day,Math.min(h.get(day)??Infinity,time));
+    }
+    const pace=[];
+    for(const h of histories.values()){
+     const dates=[...h.keys()].sort();if(dates.length<2)continue;
+     const days=(Date.parse(dates.at(-1))-Date.parse(dates[0]))/86400000;
+     if(days<14)continue;
+     pace.push(clamp(100*(h.get(dates[0])-h.get(dates.at(-1)))/h.get(dates[0])*90/days,-5,5));
+    }
+    const paceAverage=pace.length>=2?pace.reduce((a,b)=>a+b,0)/pace.length:null;
+    const paceScore=paceAverage===null?50:100*(1-clamp((paceAverage+2)/4,0,1));
+    const score=.4*percentile+.3*gapScore+.2*densityScore+.1*paceScore;
+    eventRows.push({event,score,faster,rivals:rivals.length,gap,close,paceAverage});
+   }
+   return {name:short,events:eventRows,score:eventRows.length?eventRows.reduce((a,b)=>a+b.score,0)/eventRows.length:null};
+  });
+  return {label,disciplines:perDiscipline};
+ });
+ const centerX=170,centerY=153,radius=106;
+ const point=(i,r)=>`${(centerX+Math.cos(-Math.PI/2+i*2*Math.PI/5)*r).toFixed(1)},${(centerY+Math.sin(-Math.PI/2+i*2*Math.PI/5)*r).toFixed(1)}`;
+ const grid=[20,40,60,80,100].map(v=>`<polygon points="${Array.from({length:5},(_,i)=>point(i,radius*v/100)).join(' ')}" fill="none" stroke="currentColor" stroke-opacity=".16"/>`).join('');
+ const axes=disciplines.map(([,name],i)=>`<line x1="${centerX}" y1="${centerY}" x2="${point(i,radius).replace(',','" y2="')}" stroke="currentColor" stroke-opacity=".18"/>`).join('');
+ const labels=[[170,22],[305,105],[264,291],[76,291],[34,105]];
+ const svgLabels=disciplines.map(([name],i)=>`<text x="${labels[i][0]}" y="${labels[i][1]}" text-anchor="middle" font-size="14" fill="currentColor">${name}</text>`).join('');
+ const panels=byGroup.map((g,idx)=>{
+  const valid=g.disciplines.filter(x=>x.score!==null);
+  const shape=valid.length===5?`<polygon points="${g.disciplines.map((x,i)=>point(i,radius*x.score/100)).join(' ')}" fill="#0891b2" fill-opacity=".25" stroke="#0891b2" stroke-width="2.5"/>`:'';
+  const dots=g.disciplines.map((x,i)=>x.score===null?'':`<circle cx="${point(i,radius*x.score/100).split(',')[0]}" cy="${point(i,radius*x.score/100).split(',')[1]}" r="4" fill="#0891b2"/>`).join('');
+  const details=g.disciplines.map(x=>`<details class="panel"><summary><strong>${esc(x.name)} · ${x.score===null?'Unavailable':x.score.toFixed(0)+'/100'}</strong> (${x.events.length} comparable events)</summary>${x.events.length?`<div class="table-wrap">${table(['Event','Score','Faster rivals','Leader gap','Rivals within 10%','Rival pace / 90 days'],x.events.map(e=>`<tr><td>${overviewEventLink(e.event)}</td><td>${e.score.toFixed(0)}</td><td>${e.faster} of ${e.rivals}</td><td>${e.gap>0?e.gap.toFixed(2)+'% behind':Math.abs(e.gap).toFixed(2)+'% ahead'}</td><td>${e.close}</td><td>${e.paceAverage===null?'Insufficient history':e.paceAverage.toFixed(2)+'%'}</td></tr>`))}</div>`:'<p>Insufficient imported verified LCM competitors for a meaningful comparison.</p>'}</details>`).join('');
+  return `<div class="strength-group" data-strength-group="${idx}" ${idx?'hidden':''}><div style="max-width:460px;margin:auto"><svg viewBox="0 0 340 315" role="img" aria-label="${esc(g.label)} competitive strength radar">${grid}${axes}${shape}${dots}${svgLabels}</svg></div><p class="muted">${valid.length} of 5 disciplines have sufficient imported competitor evidence. Missing disciplines are not scored.</p><div class="strength-details">${details}</div></div>`;
+ }).join('');
+ return `<section class="panel"><h2>Competitive Strength Profile · LCM</h2><p>How Aidan compares with documented Jamaican competitors across Free, Back, Breast, Fly and IM. Higher scores indicate a stronger competitive position, not a predicted result.</p><label for="strength-age-group">Compare against </label><select id="strength-age-group" aria-label="Competitive strength age group"><option value="0">Boys 13–14</option><option value="1">Boys 12</option><option value="2">Combined 12–14</option></select>${panels}<p class="muted">Score: ranking percentile 40%, gap to fastest rival 30%, nearby competitor density 20%, rival improvement pace 10%. Each documented event contributes equally within its stroke. Requires at least two imported rivals per event. Rival pace with insufficient history is neutral. Based on available ASAJ-verified LCM results across all imported meet dates, not the CARIFTA selection period or an official ranking. Age is recorded at the meet.</p></section>`;
+}
 // All-event small multiples. Faster swim times are better; first/latest are chronological.
 function renderAllEventProgress(d){
  const metrics=['LCM','SCM'].flatMap(course=>intelligenceMetrics(d,course));
@@ -194,13 +410,20 @@ function renderAllEventProgress(d){
   const us=(d.usa_motivational||[]).find(x=>x.event===m.name&&x.course===m.course&&x.gender==='Boys'&&x.age_group==='13-14');
   let classification='Unclassified';
   if(us){classification='Below B';for(const band of ['B','BB','A','AA','AAA','AAAA']){const threshold=usaSeconds(us[band]);if(threshold!==null&&m.best<=threshold)classification=band;}}
-  const classificationDate=bestDate(m);
+  // The attainment date is the earliest documented result reaching the CURRENT level,
+  // not necessarily the date of the all-time personal best.
+  const levelThreshold=us&&['B','BB','A','AA','AAA','AAAA'].includes(classification)?usaSeconds(us[classification]):null;
+  const qualifyingSwims=levelThreshold===null?[]:m.swims.filter(r=>trendSeconds(r.time)<=levelThreshold+.005).sort((a,b)=>String(a.date||'').localeCompare(String(b.date||'')));
+  const attained=qualifyingSwims[0];
+  const classificationDate=attained?`${esc(attained.date||'Date unavailable')}${attained.precision==='meet_range'?' (meet date, approx.)':''}`:'Date not documented';
+  const classLabel=classification==='Unclassified'?'Classification unavailable':classification==='Below B'?'Below B standard':`${classification} classification`;
+
   const first=m.swims[0],last=m.swims.at(-1),delta=m.latest-m.first;
   const status=m.pct===null?'Insufficient history':delta<-.005?'Faster':delta>.005?'Slower':'Unchanged';
   const recent=m.recentChange===null?'Insufficient history':m.recentChange>.005?`Faster by ${m.recentChange.toFixed(2)}s`:m.recentChange<-.005?`Slower by ${Math.abs(m.recentChange).toFixed(2)}s`:'Unchanged';
-  return `<article class="panel" id="swim-${esc(m.course)}-${esc(m.name).replace(/[^a-zA-Z0-9]/g,'-')}"><h3><a href="#trends" class="progress-event-link" data-event="${esc(m.name)}" data-course="${m.course}" aria-label="View detailed race history for ${esc(m.name)} ${m.course}">${esc(m.name)} · ${m.course}</a> <small class="swim-event-classification">${esc(classification)} · ${classificationDate}</small></h3><div class="swim-inline-detail" hidden></div><div class="intel-stats"><div><small>Personal best (recorded)</small><strong>${trendTime(m.best)}</strong><small>${bestDate(m)}</small>${pbSourceLink(m)}</div><div><small>Latest vs PB</small><strong>${pbGap(m)}</strong><small>${pbAge(m)}</small></div><div><small>First → latest</small><strong>${trendTime(m.first)} → ${trendTime(m.latest)}</strong></div><div><small>Recent trend</small><strong>${recent}</strong></div></div><div class="intel-chart">${intelligenceLine(m)}</div><p>${m.swims.length} documented result(s) · ${m.pct===null?'Insufficient history':`${m.pct.toFixed(1)}% first-to-latest improvement`} · ${status}</p><p class="muted">PB includes documented ASAJ and supplementary SwimCloud results; source and date precision remain as recorded.</p></article>`;
+  return `<article class="panel" id="swim-${esc(m.course)}-${esc(m.name).replace(/[^a-zA-Z0-9]/g,'-')}"><h3><a href="#trends" class="progress-event-link" data-event="${esc(m.name)}" data-course="${m.course}" aria-label="View detailed race history for ${esc(m.name)} ${m.course}">${esc(m.name)} · ${m.course}</a></h3><p class="swim-classification-line"><strong>Current USA classification: ${esc(classLabel)}</strong><span>First attained: ${classificationDate}</span></p><div class="swim-inline-detail" hidden></div><div class="intel-stats"><div><small>Personal best (recorded)</small><strong>${trendTime(m.best)}</strong><small>${bestDate(m)}</small>${pbSourceLink(m)}</div><div><small>Latest vs PB</small><strong>${pbGap(m)}</strong><small>${pbAge(m)}</small></div><div><small>First → latest</small><strong>${trendTime(m.first)} → ${trendTime(m.latest)}</strong></div><div><small>Recent trend</small><strong>${recent}</strong></div></div><div class="intel-chart">${intelligenceLine(m)}</div><p>${m.swims.length} documented result(s) · ${m.pct===null?'Insufficient history':`${m.pct.toFixed(1)}% first-to-latest improvement`} · ${status}</p><p class="muted">PB includes documented ASAJ and supplementary SwimCloud results; source and date precision remain as recorded.</p></article>`;
  }).join('');
- return `<div class="panel"><h2>Swim Intelligence · all-event progress</h2><p>Separate LCM and SCM race histories. Performance Intelligence summarizes historical strengths and recent patterns; a slower race is not a diagnosis.</p>${summary}<p><strong>Chart key:</strong> Green segments = faster; red = slower; amber = unchanged. Yellow dots = ASAJ verified; blue = SwimCloud supplied (unverified). SCM and LCM are never combined.</p></div>${rows||'<div class="panel">No recorded races.</div>'}<div class="notice">Dates marked approximate are ASAJ meet-start dates. Supplementary swims are not qualification evidence. PB is the fastest documented result, not necessarily the latest result.</div>`;
+ return `<div class="panel"><h2>Swim Intelligence · all-event progress</h2><p>Separate LCM and SCM race histories. Performance Intelligence summarizes historical strengths and recent patterns; a slower race is not a diagnosis.</p>${summary}${renderSwimOpportunity(d,metrics)}<p><strong>Chart key:</strong> Green segments = faster; red = slower; amber = unchanged. Yellow dots = ASAJ verified; blue = SwimCloud supplied (unverified). SCM and LCM are never combined.</p></div>${rows||'<div class="panel">No recorded races.</div>'}<div class="notice">Dates marked approximate are ASAJ meet-start dates. Supplementary swims are not qualification evidence. PB is the fastest documented result, not necessarily the latest result.</div>`;
 }
 
 // Intelligence uses only documented race results and the September 2026 Jamaica ranking snapshot.
@@ -226,6 +449,21 @@ function intelligenceLine(m){
  const dots=m.swims.map((r,i)=>`<circle cx="${x(i)}" cy="${y(v[i])}" r="4.5" fill="${r.origin==='ASAJ verified'?'#e3a300':'#6e80ef'}"><title>${esc(r.date)} · ${esc(r.time)} · ${esc(r.origin)}</title></circle>`).join('');
  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(m.name)} ${m.course} chronological race times">${grid}${segments}${dots}<text x="${L}" y="${H-6}" font-size="11" fill="currentColor">${esc(m.swims[0].date)}</text><text x="${W-R}" y="${H-6}" text-anchor="end" font-size="11" fill="currentColor">${esc(m.swims.at(-1).date)}</text></svg>`;
 }
+// An ASAJ result with a meet-range date is date-eligible only if the entire
+// documented meet falls inside the qualifying window. Never infer a race day.
+function cariftaDateEvidence(swim,start,end){
+ if(swim.origin!=='ASAJ verified'||!/^(\d{4}-\d{2}-\d{2})$/.test(start||''))return null;
+ const iso=/^\d{4}-\d{2}-\d{2}$/;
+ let first=swim.date,last=swim.date;
+ if(swim.precision==='meet_range'){
+  const dates=String(swim.meet_dates||'').match(/\d{4}-\d{2}-\d{2}/g);
+  if(!dates||dates.length<2)return null;
+  [first,last]=dates;
+ }else if(swim.precision!=='exact')return null;
+ if(!iso.test(first||'')||!iso.test(last||'')||first>last)return null;
+ if(first<start||(end&&last>end))return null;
+ return {first,last,approx:swim.precision==='meet_range'};
+}
 // Championship strategy: show only events supported by recorded times and a sourced B standard.
 // This is a relative planning score, never a medal probability or selection forecast.
 function championshipOpportunities(d,meet){
@@ -235,18 +473,18 @@ function championshipOpportunities(d,meet){
   const m=all.find(x=>x.name===e.event);
   const entry=usaSeconds(e.standards?.B?.time);
   if(!m||!Number.isFinite(m.best)||entry===null||entry<=0)return null;
-  // CARIFTA selection requires an official, exactly dated LCM result in the qualifying window.
-  // Do not treat historical PBs, supplementary swims, or approximate meet dates as eligible.
+  // Qualifying evidence can be an exact race date or a wholly eligible official meet range.
   let best=m.best, bestDate=null, classification=null;
   if(meet==='CARIFTA'){
    const start=d.carifta_criteria?.qualifying_period_start;
    const end=d.carifta_criteria?.qualifying_period_end;
    if(!/^\d{4}-\d{2}-\d{2}$/.test(start||''))return null;
-   const eligible=trendSwims(d,e.event,'LCM').filter(x=>x.origin==='ASAJ verified'&&x.precision==='exact'&&/^\d{4}-\d{2}-\d{2}$/.test(x.date||'')&&x.date>=start&&(!end||x.date<=end)&&Number.isFinite(trendSeconds(x.time)));
+   const eligible=trendSwims(d,e.event,'LCM').filter(x=>cariftaDateEvidence(x,start,end)&&Number.isFinite(trendSeconds(x.time)));
    if(!eligible.length)return null;
    eligible.sort((x,y)=>trendSeconds(x.time)-trendSeconds(y.time));
    best=trendSeconds(eligible[0].time);
    bestDate=eligible[0].date;
+   var bestDateRange=cariftaDateEvidence(eligible[0],start,end);
    const us=(d.usa_motivational||[]).find(x=>x.event===e.event&&x.course==='LCM'&&x.gender==='Boys'&&x.age_group==='13-14');
    if(us){classification='Below B';for(const level of ['B','BB','A','AA','AAA','AAAA']){const threshold=usaSeconds(us[level]);if(threshold!==null&&best<=threshold)classification=level;}}
   }
@@ -268,8 +506,10 @@ function championshipOpportunities(d,meet){
   const trendScore=trend===null?0:Math.max(0,Math.min(25,12.5+trend*5));
   const fieldScore=field?15/(1+nearby/3):0;
   if(meet!=='CARIFTA'){const bestSwims=trendSwims(d,e.event,'LCM').filter(x=>Math.abs(trendSeconds(x.time)-best)<.011&&/^\d{4}-\d{2}-\d{2}/.test(String(x.date)));bestDate=bestSwims.length?bestSwims.at(-1).date:null;}
-  const ageDays=bestDate?Math.max(0,Math.floor((Date.now()-Date.parse(bestDate+'T00:00:00Z'))/86400000)):null;
-  return {event:e.event,best,bestDate,ageDays,classification,entry,gap,trend,nearby,field,boys12,entryScore,trendScore,fieldScore,score:entryScore+trendScore+fieldScore};
+  const ageDays=bestDate&&(!bestDateRange||!bestDateRange.approx)?Math.max(0,Math.floor((Date.now()-Date.parse(bestDate+'T00:00:00Z'))/86400000)):null;
+  const aStandard=usaSeconds(e.standards?.A?.time);
+  const cariftaLevel=meet==='CARIFTA'?(aStandard!==null&&best<=aStandard?'A':best<=entry?'B':'Below B'):null;
+  return {event:e.event,best,bestDate,bestDateRange,ageDays,classification,cariftaLevel,aStandard,entry,gap,trend,nearby,field,boys12,entryScore,trendScore,fieldScore,score:entryScore+trendScore+fieldScore};
  }).filter(Boolean).sort((a,b)=>b.score-a.score).slice(0,5);
 }
 // Complete documented classifications, independent of the five-event strategy score.
@@ -286,39 +526,62 @@ function renderAcquiredClassifications(d){
    let level='Not available';
    if(usa){level='Below B';for(const band of ['B','BB','A','AA','AAA','AAAA']){const threshold=usaSeconds(usa[band]);if(threshold!==null&&time<=threshold)level=band;}}
    const exact=pb.precision==='exact'&&/^\d{4}-\d{2}-\d{2}$/.test(pb.date||'');
-   const qualifying=m.swims.filter(x=>course==='LCM'&&x.origin==='ASAJ verified'&&x.precision==='exact'&&/^\d{4}-\d{2}-\d{2}$/.test(x.date||'')&&start&&x.date>=start&&(!end||x.date<=end)&&Number.isFinite(trendSeconds(x.time))).sort((a,b)=>trendSeconds(a.time)-trendSeconds(b.time));
+   const qualifying=m.swims.filter(x=>course==='LCM'&&cariftaDateEvidence(x,start,end)&&Number.isFinite(trendSeconds(x.time))).sort((a,b)=>trendSeconds(a.time)-trendSeconds(b.time));
    const standard=(d.events||[]).find(x=>x.event===m.name)?.standards;
    let carifta='Not assessed';
    if(course==='LCM'&&standard){
-    if(!qualifying.length)carifta='No exact-date ASAJ result in qualifying period';
+    if(!qualifying.length)carifta='No ASAJ result with fully eligible race/meet dates';
     else{
      const eligibleTime=trendSeconds(qualifying[0].time);
      if(usaSeconds(standard.A?.time)!==null&&eligibleTime<=usaSeconds(standard.A.time))carifta='A';
      else if(usaSeconds(standard.B?.time)!==null&&eligibleTime<=usaSeconds(standard.B.time))carifta='B';
      else carifta='Below B';
-     if(qualifying[0].time!==pb.time||qualifying[0].date!==pb.date)carifta+=' (eligible swim '+qualifying[0].time+', '+qualifying[0].date+')';
     }
    }
    rows.push({event:m.name,course,time:pb.time,date:pb.date,exact,origin:pb.origin,level,carifta});
   }
  }
  rows.sort((a,b)=>a.course.localeCompare(b.course)||a.event.localeCompare(b.event));
+ const countBy=(field,values)=>values.map(([value,label])=>({label,count:rows.filter(r=>r[field]===value).length})).filter(x=>x.count).map(x=>`${esc(x.label)}${x.count}`).join(' · ');
+ const usaCounts=countBy('level',[['AAAA','AAAA'],['AAA','AAA'],['AA','AA'],['A','A'],['BB','BB'],['B','B'],['Below B','Below B '],['Not available','Unclassified ']]);
+ const cariftaCounts=countBy('carifta',[['A','A'],['B','B'],['Below B','Below B '],['No ASAJ result with fully eligible race/meet dates','No eligible result '],['Not assessed','Not assessed ']]);
+ const classificationSummary=`<span class="classification-totals"><span>USA Swimming: ${usaCounts||'None'}</span><span>CARIFTA: ${cariftaCounts||'None'}</span></span>`;
  const body=rows.map(r=>`<tr><td>${esc(r.event)}</td><td>${esc(r.course)}</td><td>${esc(r.time)}</td><td>${esc(r.date||'Unavailable')}${r.exact?'':' (approx.)'}</td><td><strong>${esc(r.level)}</strong></td><td>${esc(r.carifta)}</td><td>${esc(r.origin)}</td></tr>`).join('');
- return `<section class="panel"><h2>Acquired time classifications · all recorded events</h2><p>Fastest documented time per event and course, its recorded date, USA Swimming Boys 13–14 motivational classification, and CARIFTA A/B status where an exact-date eligible LCM result supports it. USA levels are not CARIFTA qualifying standards.</p><div style="overflow-x:auto"><table><thead><tr><th>Event</th><th>Course</th><th>PB</th><th>Date attained</th><th>USA level</th><th>CARIFTA</th><th>Evidence</th></tr></thead><tbody>${body||'<tr><td colspan="7">No documented results available</td></tr>'}</tbody></table></div><p class="muted">Approximate dates and SwimCloud-supplied results are not treated as CARIFTA qualifying evidence. CARIFTA status uses the fastest eligible qualifying-period swim, even when the overall PB is older. A meet-range date is not proof of an exact race date. Classifications reflect the currently loaded Boys 13–14 standards.</p></section>`;
+ return `<section class="panel"><h2>Acquired time classifications · all recorded events${classificationSummary}</h2><p>Fastest documented time per event and course, its recorded date, USA Swimming Boys 13–14 motivational classification, and CARIFTA A/B status where an eligible ASAJ LCM race date or wholly eligible meet range supports it. USA levels are not CARIFTA qualifying standards.</p><div style="overflow-x:auto"><table><thead><tr><th>Event</th><th>Course</th><th>PB</th><th>Date attained</th><th>USA level</th><th>CARIFTA Time Standard</th><th>Evidence</th></tr></thead><tbody>${body||'<tr><td colspan="7">No documented results available</td></tr>'}</tbody></table></div><p class="muted">ASAJ meet ranges are accepted only when the entire meet falls within the qualifying period; overlapping or undocumented ranges are excluded. SwimCloud-supplied results are not CARIFTA qualifying evidence. CARIFTA status uses the fastest eligible qualifying-period swim, even when the overall PB is older. A meet-range date is not proof of an exact race date. Classifications reflect the currently loaded Boys 13–14 standards.</p></section>`;
+}
+// Use the identical imported ASAJ best-per-swimmer ranking pool as Jamaica Rankings.
+// The 12-year-old comparison is hypothetical, not an official CARIFTA age-group rank.
+function strategyCalculatedField(d,event){
+ const older=[...(calculatedJamaicaRankings(d,[13,14]).get(event)?.values()||[])];
+ const younger=[...(calculatedJamaicaRankings(d,[12]).get(event)?.values()||[])];
+ const key=r=>String(r.swimmer||'').toLowerCase().replace(/[^a-z]/g,'');
+ const aidan=older.find(r=>key(r)==='aidanseaton');
+ if(!aidan)return null;
+ const competitors=new Map();
+ for(const r of [...older,...younger]){
+  const k=key(r);
+  if(!k||k==='aidanseaton')continue;
+  const prev=competitors.get(k);
+  if(!prev||r.seconds<prev.seconds)competitors.set(k,r);
+ }
+ const faster=[...competitors.values()].filter(r=>r.seconds<aidan.seconds-0.00001);
+ const olderFaster=older.filter(r=>key(r)!=='aidanseaton'&&r.seconds<aidan.seconds-0.00001).length;
+ const youngerFaster=younger.filter(r=>key(r)!=='aidanseaton'&&r.seconds<aidan.seconds-0.00001).length;
+ return {rank:1+olderFaster,olderFaster,youngerFaster,combinedFaster:faster.length,combinedRank:1+faster.length,fieldSize:competitors.size+1};
 }
 function renderChampionshipShortlist(d){
  const panel=meet=>{
   const rows=championshipOpportunities(d,meet);
-  if(!rows.length)return `<section class="panel"><h3>${meet} · Top five priorities</h3><p>No events have a qualifying-period, exactly dated, ASAJ-verified LCM time and a sourced B standard.</p></section>`;
+  if(!rows.length)return `<section class="panel"><h3>${meet} · Top five priorities</h3><p>No events have a qualifying-period, date-supported, ASAJ-verified LCM time and a sourced B standard.</p></section>`;
   const cards=rows.map((r,i)=>{
    const direction=r.trend===null?'No recent trend':r.trend>0.005?'Faster':r.trend<-.005?'Slower':'Stable';
    const change=r.trend===null?'':` · ${Math.abs(r.trend).toFixed(2)}s`;
-   const gap=r.gap<=0?`${Math.abs(r.gap).toFixed(2)}s inside B`:`${r.gap.toFixed(2)}s to B`;
-   return `<article class="intel-card"><h3>${i+1}. <a href="#trends" class="strategy-event-link" data-event="${esc(r.event)}">${esc(r.event)}</a> <strong>${r.score.toFixed(0)}/100</strong></h3><p><strong>${trendTime(r.best)}</strong> best · ${r.ageDays===null?"Date unavailable":`${r.ageDays} days since fastest (${esc(r.bestDate)})`} · ${gap}${meet==='CARIFTA'?` · USA level: <strong>${esc(r.classification||'Unavailable')}</strong>`:''}</p><p>Recent: ${direction}${change}</p><p>ASAJ Boys 13–14: ${r.field} swimmers · ${r.nearby} within ±5%</p><p>ASAJ Boys 12: ${r.boys12} within ±10%</p><p class="muted">Entry ${r.entryScore.toFixed(0)}/60 · Trend ${r.trendScore.toFixed(0)}/25 · Field ${r.fieldScore.toFixed(0)}/15</p></article>`;
+   const gap=r.gap<=0?`${Math.abs(r.gap).toFixed(2)}s faster than CARIFTA B standard`:`${r.gap.toFixed(2)}s slower than CARIFTA B standard`;
+   return `<article class="intel-card"><h3>${i+1}. <a href="#trends" class="strategy-event-link" data-event="${esc(r.event)}">${esc(r.event)}</a> <strong>${r.score.toFixed(0)}/100</strong></h3><p><strong>${trendTime(r.best)}</strong> best · ${r.bestDateRange?.approx?`eligible meet ${esc(r.bestDateRange.first)} to ${esc(r.bestDateRange.last)} (exact race day unknown)`:(r.ageDays===null?'Date unavailable':`${r.ageDays} days since eligible swim (${esc(r.bestDate)})`)}</p>${meet==='CARIFTA'?`<p><strong>CARIFTA:</strong> ${gap}</p><p><strong>USA Swimming:</strong> ${esc(r.classification||'Unavailable')}</p>`:`<p>${gap}</p>`}<p>Recent: ${direction}${change}</p>${meet==='CARIFTA'?(()=>{const field=strategyCalculatedField(d,r.event);return field?`<p><strong>Calculated rank (Boys 13–14):</strong> ${field.rank} · ${field.olderFaster} faster</p><p><strong>Faster swimmers (Boys 13–14 + Boys 12):</strong> ${field.combinedFaster} · hypothetical combined position ${field.combinedRank} of ${field.fieldSize}</p>`:`<p><strong>Calculated rank:</strong> Unavailable · no comparable imported ranking evidence</p>`;})():''}<p>ASAJ Boys 13–14: ${r.field} swimmers · ${r.nearby} within ±5%</p><p>ASAJ Boys 12: ${r.boys12} within ±10%</p><p class="muted">Entry ${r.entryScore.toFixed(0)}/60 · Trend ${r.trendScore.toFixed(0)}/25 · Field ${r.fieldScore.toFixed(0)}/15</p></article>`;
   }).join('');
   return `<section class="panel"><h2>${meet} · Top five event priorities</h2><div class="intel-cards">${cards}</div></section>`;
  };
- return `<section class="panel"><h2>🏆 CARIFTA + Goodwill Event Strategy</h2><p>Ranked event priorities, not qualification listings. Scores combine entry readiness (60), recent performance (25), and ASAJ competitor density (15).</p></section>${renderAcquiredClassifications(d)}${panel('CARIFTA')}${panel('Goodwill')}<p class="muted">CARIFTA: only exact-date ASAJ-verified LCM swims from 1 July 2026; qualifying period closing date remains unverified. USA classification is developmental, not selection eligibility. Recent trends may include supplementary results. Goodwill: available 2026 B standards, historical reference only. Competitor counts cover imported ASAJ results, not championship entries. Planning scores are not medal probabilities.</p>`;
+ return `<section class="panel"><h2>🏆 CARIFTA + Goodwill Event Strategy</h2><p>Ranked event priorities, not qualification listings. Scores combine entry readiness (60), recent performance (25), and ASAJ competitor density (15).</p></section>${panel('CARIFTA')}${panel('Goodwill')}<p class="muted">CARIFTA: only ASAJ-verified LCM swims with exact race dates or complete meet ranges inside the qualifying window specified in the loaded criteria (${esc(d.carifta_criteria?.qualifying_period_start||'start unavailable')} to ${esc(d.carifta_criteria?.qualifying_period_end||'closing date not confirmed')}). CARIFTA A/B labels reflect time standards only, not top-two national ranking, two-event qualification, or team selection. USA classification is developmental, not selection eligibility. Recent trends may include supplementary results. Goodwill: available 2026 B standards, historical reference only. Competitor counts cover imported ASAJ results, not championship entries. Planning scores are not medal probabilities.</p>`;
 }
 
 function renderIntelligence(d){
@@ -402,4 +665,23 @@ document.addEventListener('click',event=>{
  anchor.setAttribute('aria-expanded','true');
  drawTrendDetail(detail);
  detail.scrollIntoView({behavior:'smooth',block:'nearest'});
+});
+
+// Keep the radar selector functional after the tab re-renders.
+document.addEventListener('change',e=>{if(e.target?.id!=='strength-age-group')return;document.querySelectorAll('.strength-group').forEach((el,i)=>{el.hidden=i!==Number(e.target.value);});});
+
+
+// Overview navigation reuses the Swim Intelligence event panels and their inline graphs.
+function overviewEventLink(event,course='LCM'){
+ return `<a href="#swim-intelligence" class="overview-event-link" data-event="${esc(event)}" data-course="${esc(course)}">${esc(event)}</a>`;
+}
+document.addEventListener('click',event=>{
+ const anchor=event.target.closest?.('.overview-event-link');if(!anchor)return;
+ event.preventDefault();
+ const name=anchor.dataset.event,course=anchor.dataset.course||'LCM';
+ const nav=document.querySelector('nav button[data-tab="progress"]');
+ if(nav)nav.click();else{TAB='progress';render();}
+ const link=[...document.querySelectorAll('.progress-event-link')].find(x=>x.dataset.event===name&&x.dataset.course===course);
+ if(link){link.click();link.closest('article')?.scrollIntoView({behavior:'smooth',block:'start'});}
+ else document.querySelector('#content')?.scrollIntoView({behavior:'smooth',block:'start'});
 });
