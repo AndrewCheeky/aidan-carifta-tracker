@@ -101,16 +101,43 @@ function rivalsStrengthDiagram(group=0){
  const labels=ds.map((d,i)=>`<text x="${point(i,R+23).replace(',','" y="')}" text-anchor="middle" font-size="12" fill="#16354b">${esc(d.label==='Individual medley'?'IM':d.label)}</text>`).join('');
  return `<section class="panel strength-panel"><h2>Five-event competitive strength profile · Rivals</h2><p>Compare Aidan with documented ASAJ LCM swimmers from each age-at-meet group, including Boys 12 who may age up. Each competitor's fastest verified time per event is used once.</p><label for="rival-age-group">Comparison group</label> <select id="rival-age-group">${RIVAL_GROUPS.map(([name],i)=>`<option value="${i}" ${i===group?'selected':''}>${esc(name)}</option>`).join('')}</select><div class="strength-layout"><svg viewBox="0 0 320 300" role="img" aria-label="Five-stroke comparative strength for ${esc(RIVAL_GROUPS[group][0])}">${grid}${axes}${shape}${dots}${labels}</svg><div class="strength-legend">${ds.map(d=>`<p><strong>${esc(d.label)}</strong>: ${d.score===null?'Insufficient verified comparisons':d.score.toFixed(0)+' / 100'} <small>(${d.events.length} documented events)</small>${d.events.map(e=>`<small class="rival-evidence">${esc(e.event)} · calculated #${e.rank} of ${e.count} · ${competitorSource(e.pb,'Aidan ASAJ PB')} · ${competitorSource(e.leader,'Rival ASAJ result')}</small>`).join('')}</p>`).join('')}</div></div><p class="subtle">Method: each event scores 100 × (competitor count − Aidan rank) ÷ (competitor count − 1); discipline score averages evidenced events. This is historical age at meet, not confirmed future age-group eligibility or an official ranking. Missing disciplines are not estimated.</p></section>`;
 }
+// Race-by-race comparison: lower elapsed seconds means improvement; equal exact
+// hundredth-second values mean unchanged; higher values mean decline. A PB is a
+// new strictly faster cumulative minimum within the same event/course. The first
+// recorded race is the baseline PB, not an improvement. ASAJ and supplementary
+// SwimCloud results are never silently described as equally verified.
+function swimRaceStates(rows){
+ let best=Infinity;
+ return rows.map((r,i)=>{const n=secs(r.time),previous=i?secs(rows[i-1].time):null;
+  const direction=previous===null?'baseline':n<previous?'improved':n>previous?'declined':'same';
+  const pb=n<best;best=Math.min(best,n);
+  return {...r,seconds:n,direction,pb};
+ });
+}
+// Least-squares trend uses only documented plotted results; it is a descriptive
+// comparison, not a prediction. It is omitted when fewer than two dated results.
+function swimTrendValues(rows){
+ if(rows.length<2)return null;
+ const n=rows.length,meanX=(n-1)/2,meanY=rows.reduce((a,r)=>a+r.seconds,0)/n;
+ const den=rows.reduce((a,_,i)=>a+(i-meanX)**2,0);
+ if(!den)return null;
+ const slope=rows.reduce((a,r,i)=>a+(i-meanX)*(r.seconds-meanY),0)/den;
+ return [meanY-slope*meanX,meanY+slope*(n-1-meanX)];
+}
 function swimIntelligence(){
  const history=[...(DATA.race_history_2026||[]).map(r=>({...r,origin:'ASAJ'})),...(DATA.swimcloud_supplemental||[]).map(r=>({...r,origin:'SwimCloud'}))];
  const events=[...new Set(history.map(r=>r.event))].sort();
- return `<section class="panel"><h2>Swim Intelligence · Performance history</h2><p>Explore recorded race times, PB progression and source evidence by event and course. LCM and SCM remain separate; SwimCloud is supplementary and not CARIFTA qualifying evidence.</p></section>${events.map(event=>`<section class="panel swim-event-section" data-swim-section="${esc(event)}"><h3>${esc(event)}</h3>${['LCM','SCM'].map(course=>{
+ return `<section class="panel"><h2>Swim Intelligence · Performance history</h2><p>Compare each recorded race with the previous one. <span class="swim-key improved">● Faster</span> <span class="swim-key same">● Unchanged</span> <span class="swim-key declined">● Slower</span> <span class="swim-key trend">┄ Dashed overall trend</span>. ★ marks a new PB. Lower on the time scale means faster; chart points place faster times higher. LCM and SCM stay separate; SwimCloud is supplementary, not CARIFTA qualifying evidence.</p></section>${events.map(event=>`<section class="panel swim-event-section" data-swim-section="${esc(event)}"><h3>${esc(event)}</h3>${['LCM','SCM'].map(course=>{
   const rows=history.filter(r=>r.event===event&&r.course===course&&secs(r.time)!==null&&r.race_date).sort((a,b)=>a.race_date.localeCompare(b.race_date));
   if(!rows.length)return '';
-  const values=rows.map(r=>secs(r.time)),min=Math.min(...values),max=Math.max(...values),spread=Math.max(1,max-min),w=300,h=110;
-  const points=rows.map((r,i)=>`${20+(rows.length===1?0:i*(w-40)/(rows.length-1))},${10+(secs(r.time)-min)/spread*(h-20)}`).join(' ');
-  const fastest=rows.reduce((a,b)=>secs(a.time)<secs(b.time)?a:b);
-  return `<details><summary>${course} · ${rows.length} documented race(s) · PB ${esc(fastest.time)}</summary><svg class="swim-history-chart" viewBox="0 0 300 110" role="img" aria-label="${esc(event)} ${course} time history, faster times appear higher"><line x1="20" y1="10" x2="20" y2="100" stroke="#a4becb"/><polyline points="${points}" fill="none" stroke="#087e88" stroke-width="3"/>${rows.map((r,i)=>`<circle cx="${20+(rows.length===1?0:i*260/(rows.length-1))}" cy="${10+(secs(r.time)-min)/spread*90}" r="3.5" fill="${r.origin==='ASAJ'?'#087e88':'#d49b00'}"/>`).join('')}</svg><div class="swim-races">${rows.map(r=>`<p>${dateText(r.race_date)} · <strong>${esc(r.time)}</strong> · ${esc(r.origin)} · ${r.source_pdf?pdf(r.source_pdf,'Source PDF',r.source_page):a(r.source_url,'Supplemental source')}</p>`).join('')}</div></details>`;
+  const races=swimRaceStates(rows),values=races.map(r=>r.seconds),min=Math.min(...values),max=Math.max(...values),spread=Math.max(1,max-min),w=300,h=130;
+  const x=i=>20+(races.length===1?130:i*260/(races.length-1));
+  const y=n=>12+(n-min)/spread*96;
+  const trend=swimTrendValues(races);
+  const fastest=races.reduce((a,b)=>a.seconds<b.seconds?a:b);
+  const segments=races.slice(1).map((r,i)=>`<line x1="${x(i)}" y1="${y(races[i].seconds)}" x2="${x(i+1)}" y2="${y(r.seconds)}" class="swim-segment ${r.direction}" stroke-width="3.5" stroke-linecap="round"/>`).join('');
+  const dots=races.map((r,i)=>`<circle cx="${x(i)}" cy="${y(r.seconds)}" r="${r.pb?5:3.5}" class="swim-point ${r.direction}${r.pb?' pb':''}" stroke-width="${r.pb?2.5:1.5}"/><title>${esc(dateText(r.race_date))}: ${esc(r.time)}${r.pb?' · PB':''} · ${r.direction}</title>${r.pb?`<text x="${x(i)}" y="${Math.max(9,y(r.seconds)-9)}" text-anchor="middle" class="swim-pb-star">★</text>`:''}`).join('');
+  return `<details><summary>${course} · ${rows.length} documented race(s) · PB ${esc(fastest.time)}</summary><svg class="swim-history-chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(event)} ${course} time history. Coloured segments show faster, unchanged or slower swims; dashed line is the overall linear trend; stars mark new PBs"><line x1="20" y1="12" x2="20" y2="108" stroke="#a4becb"/>${trend?`<line x1="${x(0)}" y1="${y(trend[0])}" x2="${x(races.length-1)}" y2="${y(trend[1])}" class="swim-trend-line"/>`:''}${segments}${dots}</svg><div class="swim-races">${races.map(r=>`<p class="swim-race ${r.pb?'swim-race-pb':''}"><span class="swim-race-date">${r.pb?'★ PB · ':''}${dateText(r.race_date)}${r.date_precision&&r.date_precision!=='exact'?' · date not exact':''}</span> · <strong class="swim-race-time">${esc(r.time)}</strong> · <span class="swim-key ${r.direction}">${r.direction==='improved'?'↓ Faster':r.direction==='declined'?'↑ Slower':r.direction==='same'?'= Unchanged':'First recorded'}</span> · ${esc(r.origin)} · ${r.source_pdf?pdf(r.source_pdf,'Source PDF',r.source_page):a(r.source_url,'Supplemental source')}</p>`).join('')}</div><p class="subtle">PB stars indicate the fastest documented time up to that race within this ${course} history, not an independently certified lifetime record. The dashed line is a descriptive fit, not a forecast.</p></details>`;
  }).join('')}</section>`).join('')}`;
 }
 function eventAnalytics(){const ranked=DATA.events.map(e=>{const i=calculated(e),b=standardGap(e),s=snapshotGap(e);return {e,i,b,s,score:Number.isFinite(b)&&Number.isFinite(s)?b+s:null}});return `<section class="panel"><h2>Competition intelligence · Events</h2><p>Event opportunities use the combined seconds to B and to calculated second place. Smaller totals indicate a closer pair of benchmarks, not guaranteed selection.</p><div class="analytics-grid">${ranked.filter(x=>x.score!==null).sort((a,b)=>a.score-b.score).map(x=>`<div class="analytics-item"><strong>${esc(x.e.event)}</strong><span>Calculated #${x.i?.rank??'—'} of ${x.i?.count??'—'}</span><span>B: ${gapText(x.b)} · Top 2: ${gapText(x.s)}</span><span>Combined: ${x.score.toFixed(2)}s · ${competitorSource(x.i?.aidan,'ASAJ PB')} · ${competitorSource(x.i?.second,'2nd place')} · ${a(standard(x.e)?.source_url,'B standard')}</span></div>`).join('')||'<p>No fully evidenced comparisons.</p>'}</div></section>`;}

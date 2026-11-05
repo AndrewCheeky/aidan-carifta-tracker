@@ -39,3 +39,12 @@
 
 /* Event titles are direct navigation links to the matching Swim Intelligence history. */
 .event-swim-link{color:#075d81;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:4px}.event-swim-link:hover{color:#087e88}.swim-event-section{scroll-margin-top:12px}
+
+/* Swim Intelligence: text labels and shapes supplement colour for accessibility. */
+.swim-segment.improved{stroke:#13845d}.swim-segment.same{stroke:#607b91}.swim-segment.declined{stroke:#c15b37}
+.swim-point{fill:#fff;stroke:#607b91}.swim-point.improved{stroke:#13845d}.swim-point.same{stroke:#607b91}.swim-point.declined{stroke:#c15b37}.swim-point.pb{fill:#fff0b3;stroke:#946000}
+.swim-trend-line{stroke:#6e52a1;stroke-width:2;stroke-dasharray:6 5;fill:none}
+.swim-pb-star{fill:#946000;font-size:10px;font-weight:800}
+.swim-key{font-weight:650;white-space:nowrap}.swim-key.improved{color:#126b4d}.swim-key.same,.swim-key.baseline{color:#526b80}.swim-key.declined{color:#a33d20}.swim-key.trend{color:#6e52a1}
+.swim-race-pb{background:#fff8df;border-left:4px solid #b8860b;padding-left:9px!important;border-radius:4px}
+.swim-race-pb .swim-race-date,.swim-race-pb .swim-race-time{font-weight:800;color:#684a00}

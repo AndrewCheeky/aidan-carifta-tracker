@@ -56,3 +56,9 @@
 - Added local PNG export showing only Aidan S., sourced event/time and badge, and one-time confetti for newly imported achievements.
 - Reduced-motion preference disables celebration motion; decorative count-up never changes race times.
 - Added four automated tests documenting the evidence, hero, journey, milestone and privacy rules.
+
+### Swim Intelligence PB and trends
+- Highlight cumulative PB dates and exact recorded times in each course/event history.
+- Colour and label each consecutive race segment as faster, unchanged, or slower.
+- Overlay a dashed least-squares trend comparison without forecasting or changing race times.
+- Keep ASAJ evidence and supplemental SwimCloud attribution distinct.
