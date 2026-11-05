@@ -12,3 +12,15 @@
 .swim-history-chart{width:100%;max-width:600px;height:auto;background:#f5fbfc;border-radius:10px;margin:8px 0}
 .swim-races p{border-bottom:1px solid #d9e7ee;padding:8px 0;margin:0;overflow-wrap:anywhere}
 @media(max-width:650px){.strength-layout svg{max-width:300px}.rival-evidence{font-size:12px}}
+
+/* Rivals: per-event source-linked mobile time comparisons */
+.rival-event-chart{margin:14px 0;padding:12px;border:1px solid #c5dfe6;border-radius:12px;background:#f7fbfc}
+.rival-chart-row{margin:12px 0 16px;min-width:0}
+.rival-chart-head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;flex-wrap:wrap;font-size:14px}
+.rival-chart-head span{min-width:0;overflow-wrap:anywhere}
+.rival-chart-head small{display:block;font-size:12px;color:#4a6474}
+.rival-chart-track{height:13px;border-radius:8px;background:#e3eef2;margin:5px 0;overflow:hidden}
+.rival-chart-bar{height:100%;border-radius:8px;background:#568ca4}
+.rival-chart-bar.aidan{background:#078c83}.rival-chart-bar.first{background:#355e90}.rival-chart-bar.second{background:#81a6d4}.rival-chart-bar.age12{background:#d89935}
+.rival-chart-evidence{font-size:12px;overflow-wrap:anywhere}
+@media(max-width:650px){.rival-event-chart{padding:10px}.rival-chart-head{font-size:13px}}
