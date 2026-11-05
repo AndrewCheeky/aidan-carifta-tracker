@@ -5,3 +5,10 @@
 
 /* Responsive competitive-strength diagram and event intelligence */
 .strength-layout{display:grid;grid-template-columns:minmax(0,350px) minmax(0,1fr);align-items:center;gap:16px}.strength-layout svg{width:100%;height:auto;max-width:350px}.strength-legend p{margin:8px 0;border-bottom:1px solid #e0edf2;padding-bottom:8px}.strength-legend small{color:#536e7b}.analytics-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.analytics-item{border:1px solid #c5dfe7;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:5px;min-width:0}.analytics-item span{font-size:14px;overflow-wrap:anywhere}@media(max-width:650px){.strength-layout,.analytics-grid{grid-template-columns:1fr}.strength-layout svg{max-width:320px;margin:auto}.strength-panel{padding:12px}.strength-legend{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.strength-legend p{font-size:13px}}@media print{.strength-panel{display:none!important}}
+
+/* Rival cohort selector and restored Swim Intelligence */
+#rival-age-group{min-height:44px;max-width:100%;border:1px solid #91b5c5;border-radius:9px;padding:9px;background:white;color:#16354b;font:inherit}
+.rival-evidence{display:block;margin:5px 0;line-height:1.5;overflow-wrap:anywhere}
+.swim-history-chart{width:100%;max-width:600px;height:auto;background:#f5fbfc;border-radius:10px;margin:8px 0}
+.swim-races p{border-bottom:1px solid #d9e7ee;padding:8px 0;margin:0;overflow-wrap:anywhere}
+@media(max-width:650px){.strength-layout svg{max-width:300px}.rival-evidence{font-size:12px}}
