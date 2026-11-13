@@ -5,7 +5,7 @@
     "https://asaj.com.jm/rankings": {
       "category": "rankings",
       "title": "ASAJ listing: rankings",
-      "sha256": "3fef9e8130d71d22514e8a5f86bd52165d9cbb25abe19de633ed54101868f94f",
+      "sha256": "d5284e8eb4ddc1fbadd75045479d7049b4dc429ec6622d9bfe55652a41fad35e",
       "content_type": "html",
       "links": [
         {
@@ -105,6 +105,10 @@
           "title": "Carifta 2027 06-09-2026.pdf"
         },
         {
+          "url": "https://asaj.com.jm/swimming/carifta-2027-12-11-2026.pdf/@@display-file/file",
+          "title": "Carifta 2027 12-11-2026.pdf"
+        },
+        {
           "url": "https://asaj.com.jm/swimming/carifta-2027-29-09-2026.pdf/@@display-file/file",
           "title": "Carifta 2027 29-09-2026.pdf"
         },
@@ -133,12 +137,12 @@
           "title": "General Ranking 29-06-2026.pdf"
         },
         {
-          "url": "https://asaj.com.jm/swimming/general-rankings-01-06-2026.pdf/@@display-file/file",
-          "title": "General Rankings 01-06-2026.pdf"
-        },
-        {
           "url": "https://asaj.com.jm/swimming/general-rankings-06-09-2026.pdf/@@display-file/file",
           "title": "General Rankings 06-09-2026.pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/general-rankings-12-11-2026.pdf/@@display-file/file",
+          "title": "General Rankings 12-11-2026.pdf"
         },
         {
           "url": "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf/@@display-file/file",
@@ -169,14 +173,6 @@
           "title": "Goodwill 2026 Rankings 22-06-2026.pdf"
         },
         {
-          "url": "https://asaj.com.jm/swimming/goodwill-2026-rankings-27-05-2026.pdf/@@display-file/file",
-          "title": "Goodwill 2026 Rankings 27-05-2026.pdf"
-        },
-        {
-          "url": "https://asaj.com.jm/swimming/goodwill-2026-rankings-31-05-2026.pdf/@@display-file/file",
-          "title": "Goodwill 2026 Rankings 31-05-2026.pdf"
-        },
-        {
           "url": "https://asaj.com.jm/swimming/lima-2027-29-09-2026.pdf/@@display-file/file",
           "title": "Lima 2027 29-09-2026.pdf"
         },
@@ -195,6 +191,10 @@
         {
           "url": "https://asaj.com.jm/swimming/selection-criteria-2026-youth-olympic-games.pdf/@@display-file/file",
           "title": "Selection Criteria 2026 Youth Olympic Games .pdf"
+        },
+        {
+          "url": "https://asaj.com.jm/swimming/top-10-rankings-12-11-2026.pdf/@@display-file/file",
+          "title": "Top 10 Rankings 12-11-2026.pdf"
         },
         {
           "url": "https://asaj.com.jm/swimming/top-10-rankings-29-09-2026.pdf/@@display-file/file",
@@ -231,6 +231,17 @@
       "download_url": "https://asaj.com.jm/swimming/carifta-2027-06-09-2026.pdf/@@download/file",
       "review_status": "needs_human_review",
       "pages": 2,
+      "aidan_mentions": [],
+      "extraction_note": "Candidate text only. Check original PDF tables, age, event, course and times manually."
+    },
+    "https://asaj.com.jm/swimming/carifta-2027-12-11-2026.pdf": {
+      "category": "rankings",
+      "title": "Carifta 2027 12-11-2026.pdf",
+      "sha256": "6eaec7704c8e6caf90ca875f6984be0485b6ab6fae6f72b86e4d37b546f8007e",
+      "content_type": "pdf",
+      "download_url": "https://asaj.com.jm/swimming/carifta-2027-12-11-2026.pdf/@@download/file",
+      "review_status": "needs_human_review",
+      "pages": 3,
       "aidan_mentions": [],
       "extraction_note": "Candidate text only. Check original PDF tables, age, event, course and times manually."
     },
@@ -333,6 +344,17 @@
       "aidan_mentions": [],
       "extraction_note": "Candidate text only. Check original PDF tables, age, event, course and times manually."
     },
+    "https://asaj.com.jm/swimming/general-rankings-12-11-2026.pdf": {
+      "category": "rankings",
+      "title": "General Rankings 12-11-2026.pdf",
+      "sha256": "2cf9f6527257aec1ec00dacf8c8b19739d0e31788d38da8132eb1ad73d4039c0",
+      "content_type": "pdf",
+      "download_url": "https://asaj.com.jm/swimming/general-rankings-12-11-2026.pdf/@@download/file",
+      "review_status": "needs_human_review",
+      "pages": 36,
+      "aidan_mentions": [],
+      "extraction_note": "Candidate text only. Check original PDF tables, age, event, course and times manually."
+    },
     "https://asaj.com.jm/swimming/general-rankings-29-09-2026.pdf": {
       "category": "rankings",
       "title": "General Rankings 29-09-2026.pdf",
@@ -421,6 +443,17 @@
       "aidan_mentions": [],
       "extraction_note": "Candidate text only. Check original PDF tables, age, event, course and times manually."
     },
+    "https://asaj.com.jm/swimming/top-10-rankings-12-11-2026.pdf": {
+      "category": "rankings",
+      "title": "Top 10 Rankings 12-11-2026.pdf",
+      "sha256": "0bd7859284deab69b8e2149a73ee65b2bc9e1962dc255d96d96ce29f9dc47c97",
+      "content_type": "pdf",
+      "download_url": "https://asaj.com.jm/swimming/top-10-rankings-12-11-2026.pdf/@@download/file",
+      "review_status": "needs_human_review",
+      "pages": 7,
+      "aidan_mentions": [],
+      "extraction_note": "Candidate text only. Check original PDF tables, age, event, course and times manually."
+    },
     "https://asaj.com.jm/swimming/top-10-rankings-29-09-2026.pdf": {
       "category": "rankings",
       "title": "Top 10 Rankings 29-09-2026.pdf",
@@ -446,7 +479,7 @@
     "https://www.asaj.com.jm/calendar/2027": {
       "category": "calendar",
       "title": "ASAJ listing: calendar",
-      "sha256": "2bbfda7bed95c1ac0c29578e3590019421b58df9adb33e3d98e1ad2009e2a02e",
+      "sha256": "d63ccdfe2ac07516a5ba67dba384f26b675a155dfca14c317da6ff109fa00d48",
       "content_type": "html",
       "links": [
         {
@@ -471,7 +504,7 @@
     "https://www.asaj.com.jm/events/aggregator": {
       "category": "events",
       "title": "ASAJ listing: events",
-      "sha256": "2422934c2a9642dd96a3368ff024956b9c62510a83948dccc294baf415162abb",
+      "sha256": "19afef85475dbb8887edf2e0409dc3aee1fad87c65935cc308c8627de9ec7fc7",
       "content_type": "html",
       "links": [
         {
@@ -548,7 +581,7 @@
     "https://www.asaj.com.jm/resources": {
       "category": "resources",
       "title": "ASAJ listing: resources",
-      "sha256": "9e863f32e4b81bac6c62e09f1d4425892648aac138c7528619b735b98a8afcea",
+      "sha256": "3dbc76706629cc0e2dade7475426bb9d07748a1ae686ec6b91aba5a2aec015ff",
       "content_type": "html",
       "links": [
         {
@@ -821,6 +854,9 @@
   },
   "new_or_changed_documents": [
     "https://asaj.com.jm/rankings",
+    "https://asaj.com.jm/swimming/carifta-2027-12-11-2026.pdf",
+    "https://asaj.com.jm/swimming/general-rankings-12-11-2026.pdf",
+    "https://asaj.com.jm/swimming/top-10-rankings-12-11-2026.pdf",
     "https://www.asaj.com.jm/calendar/2027",
     "https://www.asaj.com.jm/events/aggregator",
     "https://www.asaj.com.jm/resources"
