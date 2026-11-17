@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Fail closed: only publish validated official performances and standards."""
-import csv, json, re, html
+import csv, json, re, html, shutil
 from pathlib import Path
 from datetime import date, datetime
 ROOT=Path(__file__).resolve().parents[1]
@@ -362,8 +362,10 @@ output['date_conflicts']=date_conflicts
 (DOCS/'competitors.json').write_text(json.dumps(output.pop('asaj_competitor_results'),separators=(',',':'),ensure_ascii=False))
 (DOCS/'data.json').write_text(json.dumps(output,separators=(',',':'),ensure_ascii=False))
 # Root UI is authoritative; deploy copies are generated consistently.
-for filename in ('index.html','style.css','app.js'):
+for filename in ('index.html','style.css','app.js','profile.html'):
     (DOCS/filename).write_bytes((ROOT/filename).read_bytes())
+# Profile page photos: GitHub Pages publishes only docs/, so copy them there.
+shutil.copytree(ROOT/'images'/'profile',DOCS/'images'/'profile',dirs_exist_ok=True)
 
 # Optional multiple dated snapshot files; one snapshot must never imply a trend.
 snapshots=sorted(DATA.glob('rankings_????-??-??.csv'))

@@ -1,3 +1,9 @@
+## 2026-11-17 · Profile page
+- Added profile.html (profile and achievements showcase) and images/profile/ photos; "Profile & achievements" link added to the tracker dropdown menu as a normal link, not a tab.
+- build.py now publishes profile.html and images/profile/ into docs/ (GitHub Pages serves only docs/).
+- Removed leftover data/coach_notes.json, docs/coach_notes.json and docs/legacy.html so the existing "no notes or public legacy page" test passes.
+- Added tests/test_profile_page.py.
+
 ## Achievements update (5 November 2026)
 - Added Today achievements: verified PB milestones, qualifying CARIFTA B milestones, calculated top-two milestones, and a source-linked timeline.
 - Added copyable milestone summaries without user-entered text.
