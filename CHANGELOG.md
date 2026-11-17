@@ -1,3 +1,6 @@
+## 2026-11-17 · Profile 50 Free history complete
+- Profile "Since 2017": added 2021-2024 season bests (39.73, 36.27, 32.54, 30.88) from SwimCloud meet lists; chart now covers every season 2017-2026. SwimCloud-sourced, not ASAJ-verified.
+
 ## 2026-11-17 · Profile history from SwimCloud
 - Profile page: added a "Since 2017" section (50 Free long-course progression 2017-2026 and Tornadoes age-group ranking by year), sourced from SwimCloud and labelled not ASAJ-verified.
 - Profile page: corrected 100 Fly (1:05.00) and 200 IM (2:31.06) to the tracker's ASAJ-verified times; added 100 Free, 200 Breast, 200 Fly and 400 IM; 100 Fly progression is now long course to long course; Goodwill 2025 medal times labelled SCM.
