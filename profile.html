@@ -7,7 +7,7 @@
 <meta name="description" content="Aidan Seaton: Jamaican age-group swimmer, three-time Goodwill Championships representative and 2025 Goodwill gold and bronze medallist, training for CARIFTA 2027 in Trinidad & Tobago.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --ink:#050705; --deep:#0b100c; --panel:#111a13; --panel2:#18261c;
@@ -16,15 +16,16 @@
     --text:#e6e9e6; --muted:#9aa89e;
     --display:"Poppins","Inter",system-ui,sans-serif;
     --body:"Inter",system-ui,sans-serif;
-    --mono:"JetBrains Mono",ui-monospace,monospace;
+    --mono:"Poppins","Inter",system-ui,sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
-  body{background:var(--ink);color:var(--text);font-family:var(--body);line-height:1.6;-webkit-font-smoothing:antialiased}
+  body{background:var(--ink);color:var(--text);font-family:var(--body);line-height:1.6;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
   a{color:inherit}
   img{max-width:100%;display:block}
   .wrap{width:min(1180px,92vw);margin:0 auto}
-  .flagbar{height:6px;background:linear-gradient(90deg,var(--green) 0 33.3%,var(--gold) 33.3% 66.6%,#000 66.6%)}
+  .flagbar{height:6px;background:linear-gradient(90deg,#000 0 33.3%,var(--green) 33.3% 66.6%,var(--gold) 66.6%)}
+  .flagline{height:2px;background:linear-gradient(90deg,#000 0 33.3%,var(--green) 33.3% 66.6%,var(--gold) 66.6%)}
 
   /* NAV */
   nav{position:sticky;top:0;z-index:50;background:rgba(5,7,5,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
@@ -335,6 +336,7 @@
     </div>
   </div>
 </section>
+<div class="flagline" aria-hidden="true"></div>
 
 <!-- JOURNEY -->
 <section id="journey" class="alt">
@@ -373,6 +375,7 @@
     </div>
   </div>
 </section>
+<div class="flagline" aria-hidden="true"></div>
 
 <!-- ACHIEVEMENTS -->
 <section id="achievements">
@@ -415,6 +418,7 @@
     </div>
   </div>
 </section>
+<div class="flagline" aria-hidden="true"></div>
 
 <!-- PERFORMANCE -->
 <section id="performance" class="alt">
@@ -458,6 +462,7 @@
     </div>
   </div>
 </section>
+<div class="flagline" aria-hidden="true"></div>
 
 <!-- HISTORY -->
 <section id="history">
@@ -523,6 +528,7 @@
     </div>
   </div>
 </section>
+<div class="flagline" aria-hidden="true"></div>
 
 <!-- CARIFTA -->
 <section id="carifta" class="carifta">
@@ -558,6 +564,7 @@
     </div>
   </div>
 </section>
+<div class="flagline" aria-hidden="true"></div>
 
 <!-- MEDIA -->
 <section id="media">
@@ -575,6 +582,7 @@
     </div>
   </div>
 </section>
+<div class="flagline" aria-hidden="true"></div>
 
 <!-- CONNECT -->
 <section id="connect" class="alt">
