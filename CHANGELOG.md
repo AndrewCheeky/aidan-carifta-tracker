@@ -1,3 +1,7 @@
+## 2026-11-17 · Profile typeface restored, Campion College
+- Profile page: restored the original Big Shoulders Display headings and JetBrains Mono numerals (Poppins reverted); black/green/gold palette, flag bar and section lines kept.
+- Profile hero line now reads "Team Jamaica | Tornadoes Swim Club | Campion College".
+
 ## 2026-11-17 · Profile typeface
 - Profile page: headings switched from Big Shoulders Display (condensed, all caps) to Poppins in sentence case for a modern, polished look; sizes and line heights retuned. Body (Inter) and numerals (JetBrains Mono) unchanged.
 - Profile page: recoloured from navy/teal to the Jamaican flag palette (black backgrounds, green accents, gold highlights); top flag bar reordered to black, green, gold with a thin matching line between sections; numerals and labels now use Poppins (JetBrains Mono removed).

@@ -7,20 +7,20 @@
 <meta name="description" content="Aidan Seaton: Jamaican age-group swimmer, three-time Goodwill Championships representative and 2025 Goodwill gold and bronze medallist, training for CARIFTA 2027 in Trinidad & Tobago.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --ink:#050705; --deep:#0b100c; --panel:#111a13; --panel2:#18261c;
     --line:rgba(91,229,141,.18); --teal:#1ec85f; --teal-soft:#5be58d;
     --gold:#f5c542; --bronze:#c98a4b; --green:#009b3a;
     --text:#e6e9e6; --muted:#9aa89e;
-    --display:"Poppins","Inter",system-ui,sans-serif;
+    --display:"Big Shoulders Display",Impact,sans-serif;
     --body:"Inter",system-ui,sans-serif;
-    --mono:"Poppins","Inter",system-ui,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,monospace;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
-  body{background:var(--ink);color:var(--text);font-family:var(--body);line-height:1.6;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+  body{background:var(--ink);color:var(--text);font-family:var(--body);line-height:1.6;-webkit-font-smoothing:antialiased}
   a{color:inherit}
   img{max-width:100%;display:block}
   .wrap{width:min(1180px,92vw);margin:0 auto}
@@ -30,7 +30,7 @@
   /* NAV */
   nav{position:sticky;top:0;z-index:50;background:rgba(5,7,5,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
   nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:1rem}
-  .logo{font-family:var(--display);font-weight:800;font-size:1.25rem;letter-spacing:.02em;text-decoration:none;text-transform:uppercase}
+  .logo{font-family:var(--display);font-weight:900;font-size:1.5rem;letter-spacing:.04em;text-decoration:none;text-transform:uppercase}
   .logo span{color:var(--teal)}
   .links{display:flex;gap:1.2rem;list-style:none}
   .links a{white-space:nowrap;text-decoration:none;font-size:.78rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);transition:color .2s}
@@ -42,7 +42,7 @@
   .lanes{position:absolute;inset:0;opacity:.55}
   .hero .wrap{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:3rem;align-items:center;padding:5rem 0}
   .eyebrow{font-family:var(--mono);font-size:.75rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal)}
-  .hero h1{font-family:var(--display);font-weight:800;font-size:clamp(3.2rem,9.5vw,7.4rem);line-height:1;letter-spacing:-.035em;margin:1.2rem 0 1.5rem}
+  .hero h1{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(4.5rem,13vw,10.5rem);line-height:.84;letter-spacing:-.01em;margin:1.2rem 0 1.5rem}
   .hero h1 .outline{color:transparent;-webkit-text-stroke:2px var(--teal-soft)}
   .rule{width:64px;height:4px;background:var(--gold);margin-bottom:1.5rem}
   .lede{font-size:clamp(1.05rem,1.8vw,1.3rem);max-width:34ch;color:#d6dcd7}
@@ -54,7 +54,7 @@
   .btn.ghost:hover{border-color:var(--teal);color:var(--teal)}
   .hero-card{position:relative;aspect-ratio:4/5;border-radius:6px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(160deg,#14281a,#0b140d)}
   .hero-tag{position:absolute;left:1.2rem;bottom:1.2rem;right:1.2rem;display:flex;justify-content:space-between;align-items:end}
-  .hero-tag .big{font-family:var(--display);font-weight:800;font-size:3.4rem;line-height:.9;color:var(--gold)}
+  .hero-tag .big{font-family:var(--display);font-weight:900;font-size:3.4rem;line-height:.9;color:var(--gold)}
   .hero-tag small{display:block;font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;color:var(--muted);text-transform:uppercase}
 
   /* PHOTO PLACEHOLDER */
@@ -79,21 +79,21 @@
   .strip .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
   .stat{padding:2rem 1.2rem;border-right:1px solid var(--line)}
   .stat:last-child{border-right:none}
-  .stat b{display:block;font-family:var(--display);font-weight:800;font-size:clamp(2.4rem,4.5vw,3.6rem);line-height:1}
+  .stat b{display:block;font-family:var(--display);font-weight:900;font-size:clamp(2.4rem,4.5vw,3.6rem);line-height:1}
   .stat b em{font-style:normal;color:var(--teal)}
   .stat span{font-size:.78rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;font-weight:600}
 
   /* SECTIONS */
   section{padding:7rem 0;scroll-margin-top:64px}
   .sec-head{margin-bottom:3.5rem;max-width:720px}
-  .sec-head h2{font-family:var(--display);font-weight:800;font-size:clamp(2.2rem,5vw,3.6rem);line-height:1.08;letter-spacing:-.025em;margin-top:.8rem}
+  .sec-head h2{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(2.8rem,6vw,4.6rem);line-height:.95;margin-top:.8rem}
   .sec-head p{color:var(--muted);margin-top:1rem;font-size:1.05rem}
   .alt{background:var(--deep)}
 
   /* ABOUT */
   .about{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
   .about .bio p{font-size:1.08rem;color:#dbe0dc;margin-bottom:1.3rem}
-  .about .bio p:first-child::first-letter{font-family:var(--display);font-weight:800;font-size:4.2rem;float:left;line-height:.8;padding:.3rem .6rem 0 0;color:var(--teal)}
+  .about .bio p:first-child::first-letter{font-family:var(--display);font-weight:900;font-size:4.2rem;float:left;line-height:.8;padding:.3rem .6rem 0 0;color:var(--teal)}
   .portrait{position:relative;aspect-ratio:3/4;border-radius:6px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(200deg,#173222,#0c150e)}
   .portrait::after{content:"";position:absolute;inset:auto 0 0 0;height:6px;background:linear-gradient(90deg,var(--green) 0 33.3%,var(--gold) 33.3% 66.6%,#000 66.6%)}
   .quote{border-left:3px solid var(--gold);padding:1rem 1.4rem;margin:2rem 0;background:rgba(245,197,66,.06);font-style:italic;color:#f1e7c8}
@@ -109,7 +109,7 @@
   .t-item{position:relative;padding-top:4.2rem}
   .t-item::before{content:"";position:absolute;top:19px;left:0;width:20px;height:20px;border-radius:50%;background:var(--ink);border:3px solid var(--teal)}
   .t-item.next::before{border-color:var(--gold);box-shadow:0 0 0 6px rgba(245,197,66,.15)}
-  .t-year{font-family:var(--display);font-weight:800;font-size:2.6rem;line-height:1}
+  .t-year{font-family:var(--display);font-weight:900;font-size:3.2rem;line-height:1}
   .t-item.next .t-year{color:var(--gold)}
   .t-item h3{font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin:.5rem 0 .4rem}
   .t-item.next h3{color:var(--gold)}
@@ -121,15 +121,15 @@
   .ach{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
   .medal{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:2.2rem 2rem 2rem 2.4rem;overflow:hidden}
   .medal::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:linear-gradient(180deg,#e2ad78,var(--bronze))}
-  .medal .disc{position:absolute;right:1.6rem;top:1.6rem;width:58px;height:58px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f0c08e,var(--bronze) 55%,#8a5a2c);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:1.5rem;color:#3a2410;box-shadow:inset 0 -3px 6px rgba(0,0,0,.25)}
+  .medal .disc{position:absolute;right:1.6rem;top:1.6rem;width:58px;height:58px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f0c08e,var(--bronze) 55%,#8a5a2c);display:grid;place-items:center;font-family:var(--display);font-weight:900;font-size:1.5rem;color:#3a2410;box-shadow:inset 0 -3px 6px rgba(0,0,0,.25)}
   .medal small{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;color:#e2ad78;text-transform:uppercase}
-  .medal h3{font-family:var(--display);font-weight:700;font-size:1.6rem;line-height:1.15;margin:.6rem 0 1.2rem}
+  .medal h3{font-family:var(--display);font-weight:800;font-size:2rem;text-transform:uppercase;line-height:1;margin:.6rem 0 1.2rem}
   .medal .time{font-family:var(--mono);font-weight:700;font-size:2.2rem;letter-spacing:-.02em}
   .medal p{color:var(--muted);font-size:.9rem}
   .record{grid-column:1/-1;display:grid;grid-template-columns:auto 1fr;gap:2.5rem;align-items:center;background:linear-gradient(120deg,#14301f,#0e1b12);border:1px solid rgba(30,200,95,.35);border-radius:6px;padding:2.5rem}
   .record .time{font-family:var(--mono);font-weight:700;font-size:clamp(3rem,7vw,5.2rem);color:var(--teal-soft);letter-spacing:-.03em;line-height:1}
   .record small{font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase}
-  .record h3{font-family:var(--display);font-weight:800;font-size:1.9rem;line-height:1.05;margin:.4rem 0 .6rem}
+  .record h3{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:1.9rem;line-height:1.05;margin:.4rem 0 .6rem}
   .record p{color:var(--muted)}
 
   /* PERFORMANCE */
@@ -145,21 +145,21 @@
   .note{font-size:.82rem;color:var(--muted);margin-top:1.2rem}
   .prog{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:2rem}
   .prog small{font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;color:var(--teal);text-transform:uppercase}
-  .prog h3{font-family:var(--display);font-weight:800;font-size:1.9rem;line-height:1;margin:.5rem 0 1.6rem}
+  .prog h3{font-family:var(--display);font-weight:800;font-size:1.9rem;text-transform:uppercase;line-height:1;margin:.5rem 0 1.6rem}
   .bar{margin-bottom:1.3rem}
   .bar .lbl{display:flex;justify-content:space-between;font-size:.82rem;color:var(--muted);margin-bottom:.45rem}
   .bar .lbl b{font-family:var(--mono);color:var(--text)}
   .bar .track{height:10px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden}
   .bar .fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#0f8a3e,var(--teal))}
   .bar.old .fill{background:linear-gradient(90deg,#4a5a4f,#6b7f70)}
-  .rk-h{font-family:var(--display);font-weight:800;font-size:1.5rem;margin-bottom:1.2rem}
+  .rk-h{font-family:var(--display);font-weight:800;font-size:1.5rem;text-transform:uppercase;margin-bottom:1.2rem}
   .rks{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:.7rem}
   .rk{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:.9rem .8rem}
-  .rk b{display:block;font-family:var(--display);font-weight:800;font-size:1.9rem;color:var(--gold);line-height:1}
+  .rk b{display:block;font-family:var(--display);font-weight:900;font-size:1.9rem;color:var(--gold);line-height:1}
   .rk span{display:block;font-family:var(--mono);font-size:.72rem;color:var(--text);margin-top:.3rem}
   .rk small{display:block;font-size:.7rem;color:var(--muted)}
   .drop{display:flex;align-items:baseline;gap:.6rem;margin-top:1.4rem;padding-top:1.4rem;border-top:1px solid var(--line)}
-  .drop b{font-family:var(--display);font-weight:800;font-size:3rem;color:var(--gold);line-height:1}
+  .drop b{font-family:var(--display);font-weight:900;font-size:3rem;color:var(--gold);line-height:1}
   .drop span{color:var(--muted);font-size:.9rem}
 
   /* CARIFTA */
@@ -169,7 +169,7 @@
   .c-grid p{color:#dbe0dc;font-size:1.06rem;margin-bottom:1.2rem}
   .meet{background:rgba(5,7,5,.7);border:1px solid rgba(245,197,66,.35);border-radius:6px;padding:2rem}
   .meet small{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase}
-  .meet h3{font-family:var(--display);font-weight:700;font-size:1.9rem;line-height:1;margin:.5rem 0 1.4rem}
+  .meet h3{font-family:var(--display);font-weight:900;font-size:2.4rem;text-transform:uppercase;line-height:1;margin:.5rem 0 1.4rem}
   .meet dl{display:grid;grid-template-columns:auto 1fr;gap:.7rem 1.4rem;font-size:.95rem}
   .meet dt{color:var(--muted);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;padding-top:.15rem}
   .focus{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.6rem}
@@ -196,7 +196,7 @@
   .fill-in{color:var(--gold);border-bottom:1px dashed rgba(245,197,66,.6)}
   .safe{display:flex;gap:.8rem;margin-top:1.6rem;font-size:.84rem;color:var(--muted);padding:1rem;border-radius:4px;background:rgba(30,200,95,.06);border:1px solid var(--line)}
   .safe svg{flex:0 0 20px;color:var(--teal)}
-  .tagline{font-family:var(--display);font-weight:800;font-size:clamp(2.4rem,6vw,4.6rem);line-height:1.05;letter-spacing:-.03em}
+  .tagline{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(3.2rem,7vw,6rem);line-height:.9}
   .tagline span{color:var(--teal)}
   .tagline em{font-style:normal;color:transparent;-webkit-text-stroke:2px var(--gold)}
 
@@ -277,7 +277,7 @@
   </svg>
   <div class="wrap">
     <div>
-      <div class="eyebrow">Team Jamaica &nbsp;|&nbsp; Tornadoes Swim Club</div>
+      <div class="eyebrow">Team Jamaica &nbsp;|&nbsp; Tornadoes Swim Club &nbsp;|&nbsp; Campion College</div>
       <h1>Aidan<br><span class="outline">Seaton</span></h1>
       <div class="rule"></div>
       <p class="lede">Competitive swimmer. Three-time national team representative. Goodwill gold medallist. Chasing CARIFTA 2027.</p>
