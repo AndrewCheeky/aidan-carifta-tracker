@@ -1,5 +1,6 @@
 ## 2026-11-17 · Profile typeface
 - Profile page: headings switched from Big Shoulders Display (condensed, all caps) to Poppins in sentence case for a modern, polished look; sizes and line heights retuned. Body (Inter) and numerals (JetBrains Mono) unchanged.
+- Profile page: recoloured from navy/teal to the Jamaican flag palette (black backgrounds, green accents, gold highlights).
 
 ## 2026-11-17 · Profile 50 Free history complete
 - Profile "Since 2017": added 2021-2024 season bests (39.73, 36.27, 32.54, 30.88) from SwimCloud meet lists; chart now covers every season 2017-2026. SwimCloud-sourced, not ASAJ-verified.
