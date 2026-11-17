@@ -1,3 +1,6 @@
+## 2026-11-17 · Profile lists shortened
+- Profile page: performance table now shows his top three events (100 Fly, 200 Fly, 200 IM); the 50 Free progression shows 2017, 2022 and 2026 (full history remains on SwimCloud).
+
 ## 2026-11-17 · Profile typeface restored, Campion College
 - Profile page: restored the original Big Shoulders Display headings and JetBrains Mono numerals (Poppins reverted); black/green/gold palette, flag bar and section lines kept.
 - Profile hero line now reads "Team Jamaica | Tornadoes Swim Club | Campion College".
