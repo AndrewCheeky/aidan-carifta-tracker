@@ -1,3 +1,8 @@
+## 2026-11-17 · Profile history from SwimCloud
+- Profile page: added a "Since 2017" section (50 Free long-course progression 2017-2026 and Tornadoes age-group ranking by year), sourced from SwimCloud and labelled not ASAJ-verified.
+- Profile page: corrected 100 Fly (1:05.00) and 200 IM (2:31.06) to the tracker's ASAJ-verified times; added 100 Free, 200 Breast, 200 Fly and 400 IM; 100 Fly progression is now long course to long course; Goodwill 2025 medal times labelled SCM.
+- Profile nav: added "Since 2017"; menu collapses below 1000px.
+
 ## 2026-11-17 · Profile page
 - Added profile.html (profile and achievements showcase) and images/profile/ photos; "Profile & achievements" link added to the tracker dropdown menu as a normal link, not a tab.
 - build.py now publishes profile.html and images/profile/ into docs/ (GitHub Pages serves only docs/).

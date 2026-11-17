@@ -31,8 +31,8 @@
   nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:1rem}
   .logo{font-family:var(--display);font-weight:900;font-size:1.5rem;letter-spacing:.04em;text-decoration:none;text-transform:uppercase}
   .logo span{color:var(--teal)}
-  .links{display:flex;gap:1.6rem;list-style:none}
-  .links a{text-decoration:none;font-size:.78rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);transition:color .2s}
+  .links{display:flex;gap:1.2rem;list-style:none}
+  .links a{white-space:nowrap;text-decoration:none;font-size:.78rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);transition:color .2s}
   .links a:hover{color:var(--teal)}
   .menu-btn{display:none;background:none;border:1px solid var(--line);color:var(--text);padding:.45rem .7rem;border-radius:6px;font:600 .75rem var(--body);letter-spacing:.12em;cursor:pointer}
 
@@ -151,6 +151,12 @@
   .bar .track{height:10px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden}
   .bar .fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#1d8f84,var(--teal))}
   .bar.old .fill{background:linear-gradient(90deg,#4a6272,#6b8597)}
+  .rk-h{font-family:var(--display);font-weight:800;font-size:1.5rem;text-transform:uppercase;margin-bottom:1.2rem}
+  .rks{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:.7rem}
+  .rk{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:.9rem .8rem}
+  .rk b{display:block;font-family:var(--display);font-weight:900;font-size:1.9rem;color:var(--gold);line-height:1}
+  .rk span{display:block;font-family:var(--mono);font-size:.72rem;color:var(--text);margin-top:.3rem}
+  .rk small{display:block;font-size:.7rem;color:var(--muted)}
   .drop{display:flex;align-items:baseline;gap:.6rem;margin-top:1.4rem;padding-top:1.4rem;border-top:1px solid var(--line)}
   .drop b{font-family:var(--display);font-weight:900;font-size:3rem;color:var(--gold);line-height:1}
   .drop span{color:var(--muted);font-size:.9rem}
@@ -201,11 +207,14 @@
   .rv.in{opacity:1;transform:none}
   @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
 
-  @media (max-width:900px){
+  @media (max-width:1100px){.links{gap:.8rem}.links a{font-size:.68rem;letter-spacing:.06em}}
+  @media (max-width:1000px){
     .links{display:none;position:absolute;top:64px;left:0;right:0;flex-direction:column;gap:0;background:var(--ink);border-bottom:1px solid var(--line)}
     .links.open{display:flex}
     .links a{display:block;padding:1rem 4vw;border-top:1px solid var(--line)}
     .menu-btn{display:block}
+  }
+  @media (max-width:900px){
     .hero .wrap,.about,.perf,.c-grid,.connect{grid-template-columns:1fr;gap:2.5rem}
     .hero-card{max-width:420px}
     .strip .wrap{grid-template-columns:repeat(2,1fr)}
@@ -237,6 +246,7 @@
       <li><a href="#journey">Journey</a></li>
       <li><a href="#achievements">Achievements</a></li>
       <li><a href="#performance">Performance</a></li>
+      <li><a href="#history">Since 2017</a></li>
       <li><a href="#carifta">CARIFTA 2027</a></li>
       <li><a href="#media">Media</a></li>
       <li><a href="#connect">Connect</a></li>
@@ -384,14 +394,14 @@
         <div class="disc">3</div>
         <small>Bronze · 2025 Goodwill, Barbados</small>
         <h3>200m Individual<br>Medley</h3>
-        <div class="time">2:35.03</div>
+        <div class="time">2:35.03<small style="display:inline;padding:0;margin-left:.4rem;font-size:.7rem">SCM</small></div>
         <p>All four strokes in one race</p>
       </div>
       <div class="medal rv">
         <div class="disc">3</div>
         <small>Bronze · 2025 Goodwill, Barbados</small>
         <h3>100m<br>Butterfly</h3>
-        <div class="time">1:09.18</div>
+        <div class="time">1:09.18<small style="display:inline;padding:0;margin-left:.4rem;font-size:.7rem">SCM</small></div>
         <p>Individual podium on the international stage</p>
       </div>
       <div class="record rv">
@@ -412,34 +422,87 @@
     <div class="sec-head rv">
       <div class="eyebrow">04 / Race Intelligence</div>
       <h2>Performance profile</h2>
-      <p>Selected 2026 long-course times from the ASAJ national rankings.</p>
+      <p>Current long-course bests from ASAJ results and national rankings, 2026.</p>
     </div>
     <div class="perf">
       <div class="rv">
         <table>
           <thead><tr><th>Event</th><th>Stroke</th><th>2026 LCM</th></tr></thead>
           <tbody>
+            <tr><td class="ev">100m Freestyle<small>Long course</small></td><td><span class="stroke">Free</span></td><td class="tm">58.75</td></tr>
             <tr><td class="ev">100m Breaststroke<small>Long course</small></td><td><span class="stroke">Breast</span></td><td class="tm">1:19.20</td></tr>
+            <tr><td class="ev">200m Breaststroke<small>Long course</small></td><td><span class="stroke">Breast</span></td><td class="tm">2:52.29</td></tr>
             <tr><td class="ev">50m Breaststroke<small>Long course</small></td><td><span class="stroke">Breast</span></td><td class="tm">35.32</td></tr>
             <tr><td class="ev">50m Butterfly<small>Long course</small></td><td><span class="stroke">Fly</span></td><td class="tm">29.22</td></tr>
-            <tr><td class="ev">100m Butterfly<small>Long course</small></td><td><span class="stroke">Fly</span></td><td class="tm">1:07.35</td></tr>
-            <tr><td class="ev">200m Individual Medley<small>Long course</small></td><td><span class="stroke">IM</span></td><td class="tm">2:36.66</td></tr>
+            <tr><td class="ev">100m Butterfly<small>Long course</small></td><td><span class="stroke">Fly</span></td><td class="tm">1:05.00</td></tr>
+            <tr><td class="ev">200m Butterfly<small>Long course</small></td><td><span class="stroke">Fly</span></td><td class="tm">2:34.11</td></tr>
+            <tr><td class="ev">200m Individual Medley<small>Long course</small></td><td><span class="stroke">IM</span></td><td class="tm">2:31.06</td></tr>
+            <tr><td class="ev">400m Individual Medley<small>Long course</small></td><td><span class="stroke">IM</span></td><td class="tm">5:28.27</td></tr>
           </tbody>
         </table>
-        <p class="note">Source: ASAJ long-course rankings, 2026. Certified personal bests with meet names, dates and splits are available to coaches on request.</p>
+        <p class="note">Source: ASAJ long-course results and rankings, 2026 (Dean Martin Memorial, Oct&ndash;Nov 2026; ASAJ Distance Meet, 10 Oct 2026). Meet names, dates and splits are available to coaches on request.</p>
       </div>
       <div class="prog rv">
-        <small>Progression</small>
+        <small>Progression &middot; long course</small>
         <h3>100m Butterfly</h3>
         <div class="bar old">
-          <div class="lbl"><span>2025 · Goodwill bronze</span><b>1:09.18</b></div>
-          <div class="track"><div class="fill" style="width:78%"></div></div>
+          <div class="lbl"><span>Dec 2025 &middot; ASAJ Christmas Open</span><b>1:12.42</b></div>
+          <div class="track"><div class="fill" style="width:72%"></div></div>
         </div>
         <div class="bar">
-          <div class="lbl"><span>2026 · ASAJ ranking</span><b>1:07.35</b></div>
+          <div class="lbl"><span>Oct&ndash;Nov 2026 &middot; Dean Martin Memorial</span><b>1:05.00</b></div>
           <div class="track"><div class="fill" style="width:92%"></div></div>
         </div>
-        <div class="drop"><b>−1.83s</b><span>in one season, in his international medal event</span></div>
+        <div class="drop"><b>&minus;7.42s</b><span>in eleven months, long course to long course</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HISTORY -->
+<section id="history">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">05 / Nine Seasons</div>
+      <h2>Since 2017</h2>
+      <p>Racing since the 2017 prep and primary schools meet, and improving every year he has swum.</p>
+    </div>
+    <div class="perf">
+      <div class="prog rv">
+        <small>Progression &middot; long course</small>
+        <h3>50m Freestyle</h3>
+        <div class="bar old">
+          <div class="lbl"><span>2017 &middot; ASAJ Prep/Primary Schools</span><b>59.69</b></div>
+          <div class="track"><div class="fill" style="width:8%"></div></div>
+        </div>
+        <div class="bar old">
+          <div class="lbl"><span>2018 &middot; ASAJ Prep &amp; Primary Meet</span><b>53.62</b></div>
+          <div class="track"><div class="fill" style="width:25%"></div></div>
+        </div>
+        <div class="bar old">
+          <div class="lbl"><span>2019 &middot; NCBIC Prep Primary Championship</span><b>46.35</b></div>
+          <div class="track"><div class="fill" style="width:46%"></div></div>
+        </div>
+        <div class="bar old">
+          <div class="lbl"><span>2020 &middot; Karl Dalhouse Memorial</span><b>42.85</b></div>
+          <div class="track"><div class="fill" style="width:56%"></div></div>
+        </div>
+        <div class="bar old">
+          <div class="lbl"><span>2025 &middot; Dean Martin Memorial</span><b>28.28</b></div>
+          <div class="track"><div class="fill" style="width:98%"></div></div>
+        </div>
+        <div class="bar">
+          <div class="lbl"><span>2026 &middot; ASAJ BB Distance Challenge</span><b>27.60</b></div>
+          <div class="track"><div class="fill" style="width:100%"></div></div>
+        </div>
+        <div class="drop"><b>&minus;32.09s</b><span>from his first recorded swim (2017) to today</span></div>
+        <p class="note">Best long-course swim in each season with a recorded 50m Free. Meet results for 2021&ndash;2024 are still to be added. Source: SwimCloud, not ASAJ-verified.</p>
+      </div>
+      <div class="rv">
+        <h3 class="rk-h">Tornadoes Swim Club age-group ranking</h3>
+        <div class="rks"><div class="rk"><b>5th</b><span>2020</span><small>Age 8 &amp; under</small></div><div class="rk"><b>2nd</b><span>2021</span><small>Age 8 &amp; under</small></div><div class="rk"><b>6th</b><span>2022</span><small>Age 9&ndash;10</small></div><div class="rk"><b>3rd</b><span>2023</span><small>Age 9&ndash;10</small></div><div class="rk"><b>4th</b><span>2024</span><small>Age 11&ndash;12</small></div><div class="rk"><b>2nd</b><span>2025</span><small>Age 11&ndash;12</small></div><div class="rk"><b>2nd</b><span>2026</span><small>Age 13&ndash;14</small></div></div>
+        <p class="note">Rank within the Tornadoes club for his age group each year, from SwimCloud. In 2026 he is also 36th nationally across all of Jamaica.</p>
+        <p style="margin-top:1.4rem"><a class="btn ghost" href="https://www.swimcloud.com/swimmer/1287794/" target="_blank" rel="noopener">Full history on SwimCloud</a></p>
       </div>
     </div>
   </div>
@@ -450,7 +513,7 @@
   <div class="bgnum" aria-hidden="true">2027</div>
   <div class="wrap">
     <div class="sec-head rv">
-      <div class="eyebrow">05 / The Next Chapter</div>
+      <div class="eyebrow">06 / The Next Chapter</div>
       <h2>Road to CARIFTA</h2>
     </div>
     <div class="c-grid">
@@ -484,7 +547,7 @@
 <section id="media">
   <div class="wrap">
     <div class="sec-head rv">
-      <div class="eyebrow">06 / Media</div>
+      <div class="eyebrow">07 / Media</div>
       <h2>In the water</h2>
       <p>Team Jamaica moments from Goodwill 2025 and 2026.</p>
     </div>
@@ -501,7 +564,7 @@
 <section id="connect" class="alt">
   <div class="wrap connect">
     <div class="rv">
-      <div class="eyebrow">07 / Connect</div>
+      <div class="eyebrow">08 / Connect</div>
       <p class="tagline" style="margin-top:1rem">Wear the <span>flag.</span><br>Chase the <em>clock.</em></p>
       <p style="color:var(--muted);margin-top:1.5rem;max-width:44ch">For coaches, scouts and programme staff interested in Aidan's development, please get in touch through his family or club.</p>
     </div>
