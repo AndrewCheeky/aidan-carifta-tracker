@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Profile | Aidan Seaton</title>
+<meta name="description" content="Aidan Seaton: Jamaican age-group swimmer, three-time Goodwill Championships representative and 2025 Goodwill gold and bronze medallist, training for CARIFTA 2027 in Trinidad & Tobago.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#061826; --deep:#0a2233; --panel:#0f2f44; --panel2:#133a52;
+    --line:rgba(94,234,212,.18); --teal:#2dd4bf; --teal-soft:#5eead4;
+    --gold:#f5c542; --bronze:#c98a4b; --green:#009b3a;
+    --text:#e8f1f5; --muted:#93acbb;
+    --display:"Big Shoulders Display",Impact,sans-serif;
+    --body:"Inter",system-ui,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--ink);color:var(--text);font-family:var(--body);line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  img{max-width:100%;display:block}
+  .wrap{width:min(1180px,92vw);margin:0 auto}
+  .flagbar{height:6px;background:linear-gradient(90deg,var(--green) 0 33.3%,var(--gold) 33.3% 66.6%,#000 66.6%)}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:50;background:rgba(6,24,38,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:1rem}
+  .logo{font-family:var(--display);font-weight:900;font-size:1.5rem;letter-spacing:.04em;text-decoration:none;text-transform:uppercase}
+  .logo span{color:var(--teal)}
+  .links{display:flex;gap:1.6rem;list-style:none}
+  .links a{text-decoration:none;font-size:.78rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);transition:color .2s}
+  .links a:hover{color:var(--teal)}
+  .menu-btn{display:none;background:none;border:1px solid var(--line);color:var(--text);padding:.45rem .7rem;border-radius:6px;font:600 .75rem var(--body);letter-spacing:.12em;cursor:pointer}
+
+  /* HERO */
+  .hero{position:relative;overflow:hidden;min-height:calc(100vh - 70px);display:flex;align-items:center;background:radial-gradient(ellipse at 75% 40%,#11425c 0%,var(--deep) 45%,var(--ink) 80%)}
+  .lanes{position:absolute;inset:0;opacity:.55}
+  .hero .wrap{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:3rem;align-items:center;padding:5rem 0}
+  .eyebrow{font-family:var(--mono);font-size:.75rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal)}
+  .hero h1{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(4.5rem,13vw,10.5rem);line-height:.84;letter-spacing:-.01em;margin:1.2rem 0 1.5rem}
+  .hero h1 .outline{color:transparent;-webkit-text-stroke:2px var(--teal-soft)}
+  .rule{width:64px;height:4px;background:var(--gold);margin-bottom:1.5rem}
+  .lede{font-size:clamp(1.05rem,1.8vw,1.3rem);max-width:34ch;color:#cfe0e8}
+  .cta{display:flex;gap:1rem;margin-top:2.2rem;flex-wrap:wrap}
+  .btn{display:inline-block;text-decoration:none;font-weight:700;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;padding:1rem 1.6rem;border-radius:4px;transition:transform .2s,background .2s}
+  .btn.primary{background:var(--teal);color:var(--ink)}
+  .btn.primary:hover{transform:translateY(-2px);background:var(--teal-soft)}
+  .btn.ghost{border:1px solid rgba(232,241,245,.35)}
+  .btn.ghost:hover{border-color:var(--teal);color:var(--teal)}
+  .hero-card{position:relative;aspect-ratio:4/5;border-radius:6px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(160deg,#123d55,#0a2638)}
+  .hero-tag{position:absolute;left:1.2rem;bottom:1.2rem;right:1.2rem;display:flex;justify-content:space-between;align-items:end}
+  .hero-tag .big{font-family:var(--display);font-weight:900;font-size:3.4rem;line-height:.9;color:var(--gold)}
+  .hero-tag small{display:block;font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;color:var(--muted);text-transform:uppercase}
+
+  /* PHOTO PLACEHOLDER */
+  .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;color:var(--muted);text-align:center;padding:1.5rem}
+  .ph svg{width:56px;height:56px;opacity:.6}
+  .ph span{font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase}
+
+  .photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .hero-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(6,24,38,.92))}
+  .hero-tag{z-index:2}
+  .tile img{width:100%;height:100%;object-fit:cover;display:block}
+  .tile figcaption{position:absolute;left:0;right:0;bottom:0;padding:1.6rem 1rem .8rem;background:linear-gradient(transparent,rgba(6,24,38,.9));font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:#cfe0e8}
+  .medal small{display:block;padding-right:64px}
+  .medal.gold::before{background:linear-gradient(180deg,#ffe08a,#d9a300)}
+  .medal.gold .disc{background:radial-gradient(circle at 35% 30%,#fff1b8,#e8b923 55%,#a57a00);color:#3d2c00}
+  .medal.gold small{color:var(--gold)}
+  .events26{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.8rem}
+  .events26 span{font-size:.72rem;padding:.25rem .5rem;border-radius:3px;background:var(--panel2);border:1px solid var(--line);color:#cfe0e8}
+
+  /* STAT STRIP */
+  .strip{background:var(--panel);border-block:1px solid var(--line)}
+  .strip .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
+  .stat{padding:2rem 1.2rem;border-right:1px solid var(--line)}
+  .stat:last-child{border-right:none}
+  .stat b{display:block;font-family:var(--display);font-weight:900;font-size:clamp(2.4rem,4.5vw,3.6rem);line-height:1}
+  .stat b em{font-style:normal;color:var(--teal)}
+  .stat span{font-size:.78rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+
+  /* SECTIONS */
+  section{padding:7rem 0;scroll-margin-top:64px}
+  .sec-head{margin-bottom:3.5rem;max-width:720px}
+  .sec-head h2{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(2.8rem,6vw,4.6rem);line-height:.95;margin-top:.8rem}
+  .sec-head p{color:var(--muted);margin-top:1rem;font-size:1.05rem}
+  .alt{background:var(--deep)}
+
+  /* ABOUT */
+  .about{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+  .about .bio p{font-size:1.08rem;color:#d3e2ea;margin-bottom:1.3rem}
+  .about .bio p:first-child::first-letter{font-family:var(--display);font-weight:900;font-size:4.2rem;float:left;line-height:.8;padding:.3rem .6rem 0 0;color:var(--teal)}
+  .portrait{position:relative;aspect-ratio:3/4;border-radius:6px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(200deg,#164863,#0b2739)}
+  .portrait::after{content:"";position:absolute;inset:auto 0 0 0;height:6px;background:linear-gradient(90deg,var(--green) 0 33.3%,var(--gold) 33.3% 66.6%,#000 66.6%)}
+  .quote{border-left:3px solid var(--gold);padding:1rem 1.4rem;margin:2rem 0;background:rgba(245,197,66,.06);font-style:italic;color:#f1e7c8}
+  .quote small{display:block;font-style:normal;font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;color:var(--muted);margin-top:.6rem;text-transform:uppercase}
+  .snap{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-top:2rem}
+  .snap div{background:var(--panel);padding:1.2rem 1.3rem}
+  .snap small{font-family:var(--mono);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--teal)}
+  .snap b{display:block;font-size:1.05rem;margin-top:.2rem}
+
+  /* JOURNEY TIMELINE */
+  .timeline{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
+  .timeline::before{content:"";position:absolute;top:28px;left:0;right:0;height:2px;background:repeating-linear-gradient(90deg,var(--teal) 0 14px,transparent 14px 24px);opacity:.5}
+  .t-item{position:relative;padding-top:4.2rem}
+  .t-item::before{content:"";position:absolute;top:19px;left:0;width:20px;height:20px;border-radius:50%;background:var(--ink);border:3px solid var(--teal)}
+  .t-item.next::before{border-color:var(--gold);box-shadow:0 0 0 6px rgba(245,197,66,.15)}
+  .t-year{font-family:var(--display);font-weight:900;font-size:3.2rem;line-height:1}
+  .t-item.next .t-year{color:var(--gold)}
+  .t-item h3{font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin:.5rem 0 .4rem}
+  .t-item.next h3{color:var(--gold)}
+  .t-item p{color:var(--muted);font-size:.95rem}
+  .pill{display:inline-block;margin-top:.8rem;font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;padding:.3rem .6rem;border-radius:99px;border:1px solid var(--line);color:var(--teal-soft);text-transform:uppercase}
+  .pill.bronze{border-color:rgba(201,138,75,.5);color:#e2ad78}
+
+  /* ACHIEVEMENTS */
+  .ach{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+  .medal{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:2.2rem 2rem 2rem 2.4rem;overflow:hidden}
+  .medal::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:linear-gradient(180deg,#e2ad78,var(--bronze))}
+  .medal .disc{position:absolute;right:1.6rem;top:1.6rem;width:58px;height:58px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f0c08e,var(--bronze) 55%,#8a5a2c);display:grid;place-items:center;font-family:var(--display);font-weight:900;font-size:1.5rem;color:#3a2410;box-shadow:inset 0 -3px 6px rgba(0,0,0,.25)}
+  .medal small{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;color:#e2ad78;text-transform:uppercase}
+  .medal h3{font-family:var(--display);font-weight:800;font-size:2rem;text-transform:uppercase;line-height:1;margin:.6rem 0 1.2rem}
+  .medal .time{font-family:var(--mono);font-weight:700;font-size:2.2rem;letter-spacing:-.02em}
+  .medal p{color:var(--muted);font-size:.9rem}
+  .record{grid-column:1/-1;display:grid;grid-template-columns:auto 1fr;gap:2.5rem;align-items:center;background:linear-gradient(120deg,#0f3b52,#0c2a3d);border:1px solid rgba(45,212,191,.35);border-radius:6px;padding:2.5rem}
+  .record .time{font-family:var(--mono);font-weight:700;font-size:clamp(3rem,7vw,5.2rem);color:var(--teal-soft);letter-spacing:-.03em;line-height:1}
+  .record small{font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase}
+  .record h3{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:1.9rem;line-height:1.05;margin:.4rem 0 .6rem}
+  .record p{color:var(--muted)}
+
+  /* PERFORMANCE */
+  .perf{display:grid;grid-template-columns:1.4fr 1fr;gap:3rem;align-items:start}
+  table{width:100%;border-collapse:collapse}
+  th{font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-align:left;padding:0 0 .9rem;border-bottom:1px solid var(--line);font-weight:500}
+  th:last-child,td:last-child{text-align:right}
+  td{padding:1.15rem 0;border-bottom:1px solid var(--line)}
+  td.ev{font-weight:600;font-size:1.05rem}
+  td.ev small{display:block;font-weight:500;color:var(--muted);font-size:.78rem;letter-spacing:.06em;text-transform:uppercase}
+  td.tm{font-family:var(--mono);font-weight:700;font-size:1.4rem;color:var(--teal-soft)}
+  .stroke{display:inline-block;font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;padding:.2rem .45rem;border-radius:3px;background:rgba(45,212,191,.12);color:var(--teal-soft);text-transform:uppercase}
+  .note{font-size:.82rem;color:var(--muted);margin-top:1.2rem}
+  .prog{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:2rem}
+  .prog small{font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;color:var(--teal);text-transform:uppercase}
+  .prog h3{font-family:var(--display);font-weight:800;font-size:1.9rem;text-transform:uppercase;line-height:1;margin:.5rem 0 1.6rem}
+  .bar{margin-bottom:1.3rem}
+  .bar .lbl{display:flex;justify-content:space-between;font-size:.82rem;color:var(--muted);margin-bottom:.45rem}
+  .bar .lbl b{font-family:var(--mono);color:var(--text)}
+  .bar .track{height:10px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden}
+  .bar .fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#1d8f84,var(--teal))}
+  .bar.old .fill{background:linear-gradient(90deg,#4a6272,#6b8597)}
+  .drop{display:flex;align-items:baseline;gap:.6rem;margin-top:1.4rem;padding-top:1.4rem;border-top:1px solid var(--line)}
+  .drop b{font-family:var(--display);font-weight:900;font-size:3rem;color:var(--gold);line-height:1}
+  .drop span{color:var(--muted);font-size:.9rem}
+
+  /* CARIFTA */
+  .carifta{position:relative;overflow:hidden;background:linear-gradient(135deg,#0b2b3f 0%,#082032 60%);border-block:1px solid var(--line)}
+  .carifta .bgnum{position:absolute;right:-2vw;bottom:-6vw;font-family:var(--display);font-weight:900;font-size:clamp(12rem,32vw,26rem);line-height:1;color:transparent;-webkit-text-stroke:1px rgba(94,234,212,.12);pointer-events:none}
+  .c-grid{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:4rem;align-items:start}
+  .c-grid p{color:#d3e2ea;font-size:1.06rem;margin-bottom:1.2rem}
+  .meet{background:rgba(6,24,38,.7);border:1px solid rgba(245,197,66,.35);border-radius:6px;padding:2rem}
+  .meet small{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase}
+  .meet h3{font-family:var(--display);font-weight:900;font-size:2.4rem;text-transform:uppercase;line-height:1;margin:.5rem 0 1.4rem}
+  .meet dl{display:grid;grid-template-columns:auto 1fr;gap:.7rem 1.4rem;font-size:.95rem}
+  .meet dt{color:var(--muted);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;padding-top:.15rem}
+  .focus{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.6rem}
+  .focus span{font-size:.82rem;font-weight:600;padding:.5rem .8rem;border-radius:4px;background:var(--panel2);border:1px solid var(--line)}
+  .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2rem}
+  .pillars div{border-top:2px solid var(--teal);padding-top:1rem}
+  .pillars b{display:block;font-size:.95rem;margin-bottom:.3rem}
+  .pillars span{color:var(--muted);font-size:.88rem}
+
+  /* MEDIA */
+  .gallery{display:grid;grid-template-columns:1.3fr 1fr 1fr;grid-template-rows:300px 300px;gap:1rem}
+  .tile{position:relative;border-radius:6px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(160deg,#123d55,#0a2638)}
+  .tile:first-child{grid-row:span 2}
+  .tile:nth-child(4){grid-column:span 2}
+  .tile:first-child img{object-position:center 20%}
+
+  /* CONNECT */
+  .connect{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+  .c-card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:2.4rem}
+  .c-row{display:flex;justify-content:space-between;align-items:center;padding:1.1rem 0;border-bottom:1px solid var(--line);gap:1rem}
+  .c-row:last-of-type{border-bottom:none}
+  .c-row small{font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;color:var(--muted);text-transform:uppercase}
+  .c-row b{font-weight:600;text-align:right}
+  .fill-in{color:var(--gold);border-bottom:1px dashed rgba(245,197,66,.6)}
+  .safe{display:flex;gap:.8rem;margin-top:1.6rem;font-size:.84rem;color:var(--muted);padding:1rem;border-radius:4px;background:rgba(45,212,191,.06);border:1px solid var(--line)}
+  .safe svg{flex:0 0 20px;color:var(--teal)}
+  .tagline{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(3.2rem,7vw,6rem);line-height:.9}
+  .tagline span{color:var(--teal)}
+  .tagline em{font-style:normal;color:transparent;-webkit-text-stroke:2px var(--gold)}
+
+  footer{border-top:1px solid var(--line);padding:2.5rem 0;font-size:.8rem;color:var(--muted)}
+  footer .wrap{display:flex;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+
+  /* REVEAL */
+  .rv{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+  .rv.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+
+  @media (max-width:900px){
+    .links{display:none;position:absolute;top:64px;left:0;right:0;flex-direction:column;gap:0;background:var(--ink);border-bottom:1px solid var(--line)}
+    .links.open{display:flex}
+    .links a{display:block;padding:1rem 4vw;border-top:1px solid var(--line)}
+    .menu-btn{display:block}
+    .hero .wrap,.about,.perf,.c-grid,.connect{grid-template-columns:1fr;gap:2.5rem}
+    .hero-card{max-width:420px}
+    .strip .wrap{grid-template-columns:repeat(2,1fr)}
+    .stat:nth-child(2){border-right:none}
+    .stat:nth-child(-n+2){border-bottom:1px solid var(--line)}
+    .timeline{grid-template-columns:1fr 1fr;row-gap:2.5rem}
+    .timeline::before{display:none}
+    .ach{grid-template-columns:1fr}
+    .record{grid-template-columns:1fr;gap:1rem}
+    .pillars{grid-template-columns:1fr}
+    .gallery{grid-template-columns:1fr 1fr;grid-template-rows:200px 200px 200px}
+    .tile:first-child{grid-row:span 1;grid-column:span 2}
+    .tile:nth-child(4){grid-column:span 2}
+  .tile:first-child img{object-position:center 20%}
+    section{padding:5rem 0}
+  }
+</style>
+</head>
+<body>
+
+<div class="flagbar"></div>
+<nav>
+  <div class="wrap">
+    <a href="index.html" class="logo">Aidan<span>.</span>Seaton</a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="links">MENU</button>
+    <ul class="links" id="links">
+      <li><a href="index.html">&larr; Tracker</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#journey">Journey</a></li>
+      <li><a href="#achievements">Achievements</a></li>
+      <li><a href="#performance">Performance</a></li>
+      <li><a href="#carifta">CARIFTA 2027</a></li>
+      <li><a href="#media">Media</a></li>
+      <li><a href="#connect">Connect</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <svg class="lanes" viewBox="0 0 1200 800" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <pattern id="ropes" width="40" height="8" patternUnits="userSpaceOnUse">
+        <rect width="20" height="8" fill="#2dd4bf"/><rect x="20" width="20" height="8" fill="#f5c542" opacity=".55"/>
+      </pattern>
+    </defs>
+    <g opacity=".22">
+      <rect y="120" width="1200" height="4" fill="url(#ropes)"/>
+      <rect y="260" width="1200" height="4" fill="url(#ropes)"/>
+      <rect y="400" width="1200" height="4" fill="url(#ropes)"/>
+      <rect y="540" width="1200" height="4" fill="url(#ropes)"/>
+      <rect y="680" width="1200" height="4" fill="url(#ropes)"/>
+    </g>
+    <g stroke="#2dd4bf" stroke-width="10" stroke-linecap="round" opacity=".18">
+      <line x1="560" y1="190" x2="760" y2="190"/><line x1="560" y1="330" x2="820" y2="330"/>
+      <line x1="560" y1="470" x2="900" y2="470"/><line x1="560" y1="610" x2="980" y2="610"/>
+    </g>
+  </svg>
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Team Jamaica &nbsp;|&nbsp; Tornadoes Swim Club</div>
+      <h1>Aidan<br><span class="outline">Seaton</span></h1>
+      <div class="rule"></div>
+      <p class="lede">Competitive swimmer. Three-time national team representative. Goodwill gold medallist. Chasing CARIFTA 2027.</p>
+      <div class="cta">
+        <a href="#achievements" class="btn primary">View Achievements</a>
+        <a href="#connect" class="btn ghost">Scout &amp; Coach Contact</a>
+      </div>
+    </div>
+    <div class="hero-card">
+      <img class="photo" src="images/profile/race-block-2026.jpg" alt="Aidan Seaton in a Jamaica cap on the starting block at the 2026 Goodwill Championships in Trinidad and Tobago" style="object-position:center 15%">
+      <div class="hero-tag">
+        <div><div class="big">3×</div><small>Goodwill<br>2023 · 2025 · 2026</small></div>
+        <small style="text-align:right">Breast · Fly<br>IM · Free</small>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="strip">
+  <div class="wrap">
+    <div class="stat"><b>3<em>×</em></b><span>Jamaica representative</span></div>
+    <div class="stat"><b>3</b><span>Goodwill medals · 1 gold, 2 bronze</span></div>
+    <div class="stat"><b>1</b><span>National age-group record</span></div>
+    <div class="stat"><b>'27</b><span>Target: CARIFTA, Trinidad</span></div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="wrap about">
+    <div class="rv">
+      <div class="sec-head" style="margin-bottom:2rem">
+        <div class="eyebrow">01 / The Athlete</div>
+        <h2>Who is Aidan?</h2>
+      </div>
+      <div class="bio">
+        <p>Aidan Seaton is a Jamaican competitive swimmer from Kingston who has worn the national colours at the Goodwill Swimming Championships three times: in 2023, 2025 and 2026.</p>
+        <p>A student at Campion College, Aidan trains and races with Tornadoes Swim Club, one of Jamaica's established age-group programmes. He competes in breaststroke, butterfly, freestyle and the individual medley, where versatility across strokes counts as much as raw speed.</p>
+        <p>His breakthrough came at the 2025 Goodwill Championships in Barbados (15–17 August), where he won gold in the 100m breaststroke and bronze in the 200m IM and 100m butterfly. That same year he swam on a Tornadoes relay that set a Jamaican national age-group record in the 11–12 mixed 400m medley relay.</p>
+        <p>In August 2026 he made his third Goodwill team, swimming eight events in the Boys 13–14 age group at the 30th edition in Trinidad &amp; Tobago. Aidan's focus now is CARIFTA Aquatics 2027 in Trinidad &amp; Tobago, the Caribbean's main age-group championship and the next step on his international path.</p>
+      </div>
+      <div class="quote">"[Add a short quote from Aidan about what swimming for Jamaica means to him.]"<small>Aidan Seaton, in his own words</small></div>
+    </div>
+    <div class="rv">
+      <div class="portrait">
+        <img class="photo" src="images/profile/flag-medal-2025.jpg" alt="Aidan Seaton holding the Jamaican flag with his Goodwill medal">
+      </div>
+      <div class="snap">
+        <div><small>Nation</small><b>Jamaica</b></div>
+        <div><small>Club</small><b>Tornadoes Swim Club</b></div>
+        <div><small>School</small><b>Campion College</b></div>
+        <div><small>Age group</small><b>Boys 13–14</b></div>
+        <div><small>Specialities</small><b>Breast · Fly · IM · Free</b></div>
+        <div><small>Course</small><b>Long course (50m)</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JOURNEY -->
+<section id="journey" class="alt">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">02 / On the International Stage</div>
+      <h2>Wearing the flag</h2>
+      <p>Three Goodwill Swimming Championships for Jamaica, and the next target already set.</p>
+    </div>
+    <div class="timeline">
+      <div class="t-item rv">
+        <div class="t-year">2023</div>
+        <h3>Goodwill Championships</h3>
+        <p>First international selection for Jamaica, and first experience of racing regional rivals.</p>
+        <span class="pill">Debut</span>
+      </div>
+      <div class="t-item rv">
+        <div class="t-year">2025</div>
+        <h3>Goodwill · Barbados</h3>
+        <p>Breakthrough meet in the 11–12 age group: gold in the 100m breaststroke, bronze in the 200m IM and 100m butterfly.</p>
+        <span class="pill" style="border-color:rgba(245,197,66,.5);color:var(--gold)">1 Gold</span> <span class="pill bronze">2 Bronze</span>
+      </div>
+      <div class="t-item rv">
+        <div class="t-year">2026</div>
+        <h3>Goodwill · Trinidad &amp; Tobago</h3>
+        <p>30th edition, 14–16 August. Third national team, his first in the 13–14 age group, entered in eight events.</p>
+        <span class="pill">3rd selection</span>
+        <div class="events26"><span>50 Free</span><span>100 Free</span><span>200 Free</span><span>50 Breast</span><span>100 Breast</span><span>50 Fly</span><span>100 Fly</span><span>200 IM</span></div>
+      </div>
+      <div class="t-item next rv">
+        <div class="t-year">2027</div>
+        <h3>CARIFTA · Trinidad &amp; Tobago</h3>
+        <p>Training toward selection for CARIFTA Aquatics in March 2027.</p>
+        <span class="pill" style="border-color:rgba(245,197,66,.5);color:var(--gold)">The target</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">03 / Podium &amp; Records</div>
+      <h2>Proven performance</h2>
+      <p>Documented results from international competition and national age-group records.</p>
+    </div>
+    <div class="ach">
+      <div class="medal gold rv">
+        <div class="disc">1</div>
+        <small>Gold · 2025 Goodwill, Barbados</small>
+        <h3>100m<br>Breaststroke</h3>
+        <div class="time">Champion</div>
+        <p>Goodwill title, 11–12 age group</p>
+      </div>
+      <div class="medal rv">
+        <div class="disc">3</div>
+        <small>Bronze · 2025 Goodwill, Barbados</small>
+        <h3>200m Individual<br>Medley</h3>
+        <div class="time">2:35.03</div>
+        <p>All four strokes in one race</p>
+      </div>
+      <div class="medal rv">
+        <div class="disc">3</div>
+        <small>Bronze · 2025 Goodwill, Barbados</small>
+        <h3>100m<br>Butterfly</h3>
+        <div class="time">1:09.18</div>
+        <p>Individual podium on the international stage</p>
+      </div>
+      <div class="record rv">
+        <div class="time">5:00.03</div>
+        <div>
+          <small>Jamaican National Age-Group Record</small>
+          <h3>11–12 Mixed 400m Medley Relay</h3>
+          <p>Tornadoes Swim Club · 2025. Aidan was part of the relay team that set a new national mark for the age group.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PERFORMANCE -->
+<section id="performance" class="alt">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">04 / Race Intelligence</div>
+      <h2>Performance profile</h2>
+      <p>Selected 2026 long-course times from the ASAJ national rankings.</p>
+    </div>
+    <div class="perf">
+      <div class="rv">
+        <table>
+          <thead><tr><th>Event</th><th>Stroke</th><th>2026 LCM</th></tr></thead>
+          <tbody>
+            <tr><td class="ev">100m Breaststroke<small>Long course</small></td><td><span class="stroke">Breast</span></td><td class="tm">1:19.20</td></tr>
+            <tr><td class="ev">50m Breaststroke<small>Long course</small></td><td><span class="stroke">Breast</span></td><td class="tm">35.32</td></tr>
+            <tr><td class="ev">50m Butterfly<small>Long course</small></td><td><span class="stroke">Fly</span></td><td class="tm">29.22</td></tr>
+            <tr><td class="ev">100m Butterfly<small>Long course</small></td><td><span class="stroke">Fly</span></td><td class="tm">1:07.35</td></tr>
+            <tr><td class="ev">200m Individual Medley<small>Long course</small></td><td><span class="stroke">IM</span></td><td class="tm">2:36.66</td></tr>
+          </tbody>
+        </table>
+        <p class="note">Source: ASAJ long-course rankings, 2026. Certified personal bests with meet names, dates and splits are available to coaches on request.</p>
+      </div>
+      <div class="prog rv">
+        <small>Progression</small>
+        <h3>100m Butterfly</h3>
+        <div class="bar old">
+          <div class="lbl"><span>2025 · Goodwill bronze</span><b>1:09.18</b></div>
+          <div class="track"><div class="fill" style="width:78%"></div></div>
+        </div>
+        <div class="bar">
+          <div class="lbl"><span>2026 · ASAJ ranking</span><b>1:07.35</b></div>
+          <div class="track"><div class="fill" style="width:92%"></div></div>
+        </div>
+        <div class="drop"><b>−1.83s</b><span>in one season, in his international medal event</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CARIFTA -->
+<section id="carifta" class="carifta">
+  <div class="bgnum" aria-hidden="true">2027</div>
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">05 / The Next Chapter</div>
+      <h2>Road to CARIFTA</h2>
+    </div>
+    <div class="c-grid">
+      <div class="rv">
+        <p>CARIFTA Aquatics is where the Caribbean's best age-group swimmers measure themselves against each other, and for many it is the first step toward senior international swimming. Making Jamaica's 2027 team is Aidan's main goal.</p>
+        <p>His preparation with Tornadoes builds on the events where he has already won internationally (breaststroke, butterfly and the IM), with freestyle now part of his programme too.</p>
+        <div class="pillars">
+          <div><b>Train</b><span>Daily club sessions with Tornadoes Swim Club</span></div>
+          <div><b>Race</b><span>National meets and ASAJ qualifying opportunities</span></div>
+          <div><b>Qualify</b><span>Meet Jamaica's selection standards for 2027</span></div>
+        </div>
+      </div>
+      <div class="meet rv">
+        <small>Target championship</small>
+        <h3>CARIFTA Aquatics 2027</h3>
+        <dl>
+          <dt>Host</dt><dd>Trinidad &amp; Tobago</dd>
+          <dt>When</dt><dd>March 2027</dd>
+          <dt>Age group</dt><dd>Boys 13–14</dd>
+          <dt>Course</dt><dd>Long course (50m)</dd>
+        </dl>
+        <div class="focus">
+          <span>100 Breast</span><span>50 Breast</span><span>100 Fly</span><span>50 Fly</span><span>200 IM</span><span>Free</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MEDIA -->
+<section id="media">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">06 / Media</div>
+      <h2>In the water</h2>
+      <p>Team Jamaica moments from Goodwill 2025 and 2026.</p>
+    </div>
+    <div class="gallery rv">
+      <figure class="tile"><img src="images/profile/race-block-2026.jpg" alt="Aidan on the starting block, Goodwill 2026"><figcaption>Behind the blocks · Goodwill 2026, T&amp;T</figcaption></figure>
+      <figure class="tile"><img src="images/profile/asaj-card-2025.jpg" alt="ASAJ team card, Goodwill 2025"><figcaption>ASAJ team · Goodwill 2025</figcaption></figure>
+      <figure class="tile"><img src="images/profile/asaj-card-2026.jpg" alt="ASAJ team card, Goodwill 2026"><figcaption>ASAJ team · Goodwill 2026</figcaption></figure>
+      <div class="tile"><div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16v16H4z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>Race video &amp; press coverage<br>(coming soon)</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONNECT -->
+<section id="connect" class="alt">
+  <div class="wrap connect">
+    <div class="rv">
+      <div class="eyebrow">07 / Connect</div>
+      <p class="tagline" style="margin-top:1rem">Wear the <span>flag.</span><br>Chase the <em>clock.</em></p>
+      <p style="color:var(--muted);margin-top:1.5rem;max-width:44ch">For coaches, scouts and programme staff interested in Aidan's development, please get in touch through his family or club.</p>
+    </div>
+    <div class="c-card rv">
+      <div class="c-row"><small>Parent / Guardian</small><b class="fill-in">[Name &amp; email]</b></div>
+      <div class="c-row"><small>Club coach</small><b class="fill-in">[Tornadoes coach contact]</b></div>
+      <div class="c-row"><small>Club</small><b>Tornadoes Swim Club, Kingston</b></div>
+      <div class="c-row"><small>Federation</small><b>Aquatic Sports Association of Jamaica</b></div>
+      <div class="c-row"><small>Results</small><b class="fill-in">[SwimCloud / tracker link]</b></div>
+      <div class="safe">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg>
+        <span>Aidan is a junior athlete. All contact goes through his parent/guardian or club coach.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Aidan Seaton · Kingston, Jamaica</span>
+    <span>Results: ASAJ rankings &amp; Goodwill Championships records</span>
+  </div>
+</footer>
+
+<script>
+  const btn=document.getElementById('menuBtn'),links=document.getElementById('links');
+  btn.addEventListener('click',()=>{const o=links.classList.toggle('open');btn.setAttribute('aria-expanded',o)});
+  links.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{links.classList.remove('open');btn.setAttribute('aria-expanded','false')}));
+  const els=document.querySelectorAll('.rv');
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+    els.forEach(el=>io.observe(el));
+  } else els.forEach(el=>el.classList.add('in'));
+</script>
+</body>
+</html>
