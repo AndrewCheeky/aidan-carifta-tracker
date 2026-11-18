@@ -1,3 +1,6 @@
+## 2026-11-17 · "In His Own Words" section
+- Profile page: new "In His Own Words" section with Aidan's answers on how he started, the hardest part of swimming, and life outside the pool (lightly tidied for spelling). The school/training and representing-Jamaica cards are parked in an HTML comment until he answers; the test now fails if any unfilled placeholder is visible.
+
 ## 2026-11-17 · Profile lists shortened
 - Profile page: performance table now shows his top three events (100 Fly, 200 Fly, 200 IM); the 50 Free progression shows 2017, 2022 and 2026 (full history remains on SwimCloud).
 

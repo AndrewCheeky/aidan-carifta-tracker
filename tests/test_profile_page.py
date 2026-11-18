@@ -35,3 +35,12 @@ class ProfilePageTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class ProfileStoryPlaceholderTests(unittest.TestCase):
+    def test_unfilled_placeholders_never_visible(self):
+        for name in ('profile.html', 'docs/profile.html'):
+            text = (ROOT / name).read_text(encoding='utf-8')
+            visible = re.sub(r'<!--.*?-->', '', text, flags=re.S)
+            self.assertNotIn('[FILL IN', visible, f'{name}: unfilled placeholder is visible on the page')
+            self.assertIn('<section id="story">', visible, name)

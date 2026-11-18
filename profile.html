@@ -152,6 +152,14 @@
   .bar .track{height:10px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden}
   .bar .fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#0f8a3e,var(--teal))}
   .bar.old .fill{background:linear-gradient(90deg,#4a5a4f,#6b7f70)}
+  [hidden]{display:none!important}
+  .story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.2rem}
+  .story-card{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:6px;padding:1.6rem}
+  .story-card small{display:block;font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:.6rem}
+  .story-card h3{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:1.5rem;line-height:1.05;margin-bottom:.9rem}
+  .story-card blockquote{color:var(--text);font-size:1.02rem;line-height:1.65;font-style:italic}
+  .story-fact{margin-top:1.6rem;color:var(--muted)}
+  .story-fact small{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-right:.6rem}
   .rk-h{font-family:var(--display);font-weight:800;font-size:1.5rem;text-transform:uppercase;margin-bottom:1.2rem}
   .rks{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:.7rem}
   .rk{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:.9rem .8rem}
@@ -248,6 +256,7 @@
       <li><a href="#achievements">Achievements</a></li>
       <li><a href="#performance">Performance</a></li>
       <li><a href="#history">Since 2017</a></li>
+      <li><a href="#story">His Story</a></li>
       <li><a href="#carifta">CARIFTA 2027</a></li>
       <li><a href="#media">Media</a></li>
       <li><a href="#connect">Connect</a></li>
@@ -496,12 +505,55 @@
 </section>
 <div class="flagline" aria-hidden="true"></div>
 
+<!-- IN HIS OWN WORDS -->
+<!-- Aidan's own words, lightly tidied for spelling and punctuation. Two more answers (school and training, representing Jamaica) are parked in the comment at the end of this section. -->
+<section id="story">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">06 / In His Own Words</div>
+      <h2>The person behind the times</h2>
+      <p>In his own words.</p>
+    </div>
+    <div class="story-grid">
+        <article class="story-card rv">
+          <small>How it started</small>
+          <h3>What inspired you to start swimming?</h3>
+          <blockquote>I got into swimming when my mom started me at home, and later I trained with my coach, Aunty Ari, who made me love swimming. I started club swimming at 6.</blockquote>
+        </article>
+        <article class="story-card rv">
+          <small>Overcoming challenges</small>
+          <h3>What has been the hardest part, and how did you handle it?</h3>
+          <blockquote>The hardest part of swimming was managing my time between swimming, school and friends. I got through it by cutting down the time I spent on my phone doing nothing, focusing on swimming and studying, and then mixing in time with my friends.</blockquote>
+        </article>
+        <article class="story-card rv">
+          <small>Beyond the pool</small>
+          <h3>What do you enjoy outside of swimming?</h3>
+          <blockquote>When I&rsquo;m not swimming, I like building Legos, playing on my PlayStation and talking to my friends.</blockquote>
+        </article>
+    </div>
+    <!-- STILL TO ADD (paste back inside .story-grid / before </div> when Aidan answers):
+<article class="story-card rv">
+          <small>School and training</small>
+          <h3>How do you balance academics and training?</h3>
+          <blockquote>[FILL IN: Aidan's answer, in his own words. 2-4 sentences.]</blockquote>
+        </article>
+<article class="story-card rv">
+          <small>Representing Jamaica</small>
+          <h3>What does it mean to you to represent Jamaica?</h3>
+          <blockquote>[FILL IN: Aidan's answer, in his own words. 2-4 sentences.]</blockquote>
+        </article>
+    <p class="story-fact rv"><small>At a glance</small> [FILL IN: one line on school and weekly training, e.g. "Campion College student, trains X days a week with Tornadoes."]</p>
+    -->
+  </div>
+</section>
+<div class="flagline" aria-hidden="true"></div>
+
 <!-- CARIFTA -->
 <section id="carifta" class="carifta">
   <div class="bgnum" aria-hidden="true">2027</div>
   <div class="wrap">
     <div class="sec-head rv">
-      <div class="eyebrow">06 / The Next Chapter</div>
+      <div class="eyebrow">07 / The Next Chapter</div>
       <h2>Road to CARIFTA</h2>
     </div>
     <div class="c-grid">
@@ -536,7 +588,7 @@
 <section id="media">
   <div class="wrap">
     <div class="sec-head rv">
-      <div class="eyebrow">07 / Media</div>
+      <div class="eyebrow">08 / Media</div>
       <h2>In the water</h2>
       <p>Team Jamaica moments from Goodwill 2025 and 2026.</p>
     </div>
@@ -554,7 +606,7 @@
 <section id="connect" class="alt">
   <div class="wrap connect">
     <div class="rv">
-      <div class="eyebrow">08 / Connect</div>
+      <div class="eyebrow">09 / Connect</div>
       <p class="tagline" style="margin-top:1rem">Wear the <span>flag.</span><br>Chase the <em>clock.</em></p>
       <p style="color:var(--muted);margin-top:1.5rem;max-width:44ch">For coaches, scouts and programme staff interested in Aidan's development, please get in touch through his family or club.</p>
     </div>
