@@ -39,11 +39,8 @@ if __name__ == '__main__':
 
 class ProfileStoryPlaceholderTests(unittest.TestCase):
     def test_unfilled_placeholders_never_visible(self):
-        import re
         for name in ('profile.html', 'docs/profile.html'):
             text = (ROOT / name).read_text(encoding='utf-8')
-            section = re.search(r'<section id="story"([^>]*)>', text)
-            self.assertIsNotNone(section, name)
-            if '[FILL IN' in text:
-                self.assertIn('hidden', section.group(1), f'{name}: placeholders present but story section is not hidden')
-                self.assertRegex(text, r'<a href="#story" hidden>', f'{name}: nav link must stay hidden too')
+            visible = re.sub(r'<!--.*?-->', '', text, flags=re.S)
+            self.assertNotIn('[FILL IN', visible, f'{name}: unfilled placeholder is visible on the page')
+            self.assertIn('<section id="story">', visible, name)
