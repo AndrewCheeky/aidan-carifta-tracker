@@ -1,3 +1,6 @@
+## 2026-11-27 · Walter Lowi meet date corrected
+- Meets: 2026 ASAJ Walter Lowi Memorial Sprint Classic moved from 14-15 Nov to Sat 28 Nov 2026 (ASAJ homepage and event page); link now points at the meet's own ASAJ page. Fixes the "Next meet" panel, which was skipping a meet happening the next day.
+
 ## 2026-11-17 · "In His Own Words" section
 - Profile page: new "In His Own Words" section with Aidan's answers on how he started, the hardest part of swimming, and life outside the pool (lightly tidied for spelling). The school/training and representing-Jamaica cards are parked in an HTML comment until he answers; the test now fails if any unfilled placeholder is visible.
 
